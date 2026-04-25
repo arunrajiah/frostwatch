@@ -43,8 +43,8 @@ class GeminiProvider(LLMProvider):
                     model_name=self._model_name,
                     system_instruction=system if system else None,
                 )
-                response = model.generate_content(prompt)
-                return response.text
+                legacy_response = model.generate_content(prompt)
+                return legacy_response.text  # type: ignore[return-value]
 
         loop = asyncio.get_running_loop()
         try:

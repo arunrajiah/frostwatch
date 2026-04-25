@@ -2,21 +2,12 @@ from __future__ import annotations
 
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from datetime import date, datetime
 from pathlib import Path
 
-from sqlalchemy import (
-    Column,
-    Date,
-    DateTime,
-    Float,
-    Integer,
-    String,
-    Text,
-    UniqueConstraint,
-    text,
-)
+from sqlalchemy import Date, DateTime, Float, Integer, String, Text, UniqueConstraint, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 _engine = None
 _session_factory = None
@@ -29,76 +20,76 @@ class Base(DeclarativeBase):
 class SyncRun(Base):
     __tablename__ = "sync_runs"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    started_at = Column(DateTime, nullable=False)
-    finished_at = Column(DateTime, nullable=True)
-    status = Column(String(20), nullable=False, default="running")
-    rows_synced = Column(Integer, nullable=True)
-    error_message = Column(Text, nullable=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    started_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default="running")
+    rows_synced: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
 class CachedQuery(Base):
     __tablename__ = "cached_queries"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    query_id = Column(String(256), unique=True, nullable=False)
-    warehouse_name = Column(String(256), nullable=True)
-    user_name = Column(String(256), nullable=True)
-    role_name = Column(String(256), nullable=True)
-    database_name = Column(String(256), nullable=True)
-    schema_name = Column(String(256), nullable=True)
-    execution_time_ms = Column(Float, nullable=True)
-    bytes_scanned = Column(Float, nullable=True)
-    credits_used = Column(Float, nullable=True)
-    start_time = Column(DateTime, nullable=True)
-    end_time = Column(DateTime, nullable=True)
-    query_text = Column(Text, nullable=True)
-    query_tag = Column(String(512), nullable=True)
-    status = Column(String(64), nullable=True)
-    synced_at = Column(DateTime, nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    query_id: Mapped[str] = mapped_column(String(256), unique=True, nullable=False)
+    warehouse_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    user_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    role_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    database_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    schema_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    execution_time_ms: Mapped[float | None] = mapped_column(Float, nullable=True)
+    bytes_scanned: Mapped[float | None] = mapped_column(Float, nullable=True)
+    credits_used: Mapped[float | None] = mapped_column(Float, nullable=True)
+    start_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    end_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    query_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    query_tag: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    status: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    synced_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
 
 class CachedWarehouseMetric(Base):
     __tablename__ = "cached_warehouse_metrics"
     __table_args__ = (UniqueConstraint("warehouse_name", "date", name="uq_wh_date"),)
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    warehouse_name = Column(String(256), nullable=False)
-    date = Column(Date, nullable=False)
-    credits_used = Column(Float, nullable=False, default=0.0)
-    cost_usd = Column(Float, nullable=False, default=0.0)
-    synced_at = Column(DateTime, nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    warehouse_name: Mapped[str] = mapped_column(String(256), nullable=False)
+    date: Mapped[date] = mapped_column(Date, nullable=False)
+    credits_used: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    cost_usd: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    synced_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
 
 class AnomalyRecord(Base):
     __tablename__ = "anomalies"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    detected_at = Column(DateTime, nullable=False)
-    anomaly_type = Column(String(128), nullable=False)
-    warehouse_name = Column(String(256), nullable=True)
-    severity = Column(String(20), nullable=False, default="medium")
-    description = Column(Text, nullable=True)
-    llm_explanation = Column(Text, nullable=True)
-    resolved_at = Column(DateTime, nullable=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    detected_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    anomaly_type: Mapped[str] = mapped_column(String(128), nullable=False)
+    warehouse_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    severity: Mapped[str] = mapped_column(String(20), nullable=False, default="medium")
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    llm_explanation: Mapped[str | None] = mapped_column(Text, nullable=True)
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
 
 class ReportRecord(Base):
     __tablename__ = "reports"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    generated_at = Column(DateTime, nullable=False)
-    period_start = Column(DateTime, nullable=True)
-    period_end = Column(DateTime, nullable=True)
-    summary_text = Column(Text, nullable=True)
-    details_json = Column(Text, nullable=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    generated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    period_start: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    period_end: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    summary_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    details_json: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
 class SettingsStore(Base):
     __tablename__ = "settings_store"
 
-    key = Column(String(256), primary_key=True)
-    value = Column(Text, nullable=False)
+    key: Mapped[str] = mapped_column(String(256), primary_key=True)
+    value: Mapped[str] = mapped_column(Text, nullable=False)
 
 
 async def init_db(db_path: Path) -> None:

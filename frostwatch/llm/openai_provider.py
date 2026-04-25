@@ -17,7 +17,9 @@ class OpenAIProvider(LLMProvider):
         return "gpt-4o"
 
     async def complete(self, prompt: str, system: str = "") -> str:
-        messages = []
+        from openai.types.chat import ChatCompletionMessageParam
+
+        messages: list[ChatCompletionMessageParam] = []
         if system:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
