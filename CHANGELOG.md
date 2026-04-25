@@ -9,6 +9,12 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-04-26
+
+### Changed
+- PyPI package metadata: added README, MIT license, author, keywords, and trove classifiers
+- Added Changelog and Docker Image URLs to project metadata
+
 ## [0.1.0] - 2026-04-25
 
 ### Added
@@ -32,5 +38,6 @@ Versions follow [Semantic Versioning](https://semver.org/).
 - Configurable `snowflake_query_limit` (default 500) passed through to Snowflake query
 - Security scanning: CodeQL, Trivy, pip-audit, npm-audit, dependency-review in CI
 
-[Unreleased]: https://github.com/arunrajiah/frostwatch/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/arunrajiah/frostwatch/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/arunrajiah/frostwatch/compare/v0.1.1...v0.1.2
 [0.1.0]: https://github.com/arunrajiah/frostwatch/releases/tag/v0.1.0
