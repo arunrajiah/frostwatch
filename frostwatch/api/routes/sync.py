@@ -7,6 +7,7 @@ from sqlalchemy import desc, select
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
 from frostwatch.analysis.anomaly import detect_anomalies
+from frostwatch.api.limiter import limiter
 from frostwatch.api.models import SyncStatus
 from frostwatch.core.db import (
     AnomalyRecord,
@@ -22,7 +23,7 @@ router = APIRouter()
 _sync_running: bool = False
 
 
-async def run_sync(config, snowflake_client) -> None:
+async def run_sync(config, snowflake_client, llm_provider=None) -> None:
     global _sync_running
     _sync_running = True
 
@@ -36,7 +37,10 @@ async def run_sync(config, snowflake_client) -> None:
         sync_run_id = run.id
 
     try:
-        query_rows = await snowflake_client.execute(QUERY_HISTORY_SQL, {"days": 30})
+        query_limit = getattr(config, "snowflake_query_limit", 500)
+        query_rows = await snowflake_client.execute(
+            QUERY_HISTORY_SQL, {"days": 30, "limit": query_limit}
+        )
         metric_rows = await snowflake_client.execute(WAREHOUSE_METERING_SQL, {"days": 30})
 
         synced_at = datetime.now(UTC)
@@ -119,12 +123,28 @@ async def run_sync(config, snowflake_client) -> None:
         if anomalies:
             async with get_db() as session:
                 for a in anomalies:
+                    llm_explanation: str | None = None
+                    if llm_provider is not None:
+                        try:
+                            prompt = (
+                                f"Anomaly detected: {a.anomaly_type}\n"
+                                f"Warehouse: {a.warehouse_name}\n"
+                                f"Severity: {a.severity}\n"
+                                f"Details: {a.description}\n\n"
+                                "In 2-3 sentences, explain what this anomaly means and suggest a remedy."
+                            )
+                            llm_explanation = await llm_provider.complete(
+                                prompt, system="You are a Snowflake cost optimization expert."
+                            )
+                        except Exception:
+                            pass
                     record = AnomalyRecord(
                         detected_at=detection_time,
                         anomaly_type=a.anomaly_type,
                         warehouse_name=a.warehouse_name,
                         severity=a.severity,
                         description=a.description,
+                        llm_explanation=llm_explanation,
                     )
                     session.add(record)
 
@@ -159,6 +179,7 @@ def _to_float(value) -> float | None:
 
 
 @router.post("/sync")
+@limiter.limit("10/minute")
 async def start_sync(request: Request, background_tasks: BackgroundTasks) -> dict:
     global _sync_running
     if _sync_running:
@@ -168,7 +189,8 @@ async def start_sync(request: Request, background_tasks: BackgroundTasks) -> dic
 
     config = request.app.state.config
     client = SnowflakeClient(config)
-    background_tasks.add_task(run_sync, config, client)
+    llm = request.app.state.llm_provider
+    background_tasks.add_task(run_sync, config, client, llm)
     return {"status": "started"}
 
 

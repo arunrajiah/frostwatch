@@ -77,6 +77,7 @@ class ReportResponse(BaseModel):
 class SettingsResponse(BaseModel):
     llm_provider: str
     llm_model: str
+    llm_base_url: str
     snowflake_account: str
     snowflake_user: str
     snowflake_warehouse: str
@@ -86,6 +87,8 @@ class SettingsResponse(BaseModel):
     email_recipients: list[str]
     credits_per_dollar: float
     schedule_cron: str
+    sync_cron: str
+    snowflake_query_limit: int
     alert_threshold_multiplier: float
     llm_api_key_set: bool
     snowflake_password_set: bool
@@ -98,6 +101,7 @@ class SettingsUpdate(BaseModel):
     llm_provider: str | None = None
     llm_model: str | None = None
     llm_api_key: str | None = None
+    llm_base_url: str | None = None
     snowflake_account: str | None = None
     snowflake_user: str | None = None
     snowflake_password: str | None = None
@@ -112,6 +116,8 @@ class SettingsUpdate(BaseModel):
     email_recipients: list[str] | None = None
     credits_per_dollar: float | None = None
     schedule_cron: str | None = None
+    sync_cron: str | None = None
+    snowflake_query_limit: int | None = None
     alert_threshold_multiplier: float | None = None
 
 

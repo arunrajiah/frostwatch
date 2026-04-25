@@ -26,6 +26,7 @@ dependencies = [
     "jinja2>=3.1",
     "aiohttp>=3.9",
     "python-multipart>=0.0.9",
+    "slowapi>=0.1",
 ]
 
 [project.optional-dependencies]

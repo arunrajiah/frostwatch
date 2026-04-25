@@ -71,16 +71,23 @@ export interface ReportResponse {
 export interface SettingsResponse {
   llm_provider: string;
   llm_model: string;
+  llm_base_url: string;
   llm_api_key_set: boolean;
   snowflake_account: string;
   snowflake_user: string;
   snowflake_warehouse: string;
   snowflake_database: string;
   snowflake_role: string;
+  snowflake_password_set: boolean;
   slack_webhook_url: string;
   email_recipients: string[];
+  email_smtp_host: string;
+  email_smtp_port: number;
+  email_smtp_user: string;
   credits_per_dollar: number;
   schedule_cron: string;
+  sync_cron: string;
+  snowflake_query_limit: number;
   alert_threshold_multiplier: number;
 }
 
@@ -187,3 +194,9 @@ export const getSchedulerJobs = (): Promise<SchedulerJob[]> =>
 
 export const triggerScheduler = (): Promise<{ status: string }> =>
   request<{ status: string }>('/scheduler/trigger', { method: 'POST' });
+
+export const testSnowflakeConnection = (): Promise<{ status: string; message: string }> =>
+  request<{ status: string; message: string }>('/settings/test-snowflake', { method: 'POST' });
+
+export const testEmailConnection = (): Promise<{ status: string; message: string }> =>
+  request<{ status: string; message: string }>('/settings/test-email', { method: 'POST' });
