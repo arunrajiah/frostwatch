@@ -19,7 +19,7 @@ WHERE DATEDIFF('day', start_time, CURRENT_TIMESTAMP) <= %(days)s
   AND execution_status = 'SUCCESS'
   AND query_type NOT IN ('SHOW', 'DESCRIBE')
 ORDER BY credits_used_cloud_services DESC
-LIMIT 500
+LIMIT %(limit)s
 """
 
 WAREHOUSE_METERING_SQL = """

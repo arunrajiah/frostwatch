@@ -39,6 +39,8 @@ class FrostWatchConfig(BaseSettings):
 
     credits_per_dollar: float = 3.0
     schedule_cron: str = "0 8 * * 1"
+    sync_cron: str = "0 */6 * * *"
+    snowflake_query_limit: int = 500
     alert_threshold_multiplier: float = 3.0
 
     data_dir: Path = Path("~/.frostwatch").expanduser()

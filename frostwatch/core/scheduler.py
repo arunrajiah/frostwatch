@@ -32,7 +32,7 @@ def create_scheduler(config: FrostWatchConfig, app_state: Any) -> AsyncIOSchedul
         from frostwatch.snowflake.client import SnowflakeClient
 
         client = SnowflakeClient(app_state.config)
-        await run_sync(app_state.config, client)
+        await run_sync(app_state.config, client, app_state.llm_provider)
 
     async def report_job() -> None:
         from datetime import datetime, timedelta
@@ -94,9 +94,14 @@ def create_scheduler(config: FrostWatchConfig, app_state: Any) -> AsyncIOSchedul
     except ValueError:
         cron_trigger = CronTrigger(day_of_week="mon", hour=8, minute=0)
 
+    try:
+        sync_trigger = _parse_cron(config.sync_cron)
+    except ValueError:
+        sync_trigger = CronTrigger(hour="*/6")
+
     scheduler.add_job(
         sync_job,
-        trigger=CronTrigger(hour="*/6"),
+        trigger=sync_trigger,
         id="sync_job",
         name="Snowflake Data Sync",
         replace_existing=True,

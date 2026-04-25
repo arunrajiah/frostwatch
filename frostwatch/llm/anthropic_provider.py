@@ -14,7 +14,7 @@ class AnthropicProvider(LLMProvider):
         return "anthropic"
 
     def default_model(self) -> str:
-        return "claude-opus-4-7"
+        return "claude-sonnet-4-6"
 
     async def complete(self, prompt: str, system: str = "") -> str:
         messages = [{"role": "user", "content": prompt}]

@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Database, Zap, Bell, Clock, DollarSign, Save, RefreshCw,
-  AlertTriangle, CheckCircle2, Eye, EyeOff, Play, ChevronDown,
+  AlertTriangle, CheckCircle2, Eye, EyeOff, Play, ChevronDown, Wifi,
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
-import { getSettings, updateSettings, getSchedulerJobs, triggerScheduler } from '../api/client';
+import {
+  getSettings, updateSettings, getSchedulerJobs, triggerScheduler,
+  testSnowflakeConnection, testEmailConnection,
+} from '../api/client';
 import type { SettingsResponse } from '../api/client';
 
 const LLM_PROVIDERS = ['anthropic', 'openai', 'gemini', 'ollama'];
@@ -99,10 +102,13 @@ export default function Settings() {
   const [form, setForm] = useState<Partial<SettingsResponse>>({});
   const [password, setPassword] = useState('');
   const [llmKey, setLlmKey] = useState('');
+  const [smtpPassword, setSmtpPassword] = useState('');
   const [emailStr, setEmailStr] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [schedulerMsg, setSchedulerMsg] = useState<string | null>(null);
+  const [snowflakeTestMsg, setSnowflakeTestMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [emailTestMsg, setEmailTestMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const { data: settings, isLoading, isError, error } = useQuery({
     queryKey: ['settings'],
@@ -147,6 +153,28 @@ export default function Settings() {
     },
   });
 
+  const snowflakeTestMutation = useMutation({
+    mutationFn: testSnowflakeConnection,
+    onSuccess: (data) => {
+      setSnowflakeTestMsg({ ok: true, text: data.message });
+      setTimeout(() => setSnowflakeTestMsg(null), 5000);
+    },
+    onError: (err: Error) => {
+      setSnowflakeTestMsg({ ok: false, text: err.message });
+    },
+  });
+
+  const emailTestMutation = useMutation({
+    mutationFn: testEmailConnection,
+    onSuccess: (data) => {
+      setEmailTestMsg({ ok: true, text: data.message });
+      setTimeout(() => setEmailTestMsg(null), 5000);
+    },
+    onError: (err: Error) => {
+      setEmailTestMsg({ ok: false, text: err.message });
+    },
+  });
+
   const set = (key: keyof SettingsResponse, value: unknown) =>
     setForm((f) => ({ ...f, [key]: value }));
 
@@ -160,6 +188,7 @@ export default function Settings() {
     };
     if (password) (payload as Record<string, unknown>)['snowflake_password'] = password;
     if (llmKey) (payload as Record<string, unknown>)['llm_api_key'] = llmKey;
+    if (smtpPassword) (payload as Record<string, unknown>)['email_smtp_password'] = smtpPassword;
     saveMutation.mutate(payload);
   };
 
@@ -274,6 +303,22 @@ export default function Settings() {
             />
           </Field>
         </div>
+        <div className="flex items-center gap-3 pt-1">
+          <button
+            onClick={() => snowflakeTestMutation.mutate()}
+            disabled={snowflakeTestMutation.isPending}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-700 text-gray-300 text-xs font-medium hover:bg-gray-600 transition-colors disabled:opacity-60"
+          >
+            {snowflakeTestMutation.isPending
+              ? <><RefreshCw size={12} className="animate-spin" /> Testing…</>
+              : <><Wifi size={12} /> Test Connection</>}
+          </button>
+          {snowflakeTestMsg && (
+            <span className={`text-xs ${snowflakeTestMsg.ok ? 'text-green-400' : 'text-red-400'}`}>
+              {snowflakeTestMsg.ok ? '✓' : '✗'} {snowflakeTestMsg.text}
+            </span>
+          )}
+        </div>
       </Section>
 
       {/* LLM Configuration */}
@@ -329,8 +374,8 @@ export default function Settings() {
             <Field label="Base URL" hint="Ollama server URL">
               <input
                 type="text"
-                value={(form as Record<string, unknown>)['llm_base_url'] as string ?? ''}
-                onChange={(e) => set('llm_model' as keyof SettingsResponse, e.target.value)}
+                value={form.llm_base_url ?? ''}
+                onChange={(e) => set('llm_base_url', e.target.value)}
                 placeholder="http://localhost:11434"
                 className={inputCls}
               />
@@ -366,6 +411,61 @@ export default function Settings() {
               className={inputCls}
             />
           </Field>
+
+          {/* SMTP Configuration */}
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider pt-1">SMTP Configuration</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Field label="SMTP Host">
+              <input
+                type="text"
+                value={form.email_smtp_host ?? ''}
+                onChange={(e) => set('email_smtp_host', e.target.value)}
+                placeholder="smtp.example.com"
+                className={inputCls}
+              />
+            </Field>
+            <Field label="SMTP Port">
+              <input
+                type="number"
+                value={form.email_smtp_port ?? 587}
+                onChange={(e) => set('email_smtp_port', parseInt(e.target.value, 10))}
+                className={`${inputCls} max-w-[120px]`}
+              />
+            </Field>
+            <Field label="SMTP User">
+              <input
+                type="text"
+                value={form.email_smtp_user ?? ''}
+                onChange={(e) => set('email_smtp_user', e.target.value)}
+                placeholder="user@example.com"
+                className={inputCls}
+              />
+            </Field>
+            <Field label="SMTP Password" hint="Leave blank to keep existing password">
+              <PasswordField
+                value={smtpPassword}
+                onChange={setSmtpPassword}
+                placeholder="••••••••"
+              />
+            </Field>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => emailTestMutation.mutate()}
+              disabled={emailTestMutation.isPending}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-700 text-gray-300 text-xs font-medium hover:bg-gray-600 transition-colors disabled:opacity-60"
+            >
+              {emailTestMutation.isPending
+                ? <><RefreshCw size={12} className="animate-spin" /> Testing…</>
+                : <><Wifi size={12} /> Test SMTP</>}
+            </button>
+            {emailTestMsg && (
+              <span className={`text-xs ${emailTestMsg.ok ? 'text-green-400' : 'text-red-400'}`}>
+                {emailTestMsg.ok ? '✓' : '✗'} {emailTestMsg.text}
+              </span>
+            )}
+          </div>
+
           <Field
             label="Alert Threshold Multiplier"
             hint="Flag a cost spike if it exceeds X times the rolling average"
@@ -387,7 +487,7 @@ export default function Settings() {
       <Section title="Scheduling" icon={<Clock size={16} />}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field
-            label="Cron Expression"
+            label="Report Schedule (Cron)"
             hint={cronDesc ? `→ ${cronDesc}` : 'e.g. 0 8 * * 1 (every Monday at 8am)'}
           >
             <input
@@ -395,6 +495,18 @@ export default function Settings() {
               value={form.schedule_cron ?? ''}
               onChange={(e) => set('schedule_cron', e.target.value)}
               placeholder="0 8 * * 1"
+              className={inputCls}
+            />
+          </Field>
+          <Field
+            label="Sync Schedule (Cron)"
+            hint={form.sync_cron ? `→ ${describeCron(form.sync_cron)}` : 'e.g. 0 */6 * * * (every 6 hours)'}
+          >
+            <input
+              type="text"
+              value={form.sync_cron ?? ''}
+              onChange={(e) => set('sync_cron', e.target.value)}
+              placeholder="0 */6 * * *"
               className={inputCls}
             />
           </Field>
@@ -455,19 +567,35 @@ export default function Settings() {
 
       {/* Cost */}
       <Section title="Cost Configuration" icon={<DollarSign size={16} />}>
-        <Field
-          label="Credits per Dollar"
-          hint="Used to calculate USD cost from Snowflake credits"
-        >
-          <input
-            type="number"
-            min={0.01}
-            step={0.01}
-            value={form.credits_per_dollar ?? 1}
-            onChange={(e) => set('credits_per_dollar', parseFloat(e.target.value))}
-            className={`${inputCls} max-w-[160px]`}
-          />
-        </Field>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field
+            label="Credits per Dollar"
+            hint="Used to calculate USD cost from Snowflake credits"
+          >
+            <input
+              type="number"
+              min={0.01}
+              step={0.01}
+              value={form.credits_per_dollar ?? 1}
+              onChange={(e) => set('credits_per_dollar', parseFloat(e.target.value))}
+              className={`${inputCls} max-w-[160px]`}
+            />
+          </Field>
+          <Field
+            label="Query Fetch Limit"
+            hint="Max queries fetched per sync from Snowflake"
+          >
+            <input
+              type="number"
+              min={100}
+              max={10000}
+              step={100}
+              value={form.snowflake_query_limit ?? 500}
+              onChange={(e) => set('snowflake_query_limit', parseInt(e.target.value, 10))}
+              className={`${inputCls} max-w-[160px]`}
+            />
+          </Field>
+        </div>
       </Section>
 
       {/* Save button (bottom) */}
