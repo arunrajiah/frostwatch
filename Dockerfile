@@ -22,6 +22,7 @@ FROM base AS builder
 RUN pip install --no-cache-dir hatch
 
 COPY pyproject.toml .
+COPY README.md .
 COPY frostwatch/ ./frostwatch/
 
 RUN hatch build -t wheel
