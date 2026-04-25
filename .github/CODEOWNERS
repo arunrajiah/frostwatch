@@ -1,0 +1,11 @@
+# Global owner — reviews required for all PRs
+* @arunrajiah
+
+# Backend
+frostwatch/ @arunrajiah
+
+# Frontend
+frontend/ @arunrajiah
+
+# CI / Release
+.github/ @arunrajiah
