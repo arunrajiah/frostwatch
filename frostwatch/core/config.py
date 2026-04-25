@@ -45,7 +45,7 @@ class FrostWatchConfig(BaseSettings):
     db_path: Path = Path("")
 
     @model_validator(mode="after")
-    def set_db_path(self) -> "FrostWatchConfig":
+    def set_db_path(self) -> FrostWatchConfig:
         if not self.db_path or str(self.db_path) == "":
             self.db_path = self.data_dir / "frostwatch.db"
         return self

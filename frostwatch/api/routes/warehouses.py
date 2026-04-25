@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
-from typing import Optional
+from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, Query, Request
 from sqlalchemy import select
@@ -21,14 +20,12 @@ async def get_warehouses(
     config = request.app.state.config
     credits_per_dollar: float = config.credits_per_dollar
 
-    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    cutoff = datetime.now(UTC) - timedelta(days=days)
 
     try:
         async with get_db() as session:
             metrics_result = await session.execute(
-                select(CachedWarehouseMetric).where(
-                    CachedWarehouseMetric.date >= cutoff.date()
-                )
+                select(CachedWarehouseMetric).where(CachedWarehouseMetric.date >= cutoff.date())
             )
             metrics = metrics_result.scalars().all()
 
@@ -78,18 +75,16 @@ async def get_warehouses(
 async def get_warehouse_timeseries(
     request: Request,
     days: int = Query(default=30, ge=1, le=365),
-    warehouse: Optional[str] = Query(default=None),
+    warehouse: str | None = Query(default=None),
 ) -> list[WarehouseMetric]:
     config = request.app.state.config
     credits_per_dollar: float = config.credits_per_dollar
 
-    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    cutoff = datetime.now(UTC) - timedelta(days=days)
 
     try:
         async with get_db() as session:
-            query = select(CachedWarehouseMetric).where(
-                CachedWarehouseMetric.date >= cutoff.date()
-            )
+            query = select(CachedWarehouseMetric).where(CachedWarehouseMetric.date >= cutoff.date())
             if warehouse:
                 query = query.where(CachedWarehouseMetric.warehouse_name == warehouse)
             result = await session.execute(query)
@@ -101,9 +96,7 @@ async def get_warehouse_timeseries(
                 date=row.date.isoformat() if hasattr(row.date, "isoformat") else str(row.date),
                 credits_used=round(float(row.credits_used or 0), 4),
                 cost_usd=round(
-                    float(row.credits_used or 0) / credits_per_dollar
-                    if credits_per_dollar
-                    else 0,
+                    float(row.credits_used or 0) / credits_per_dollar if credits_per_dollar else 0,
                     4,
                 ),
             )

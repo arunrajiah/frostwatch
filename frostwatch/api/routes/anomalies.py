@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, Query
 from sqlalchemy import desc, select
@@ -15,7 +15,7 @@ router = APIRouter()
 async def get_anomalies(
     days: int = Query(default=30, ge=1, le=365),
 ) -> list[AnomalyResponse]:
-    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    cutoff = datetime.now(UTC) - timedelta(days=days)
 
     try:
         async with get_db() as session:

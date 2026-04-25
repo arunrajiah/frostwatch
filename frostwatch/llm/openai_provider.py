@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from openai import AsyncOpenAI, APIError
+from openai import APIError, AsyncOpenAI
 
 from frostwatch.llm.base import LLMProvider
 

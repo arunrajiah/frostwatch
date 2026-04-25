@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 _executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="email")
 
 
-def _send_sync(config: "FrostWatchConfig", report_text: str, cost_summary: dict) -> None:
+def _send_sync(config: FrostWatchConfig, report_text: str, cost_summary: dict) -> None:
     total_credits = cost_summary.get("total_credits_7d", 0)
     total_cost = cost_summary.get("total_cost_usd_7d", 0)
 
@@ -61,11 +61,9 @@ def _send_sync(config: "FrostWatchConfig", report_text: str, cost_summary: dict)
 
 
 async def send_email_digest(
-    config: "FrostWatchConfig",
+    config: FrostWatchConfig,
     report_text: str,
     cost_summary: dict,
 ) -> None:
     loop = asyncio.get_running_loop()
-    await loop.run_in_executor(
-        _executor, _send_sync, config, report_text, cost_summary
-    )
+    await loop.run_in_executor(_executor, _send_sync, config, report_text, cost_summary)

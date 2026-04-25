@@ -1,24 +1,24 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel
 
 
 class QueryRecord(BaseModel):
     query_id: str
-    warehouse_name: Optional[str] = None
-    user_name: Optional[str] = None
-    role_name: Optional[str] = None
-    execution_time_ms: Optional[float] = None
-    bytes_scanned: Optional[float] = None
-    credits_used: Optional[float] = None
-    start_time: Optional[datetime] = None
-    end_time: Optional[datetime] = None
-    query_text_preview: Optional[str] = None
-    query_tag: Optional[str] = None
-    status: Optional[str] = None
+    warehouse_name: str | None = None
+    user_name: str | None = None
+    role_name: str | None = None
+    execution_time_ms: float | None = None
+    bytes_scanned: float | None = None
+    credits_used: float | None = None
+    start_time: datetime | None = None
+    end_time: datetime | None = None
+    query_text_preview: str | None = None
+    query_tag: str | None = None
+    status: str | None = None
 
 
 class WarehouseMetric(BaseModel):
@@ -47,10 +47,10 @@ class AnomalyResponse(BaseModel):
     id: int
     detected_at: datetime
     anomaly_type: str
-    warehouse_name: Optional[str] = None
+    warehouse_name: str | None = None
     severity: str
-    description: Optional[str] = None
-    llm_explanation: Optional[str] = None
+    description: str | None = None
+    llm_explanation: str | None = None
 
 
 class DashboardSummary(BaseModel):
@@ -61,17 +61,17 @@ class DashboardSummary(BaseModel):
     top_warehouses: list[CostBreakdownItem]
     top_users: list[CostBreakdownItem]
     recent_anomalies: list[AnomalyResponse]
-    last_synced: Optional[datetime] = None
+    last_synced: datetime | None = None
     query_count_7d: int
 
 
 class ReportResponse(BaseModel):
     id: int
     generated_at: datetime
-    period_start: Optional[datetime] = None
-    period_end: Optional[datetime] = None
-    summary_text: Optional[str] = None
-    details_json: Optional[Any] = None
+    period_start: datetime | None = None
+    period_end: datetime | None = None
+    summary_text: str | None = None
+    details_json: Any | None = None
 
 
 class SettingsResponse(BaseModel):
@@ -95,35 +95,35 @@ class SettingsResponse(BaseModel):
 
 
 class SettingsUpdate(BaseModel):
-    llm_provider: Optional[str] = None
-    llm_model: Optional[str] = None
-    llm_api_key: Optional[str] = None
-    snowflake_account: Optional[str] = None
-    snowflake_user: Optional[str] = None
-    snowflake_password: Optional[str] = None
-    snowflake_warehouse: Optional[str] = None
-    snowflake_database: Optional[str] = None
-    snowflake_role: Optional[str] = None
-    slack_webhook_url: Optional[str] = None
-    email_smtp_host: Optional[str] = None
-    email_smtp_port: Optional[int] = None
-    email_smtp_user: Optional[str] = None
-    email_smtp_password: Optional[str] = None
-    email_recipients: Optional[list[str]] = None
-    credits_per_dollar: Optional[float] = None
-    schedule_cron: Optional[str] = None
-    alert_threshold_multiplier: Optional[float] = None
+    llm_provider: str | None = None
+    llm_model: str | None = None
+    llm_api_key: str | None = None
+    snowflake_account: str | None = None
+    snowflake_user: str | None = None
+    snowflake_password: str | None = None
+    snowflake_warehouse: str | None = None
+    snowflake_database: str | None = None
+    snowflake_role: str | None = None
+    slack_webhook_url: str | None = None
+    email_smtp_host: str | None = None
+    email_smtp_port: int | None = None
+    email_smtp_user: str | None = None
+    email_smtp_password: str | None = None
+    email_recipients: list[str] | None = None
+    credits_per_dollar: float | None = None
+    schedule_cron: str | None = None
+    alert_threshold_multiplier: float | None = None
 
 
 class SyncStatus(BaseModel):
     status: str
-    last_run_at: Optional[datetime] = None
-    last_error: Optional[str] = None
-    rows_synced: Optional[int] = None
+    last_run_at: datetime | None = None
+    last_error: str | None = None
+    rows_synced: int | None = None
 
 
 class SchedulerJob(BaseModel):
     job_id: str
     name: str
-    next_run_time: Optional[str] = None
+    next_run_time: str | None = None
     trigger_description: str

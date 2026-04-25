@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 from pathlib import Path
-from typing import Optional
 
 import typer
 from rich.console import Console
@@ -30,7 +29,9 @@ def serve(
     """Start the FrostWatch API server."""
     import uvicorn
 
-    console.print(f"[bold cyan]FrostWatch v{__version__}[/bold cyan] starting on http://{host}:{port}")
+    console.print(
+        f"[bold cyan]FrostWatch v{__version__}[/bold cyan] starting on http://{host}:{port}"
+    )
     uvicorn.run(
         "frostwatch.api.app:app",
         host=host,
@@ -43,10 +44,10 @@ def serve(
 @app.command()
 def sync() -> None:
     """Run a one-off Snowflake data sync (no server required)."""
+    from frostwatch.api.routes.sync import run_sync
     from frostwatch.core.config import load_config
     from frostwatch.core.db import init_db
     from frostwatch.snowflake.client import SnowflakeClient
-    from frostwatch.api.routes.sync import run_sync
 
     async def _run():
         config = load_config()
@@ -68,7 +69,7 @@ def sync() -> None:
 
 @config_app.command("init")
 def config_init(
-    path: Optional[Path] = typer.Option(None, "--path", help="Output path for config file"),
+    path: Path | None = typer.Option(None, "--path", help="Output path for config file"),  # noqa: B008
 ) -> None:
     """Create a template config file at ~/.frostwatch/config.yaml."""
     import yaml
@@ -139,7 +140,10 @@ def config_show() -> None:
         ("llm_model", config.llm_model or "(default)"),
         ("llm_api_key", mask(config.llm_api_key.get_secret_value())),
         ("llm_base_url", config.llm_base_url),
-        ("slack_webhook_url", mask(config.slack_webhook_url) if config.slack_webhook_url else "(not set)"),
+        (
+            "slack_webhook_url",
+            mask(config.slack_webhook_url) if config.slack_webhook_url else "(not set)",
+        ),
         ("email_smtp_host", config.email_smtp_host or "(not set)"),
         ("email_smtp_port", str(config.email_smtp_port)),
         ("email_smtp_user", config.email_smtp_user or "(not set)"),

@@ -14,7 +14,7 @@ _executor = ThreadPoolExecutor(max_workers=4, thread_name_prefix="snowflake")
 
 
 class SnowflakeClient:
-    def __init__(self, config: "FrostWatchConfig") -> None:
+    def __init__(self, config: FrostWatchConfig) -> None:
         self._config = config
 
     def _get_connection(self) -> snowflake.connector.SnowflakeConnection:

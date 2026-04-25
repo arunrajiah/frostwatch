@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, Query, Request
 from sqlalchemy import desc, select
@@ -17,7 +17,7 @@ async def get_queries(
     days: int = Query(default=7, ge=1, le=365),
     limit: int = Query(default=50, ge=1, le=500),
 ) -> list[QueryRecord]:
-    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    cutoff = datetime.now(UTC) - timedelta(days=days)
 
     try:
         async with get_db() as session:

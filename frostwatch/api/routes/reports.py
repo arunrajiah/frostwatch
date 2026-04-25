@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, Request
 from sqlalchemy import desc, select
@@ -11,7 +11,6 @@ from frostwatch.analysis.cost import compute_cost_breakdown
 from frostwatch.analysis.recommendations import generate_report
 from frostwatch.api.models import ReportResponse
 from frostwatch.core.db import (
-    AnomalyRecord,
     CachedQuery,
     CachedWarehouseMetric,
     ReportRecord,
@@ -57,7 +56,7 @@ async def generate_report_endpoint(request: Request) -> ReportResponse:
     llm = request.app.state.llm_provider
 
     period_days = 7
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     period_start = now - timedelta(days=period_days)
 
     try:
@@ -72,10 +71,7 @@ async def generate_report_endpoint(request: Request) -> ReportResponse:
 
             wm_result = await session.execute(select(CachedWarehouseMetric))
             warehouse_metrics = [
-                {
-                    c.name: getattr(row, c.name)
-                    for c in CachedWarehouseMetric.__table__.columns
-                }
+                {c.name: getattr(row, c.name) for c in CachedWarehouseMetric.__table__.columns}
                 for row in wm_result.scalars().all()
             ]
 
@@ -110,9 +106,7 @@ async def generate_report_endpoint(request: Request) -> ReportResponse:
             report_id = new_report.id
 
         async with get_db() as session:
-            result = await session.execute(
-                select(ReportRecord).where(ReportRecord.id == report_id)
-            )
+            result = await session.execute(select(ReportRecord).where(ReportRecord.id == report_id))
             saved = result.scalar_one()
             return _row_to_response(saved)
 
@@ -124,9 +118,7 @@ async def generate_report_endpoint(request: Request) -> ReportResponse:
 async def get_report(report_id: int) -> ReportResponse:
     try:
         async with get_db() as session:
-            result = await session.execute(
-                select(ReportRecord).where(ReportRecord.id == report_id)
-            )
+            result = await session.execute(select(ReportRecord).where(ReportRecord.id == report_id))
             row = result.scalar_one_or_none()
 
         if row is None:

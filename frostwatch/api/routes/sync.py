@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 from sqlalchemy import desc, select
@@ -26,7 +26,7 @@ async def run_sync(config, snowflake_client) -> None:
     global _sync_running
     _sync_running = True
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     sync_run_id: int | None = None
 
     async with get_db() as session:
@@ -39,7 +39,7 @@ async def run_sync(config, snowflake_client) -> None:
         query_rows = await snowflake_client.execute(QUERY_HISTORY_SQL, {"days": 30})
         metric_rows = await snowflake_client.execute(WAREHOUSE_METERING_SQL, {"days": 30})
 
-        synced_at = datetime.now(timezone.utc)
+        synced_at = datetime.now(UTC)
         rows_synced = 0
 
         async with get_db() as session:
@@ -51,7 +51,9 @@ async def run_sync(config, snowflake_client) -> None:
                     role_name=row.get("ROLE_NAME") or row.get("role_name"),
                     database_name=row.get("DATABASE_NAME") or row.get("database_name"),
                     schema_name=row.get("SCHEMA_NAME") or row.get("schema_name"),
-                    execution_time_ms=_to_float(row.get("EXECUTION_TIME_MS") or row.get("execution_time_ms")),
+                    execution_time_ms=_to_float(
+                        row.get("EXECUTION_TIME_MS") or row.get("execution_time_ms")
+                    ),
                     bytes_scanned=_to_float(row.get("BYTES_SCANNED") or row.get("bytes_scanned")),
                     credits_used=_to_float(row.get("CREDITS_USED") or row.get("credits_used")),
                     start_time=row.get("START_TIME") or row.get("start_time"),
@@ -107,15 +109,12 @@ async def run_sync(config, snowflake_client) -> None:
         async with get_db() as session:
             wm_result = await session.execute(select(CachedWarehouseMetric))
             all_metrics = [
-                {
-                    c.name: getattr(row, c.name)
-                    for c in CachedWarehouseMetric.__table__.columns
-                }
+                {c.name: getattr(row, c.name) for c in CachedWarehouseMetric.__table__.columns}
                 for row in wm_result.scalars().all()
             ]
 
         anomalies = detect_anomalies(all_metrics, config)
-        detection_time = datetime.now(timezone.utc)
+        detection_time = datetime.now(UTC)
 
         if anomalies:
             async with get_db() as session:
@@ -130,24 +129,20 @@ async def run_sync(config, snowflake_client) -> None:
                     session.add(record)
 
         async with get_db() as session:
-            result = await session.execute(
-                select(SyncRun).where(SyncRun.id == sync_run_id)
-            )
+            result = await session.execute(select(SyncRun).where(SyncRun.id == sync_run_id))
             run = result.scalar_one()
             run.status = "success"
-            run.finished_at = datetime.now(timezone.utc)
+            run.finished_at = datetime.now(UTC)
             run.rows_synced = rows_synced
 
     except Exception as exc:
         if sync_run_id:
             async with get_db() as session:
-                result = await session.execute(
-                    select(SyncRun).where(SyncRun.id == sync_run_id)
-                )
+                result = await session.execute(select(SyncRun).where(SyncRun.id == sync_run_id))
                 run = result.scalar_one_or_none()
                 if run:
                     run.status = "error"
-                    run.finished_at = datetime.now(timezone.utc)
+                    run.finished_at = datetime.now(UTC)
                     run.error_message = str(exc)
         raise
     finally:

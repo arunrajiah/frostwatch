@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 
 from pydantic import BaseModel
 
@@ -39,9 +39,7 @@ def compute_cost_breakdown(
     warehouse_metrics: list[dict],
     credits_per_dollar: float,
 ) -> CostBreakdown:
-    total_credits = sum(
-        float(r.get("credits_used") or 0) for r in warehouse_metrics
-    )
+    total_credits = sum(float(r.get("credits_used") or 0) for r in warehouse_metrics)
     total_cost_usd = total_credits / credits_per_dollar if credits_per_dollar else 0.0
 
     wh_credits: dict[str, float] = defaultdict(float)
@@ -91,7 +89,6 @@ def compute_cost_breakdown(
         for name, credits in sorted(tag_credits.items(), key=lambda x: -x[1])[:10]
     ]
 
-    cutoff = datetime.now(timezone.utc) - timedelta(days=30)
     date_credits: dict[str, float] = defaultdict(float)
     for r in warehouse_metrics:
         raw_date = r.get("date")

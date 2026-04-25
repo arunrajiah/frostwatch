@@ -8,19 +8,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from frostwatch.api.routes.anomalies import router as anomalies_router
+from frostwatch.api.routes.dashboard import router as dashboard_router
+from frostwatch.api.routes.queries import router as queries_router
+from frostwatch.api.routes.reports import router as reports_router
+from frostwatch.api.routes.scheduler_routes import router as scheduler_router
+from frostwatch.api.routes.settings import router as settings_router
+from frostwatch.api.routes.sync import router as sync_router
+from frostwatch.api.routes.warehouses import router as warehouses_router
 from frostwatch.core.config import load_config
 from frostwatch.core.db import init_db
 from frostwatch.core.scheduler import create_scheduler
 from frostwatch.llm.factory import get_llm_provider
-
-from frostwatch.api.routes.dashboard import router as dashboard_router
-from frostwatch.api.routes.queries import router as queries_router
-from frostwatch.api.routes.warehouses import router as warehouses_router
-from frostwatch.api.routes.anomalies import router as anomalies_router
-from frostwatch.api.routes.reports import router as reports_router
-from frostwatch.api.routes.settings import router as settings_router
-from frostwatch.api.routes.sync import router as sync_router
-from frostwatch.api.routes.scheduler_routes import router as scheduler_router
 
 
 class AppState:

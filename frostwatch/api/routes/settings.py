@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import contextlib
 import json
 
 from fastapi import APIRouter, HTTPException, Request
-from sqlalchemy import select
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
 from frostwatch.api.models import SettingsResponse, SettingsUpdate
@@ -69,9 +69,7 @@ async def update_settings(
     try:
         async with get_db() as session:
             for key, value in updates.items():
-                stmt = sqlite_insert(SettingsStore).values(
-                    key=key, value=json.dumps(value)
-                )
+                stmt = sqlite_insert(SettingsStore).values(key=key, value=json.dumps(value))
                 stmt = stmt.on_conflict_do_update(
                     index_elements=["key"], set_={"value": json.dumps(value)}
                 )
@@ -80,9 +78,7 @@ async def update_settings(
         raise HTTPException(status_code=500, detail=f"Failed to persist settings: {exc}") from exc
 
     app.state.config = new_config
-    try:
+    with contextlib.suppress(Exception):
         app.state.llm_provider = get_llm_provider(new_config)
-    except Exception:
-        pass
 
     return _config_to_response(new_config)

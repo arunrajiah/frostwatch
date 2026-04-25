@@ -3,8 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from frostwatch.llm.base import LLMProvider
     from frostwatch.analysis.cost import CostBreakdown
+    from frostwatch.llm.base import LLMProvider
 
 SYSTEM_PROMPT = """You are FrostWatch, an AI assistant specializing in Snowflake cost optimization and query performance analysis.
 Your role is to:
@@ -18,7 +18,7 @@ Be concise, specific, and prioritize high-impact recommendations. Use dollar amo
 def build_llm_prompt(
     queries: list[dict],
     anomalies: list[dict],
-    cost_breakdown: "CostBreakdown",
+    cost_breakdown: CostBreakdown,
     period_days: int,
 ) -> str:
     lines: list[str] = []
@@ -41,9 +41,7 @@ def build_llm_prompt(
     if cost_breakdown.by_user:
         lines.append("### Top Users by Credits Consumed")
         for item in cost_breakdown.by_user[:5]:
-            lines.append(
-                f"- {item.name}: {item.credits:.2f} credits (${item.cost_usd:.2f})"
-            )
+            lines.append(f"- {item.name}: {item.credits:.2f} credits (${item.cost_usd:.2f})")
         lines.append("")
 
     if anomalies:
@@ -70,7 +68,9 @@ def build_llm_prompt(
             user = q.get("user_name", "unknown")
             wh = q.get("warehouse_name", "unknown")
             text = (q.get("query_text") or "")[:500]
-            lines.append(f"\n**Query {i}** — {credits:.4f} credits, {exec_ms/1000:.1f}s, user={user}, warehouse={wh}")
+            lines.append(
+                f"\n**Query {i}** — {credits:.4f} credits, {exec_ms / 1000:.1f}s, user={user}, warehouse={wh}"
+            )
             lines.append(f"```sql\n{text}\n```")
         lines.append("")
 
@@ -92,10 +92,10 @@ def build_llm_prompt(
 
 
 async def generate_report(
-    llm: "LLMProvider",
+    llm: LLMProvider,
     queries: list[dict],
     anomalies: list[dict],
-    cost_breakdown: "CostBreakdown",
+    cost_breakdown: CostBreakdown,
     period_days: int = 7,
 ) -> str:
     prompt = build_llm_prompt(queries, anomalies, cost_breakdown, period_days)

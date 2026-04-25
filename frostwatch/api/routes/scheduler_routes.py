@@ -32,9 +32,10 @@ async def trigger_scheduler(request: Request) -> dict:
     if scheduler is None:
         raise HTTPException(status_code=503, detail="Scheduler not available")
 
-    from frostwatch.snowflake.client import SnowflakeClient
-    from frostwatch.api.routes.sync import run_sync
     import asyncio
+
+    from frostwatch.api.routes.sync import run_sync
+    from frostwatch.snowflake.client import SnowflakeClient
 
     config = request.app.state.config
     client = SnowflakeClient(config)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
@@ -30,9 +30,9 @@ def _severity_from_factor(factor: float) -> str:
 
 def detect_anomalies(
     warehouse_metrics: list[dict],
-    config: "FrostWatchConfig",
+    config: FrostWatchConfig,
 ) -> list[AnomalyDetection]:
-    today = datetime.now(timezone.utc).date()
+    today = datetime.now(UTC).date()
 
     by_warehouse: dict[str, dict[date, float]] = defaultdict(dict)
 
@@ -63,9 +63,7 @@ def detect_anomalies(
 
         recent_days = {d: c for d, c in date_credits.items() if d >= window_7_start}
         baseline_days = {
-            d: c
-            for d, c in date_credits.items()
-            if window_28_start <= d < window_7_start
+            d: c for d, c in date_credits.items() if window_28_start <= d < window_7_start
         }
 
         if not recent_days or not baseline_days:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import UTC
 from typing import TYPE_CHECKING, Any
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -23,33 +24,35 @@ def _parse_cron(cron_expr: str) -> CronTrigger:
     )
 
 
-def create_scheduler(config: "FrostWatchConfig", app_state: Any) -> AsyncIOScheduler:
+def create_scheduler(config: FrostWatchConfig, app_state: Any) -> AsyncIOScheduler:
     scheduler = AsyncIOScheduler()
 
     async def sync_job() -> None:
-        from frostwatch.snowflake.client import SnowflakeClient
         from frostwatch.api.routes.sync import run_sync
+        from frostwatch.snowflake.client import SnowflakeClient
 
         client = SnowflakeClient(app_state.config)
         await run_sync(app_state.config, client)
 
     async def report_job() -> None:
-        from frostwatch.api.routes.sync import run_sync
-        from frostwatch.snowflake.client import SnowflakeClient
-        from frostwatch.analysis.cost import compute_cost_breakdown
-        from frostwatch.analysis.anomaly import detect_anomalies
-        from frostwatch.analysis.recommendations import generate_report
-        from frostwatch.alerts.slack import send_slack_digest
-        from frostwatch.alerts.email import send_email_digest
-        from frostwatch.core.db import get_db, CachedQuery, CachedWarehouseMetric
+        from datetime import datetime, timedelta
+
         from sqlalchemy import select
-        from datetime import datetime, timedelta, timezone
+
+        from frostwatch.alerts.email import send_email_digest
+        from frostwatch.alerts.slack import send_slack_digest
+        from frostwatch.analysis.anomaly import detect_anomalies
+        from frostwatch.analysis.cost import compute_cost_breakdown
+        from frostwatch.analysis.recommendations import generate_report
+        from frostwatch.api.routes.sync import run_sync
+        from frostwatch.core.db import CachedQuery, CachedWarehouseMetric, get_db
+        from frostwatch.snowflake.client import SnowflakeClient
 
         current_config = app_state.config
         client = SnowflakeClient(current_config)
         await run_sync(current_config, client)
 
-        cutoff = datetime.now(timezone.utc) - timedelta(days=7)
+        cutoff = datetime.now(UTC) - timedelta(days=7)
         async with get_db() as session:
             q_result = await session.execute(
                 select(CachedQuery).where(CachedQuery.start_time >= cutoff)
@@ -61,10 +64,7 @@ def create_scheduler(config: "FrostWatchConfig", app_state: Any) -> AsyncIOSched
 
             wm_result = await session.execute(select(CachedWarehouseMetric))
             warehouse_metrics = [
-                {
-                    c.name: getattr(row, c.name)
-                    for c in CachedWarehouseMetric.__table__.columns
-                }
+                {c.name: getattr(row, c.name) for c in CachedWarehouseMetric.__table__.columns}
                 for row in wm_result.scalars().all()
             ]
 
@@ -84,9 +84,7 @@ def create_scheduler(config: "FrostWatchConfig", app_state: Any) -> AsyncIOSched
         }
 
         if current_config.slack_webhook_url:
-            await send_slack_digest(
-                current_config.slack_webhook_url, report_text, cost_summary
-            )
+            await send_slack_digest(current_config.slack_webhook_url, report_text, cost_summary)
 
         if current_config.email_smtp_host and current_config.email_recipients:
             await send_email_digest(current_config, report_text, cost_summary)

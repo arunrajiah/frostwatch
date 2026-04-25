@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, Request
 from sqlalchemy import desc, select
@@ -21,7 +21,7 @@ async def get_dashboard(request: Request) -> DashboardSummary:
     config = request.app.state.config
     credits_per_dollar: float = config.credits_per_dollar
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     cutoff_7d = now - timedelta(days=7)
     cutoff_30d = now - timedelta(days=30)
 
@@ -33,16 +33,12 @@ async def get_dashboard(request: Request) -> DashboardSummary:
             queries_7d = q7_result.scalars().all()
 
             wm_result = await session.execute(
-                select(CachedWarehouseMetric).where(
-                    CachedWarehouseMetric.date >= cutoff_30d.date()
-                )
+                select(CachedWarehouseMetric).where(CachedWarehouseMetric.date >= cutoff_30d.date())
             )
             all_metrics = wm_result.scalars().all()
 
             wm7_result = await session.execute(
-                select(CachedWarehouseMetric).where(
-                    CachedWarehouseMetric.date >= cutoff_7d.date()
-                )
+                select(CachedWarehouseMetric).where(CachedWarehouseMetric.date >= cutoff_7d.date())
             )
             metrics_7d = wm7_result.scalars().all()
 
@@ -77,7 +73,9 @@ async def get_dashboard(request: Request) -> DashboardSummary:
                 name=name,
                 credits=round(credits, 4),
                 cost_usd=round(credits / credits_per_dollar if credits_per_dollar else 0, 4),
-                pct_of_total=round(credits / total_credits_30d * 100, 2) if total_credits_30d else 0.0,
+                pct_of_total=round(credits / total_credits_30d * 100, 2)
+                if total_credits_30d
+                else 0.0,
             )
             for name, credits in sorted(wh_credits.items(), key=lambda x: -x[1])[:5]
         ]
