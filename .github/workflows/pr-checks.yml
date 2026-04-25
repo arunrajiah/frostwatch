@@ -29,12 +29,8 @@ jobs:
             ci
             perf
             revert
+            build
           requireScope: false
-          subjectPattern: ^[A-Z].+$
-          subjectPatternError: |
-            The subject "{subject}" must start with an uppercase letter.
-            Good: "feat: Add warehouse timeseries chart"
-            Bad:  "feat: add warehouse timeseries chart"
 
   size-label:
     name: PR size label

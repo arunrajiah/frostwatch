@@ -1,31 +1,36 @@
 backend:
-  - frostwatch/**/*
+  - changed-files:
+    - any-glob-to-any-file: "frostwatch/**/*"
 
 frontend:
-  - frontend/src/**/*
+  - changed-files:
+    - any-glob-to-any-file: "frontend/src/**/*"
 
 ci:
-  - .github/workflows/**/*
+  - changed-files:
+    - any-glob-to-any-file: ".github/workflows/**/*"
 
 docs:
-  - "*.md"
-  - docs/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - "*.md"
+      - "docs/**/*"
 
 docker:
-  - Dockerfile
-  - docker-compose.yml
-
-config:
-  - pyproject.toml
-  - frostwatch.yaml.example
-  - frontend/package.json
-  - frontend/vite.config.ts
-
-security:
-  - .github/workflows/security.yml
-  - SECURITY.md
+  - changed-files:
+    - any-glob-to-any-file:
+      - "Dockerfile"
+      - "docker-compose.yml"
 
 dependencies:
-  - pyproject.toml
-  - frontend/package.json
-  - frontend/package-lock.json
+  - changed-files:
+    - any-glob-to-any-file:
+      - "pyproject.toml"
+      - "frontend/package.json"
+      - "frontend/package-lock.json"
+
+security:
+  - changed-files:
+    - any-glob-to-any-file:
+      - ".github/workflows/security.yml"
+      - "SECURITY.md"

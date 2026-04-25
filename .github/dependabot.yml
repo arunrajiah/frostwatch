@@ -11,12 +11,15 @@ updates:
     labels:
       - dependencies
       - backend
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
       llm-providers:
         patterns:
           - "anthropic"
           - "openai"
-          - "google-generativeai"
+          - "google-genai"
       fastapi-stack:
         patterns:
           - "fastapi"
@@ -35,6 +38,9 @@ updates:
     labels:
       - dependencies
       - frontend
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
       react:
         patterns:
@@ -60,3 +66,6 @@ updates:
     labels:
       - dependencies
       - ci
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

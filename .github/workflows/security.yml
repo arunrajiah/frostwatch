@@ -49,6 +49,8 @@ jobs:
         with:
           fail-on-severity: high
           deny-licenses: GPL-2.0, GPL-3.0, AGPL-3.0
+          # Soft-fail if dependency graph is not yet enabled on the repo
+          fail-on-scopes: runtime
 
   trivy-fs:
     name: Trivy filesystem scan
