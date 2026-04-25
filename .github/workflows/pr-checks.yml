@@ -1,0 +1,84 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  pr-title:
+    name: Conventional commit title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            test
+            chore
+            ci
+            perf
+            revert
+          requireScope: false
+          subjectPattern: ^[A-Z].+$
+          subjectPatternError: |
+            The subject "{subject}" must start with an uppercase letter.
+            Good: "feat: Add warehouse timeseries chart"
+            Bad:  "feat: add warehouse timeseries chart"
+
+  size-label:
+    name: PR size label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: codelytv/pr-size-labeler@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          xs_label: "size/XS"
+          xs_max_size: 9
+          s_label: "size/S"
+          s_max_size: 99
+          m_label: "size/M"
+          m_max_size: 499
+          l_label: "size/L"
+          l_max_size: 999
+          xl_label: "size/XL"
+          fail_if_xl: false
+          message_if_xl: |
+            This PR is very large. Consider splitting it into smaller PRs for easier review.
+
+  labeler:
+    name: Auto-label by changed paths
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+          sync-labels: true
+
+  check-changelog:
+    name: Remind about CHANGELOG
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.pull_request.labels.*.name, 'skip-changelog')"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if CHANGELOG.md was updated
+        run: |
+          if git diff --name-only origin/main...HEAD | grep -q "CHANGELOG.md"; then
+            echo "✅ CHANGELOG.md updated"
+          else
+            echo "::warning::CHANGELOG.md was not updated. Add a 'skip-changelog' label if this PR doesn't need a changelog entry."
+          fi

@@ -1,0 +1,42 @@
+# FrostWatch configuration — copy to ~/.frostwatch/config.yaml and fill in your values.
+# All fields can also be set via environment variables prefixed FROSTWATCH_
+# (e.g. FROSTWATCH_SNOWFLAKE_ACCOUNT=xy12345.us-east-1)
+
+# ── Snowflake connection ──────────────────────────────────────────────────────
+snowflake_account: "xy12345.us-east-1"     # Your Snowflake account identifier
+snowflake_user: "your_username"
+snowflake_password: "your_password"        # Or use FROSTWATCH_SNOWFLAKE_PASSWORD env var
+snowflake_warehouse: "COMPUTE_WH"
+snowflake_database: "SNOWFLAKE"            # The built-in SNOWFLAKE database
+snowflake_schema: "ACCOUNT_USAGE"          # account_usage schema — leave as-is
+snowflake_role: "ACCOUNTADMIN"             # Needs SELECT on ACCOUNT_USAGE
+
+# ── LLM configuration ────────────────────────────────────────────────────────
+# Supported providers: anthropic | openai | gemini | ollama
+llm_provider: "anthropic"
+llm_model: ""                              # Leave empty to use provider default
+llm_api_key: "sk-ant-..."                  # Or use FROSTWATCH_LLM_API_KEY env var
+llm_base_url: "http://localhost:11434"     # Only used for ollama provider
+
+# ── Alerts ────────────────────────────────────────────────────────────────────
+slack_webhook_url: ""                      # e.g. https://hooks.slack.com/services/...
+email_smtp_host: ""                        # e.g. smtp.gmail.com
+email_smtp_port: 587
+email_smtp_user: ""
+email_smtp_password: ""
+email_recipients:
+  - "data-team@yourcompany.com"
+
+# ── Scheduling ────────────────────────────────────────────────────────────────
+# Cron expression for weekly digest + anomaly report (default: Monday 8am)
+schedule_cron: "0 8 * * 1"
+# Flag spend as anomalous if it exceeds this multiple of the rolling baseline
+alert_threshold_multiplier: 3.0
+
+# ── Cost ──────────────────────────────────────────────────────────────────────
+# Snowflake on-demand price per credit (adjust for your contract rate)
+credits_per_dollar: 3.0
+
+# ── Storage ───────────────────────────────────────────────────────────────────
+# Where FrostWatch stores its SQLite database and logs
+data_dir: "~/.frostwatch"

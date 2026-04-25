@@ -1,0 +1,31 @@
+backend:
+  - frostwatch/**/*
+
+frontend:
+  - frontend/src/**/*
+
+ci:
+  - .github/workflows/**/*
+
+docs:
+  - "*.md"
+  - docs/**/*
+
+docker:
+  - Dockerfile
+  - docker-compose.yml
+
+config:
+  - pyproject.toml
+  - frostwatch.yaml.example
+  - frontend/package.json
+  - frontend/vite.config.ts
+
+security:
+  - .github/workflows/security.yml
+  - SECURITY.md
+
+dependencies:
+  - pyproject.toml
+  - frontend/package.json
+  - frontend/package-lock.json
