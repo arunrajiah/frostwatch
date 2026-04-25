@@ -26,10 +26,20 @@ class SnowflakeClient:
             "warehouse": self._config.snowflake_warehouse,
             "database": self._config.snowflake_database,
             "schema": self._config.snowflake_schema,
+            "login_timeout": 30,
+            "network_timeout": 60,
         }
         if self._config.snowflake_role:
             kwargs["role"] = self._config.snowflake_role
-        return snowflake.connector.connect(**kwargs)
+        try:
+            return snowflake.connector.connect(**kwargs)
+        except snowflake.connector.errors.DatabaseError as exc:
+            raise ConnectionError(
+                f"Snowflake connection failed: {exc}. "
+                "Check your account, user, password, warehouse, and role."
+            ) from exc
+        except Exception as exc:
+            raise ConnectionError(f"Snowflake connection error: {exc}") from exc
 
     def _execute_sync(self, sql: str, params: dict | None) -> list[dict]:
         conn = self._get_connection()

@@ -9,6 +9,16 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-04-26
+
+### Fixed
+- Snowflake client: add 30s login timeout + 60s network timeout; wrap connection errors with readable messages instead of raw tracebacks
+- CORS: make allowed origins configurable via `cors_origins` config field (default keeps localhost dev origins; production deployments add their URL)
+
+### Added
+- `cors_origins` config field and `frostwatch.yaml.example` entry
+- `sync_cron`, `snowflake_query_limit` documented in `frostwatch.yaml.example`
+
 ## [0.1.4] - 2026-04-26
 
 ### Changed

@@ -30,12 +30,23 @@ email_recipients:
 # ── Scheduling ────────────────────────────────────────────────────────────────
 # Cron expression for weekly digest + anomaly report (default: Monday 8am)
 schedule_cron: "0 8 * * 1"
+# Cron expression for Snowflake data sync (default: every 6 hours)
+sync_cron: "0 */6 * * *"
+# Max queries fetched per sync
+snowflake_query_limit: 500
 # Flag spend as anomalous if it exceeds this multiple of the rolling baseline
 alert_threshold_multiplier: 3.0
 
 # ── Cost ──────────────────────────────────────────────────────────────────────
 # Snowflake on-demand price per credit (adjust for your contract rate)
 credits_per_dollar: 3.0
+
+# ── Server ────────────────────────────────────────────────────────────────────
+# Allowed CORS origins (comma-separated list for env var, or YAML list)
+# Add your deployment URL here when self-hosting (e.g. https://frostwatch.yourcompany.com)
+cors_origins:
+  - "http://localhost:5173"
+  - "http://127.0.0.1:5173"
 
 # ── Storage ───────────────────────────────────────────────────────────────────
 # Where FrostWatch stores its SQLite database and logs
