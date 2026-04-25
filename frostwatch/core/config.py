@@ -37,6 +37,8 @@ class FrostWatchConfig(BaseSettings):
     email_smtp_password: SecretStr = SecretStr("")
     email_recipients: list[str] = []
 
+    cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
+
     credits_per_dollar: float = 3.0
     schedule_cron: str = "0 8 * * 1"
     sync_cron: str = "0 */6 * * *"

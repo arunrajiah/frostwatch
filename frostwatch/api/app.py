@@ -64,16 +64,17 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="FrostWatch",
         description="AI-powered cost and query observability for Snowflake",
-        version="0.1.0",
+        version="0.1.5",
         lifespan=lifespan,
     )
 
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore[arg-type]
 
+    cors_origins = load_config().cors_origins
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+        allow_origins=cors_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
