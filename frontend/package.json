@@ -16,7 +16,7 @@
     "recharts": "^2.12.7",
     "lucide-react": "^0.400.0",
     "clsx": "^2.1.1",
-    "date-fns": "^3.6.0"
+    "date-fns": "^4.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
