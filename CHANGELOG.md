@@ -9,6 +9,11 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-04-26
+
+### Changed
+- README: badges, corrected clone URL, accurate LLM model names, API table, expanded Snowflake permissions
+
 ## [0.1.3] - 2026-04-26
 
 ### Fixed
