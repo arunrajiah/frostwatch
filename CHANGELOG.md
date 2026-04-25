@@ -16,16 +16,21 @@ Versions follow [Semantic Versioning](https://semver.org/).
 - Cost breakdown by warehouse, user, and query tag
 - Top-N most expensive queries with full query text
 - Anomaly detection: spend spike vs. rolling 21-day baseline per warehouse
-- LLM-powered plain-English anomaly explanations and query rewrite suggestions
-- BYO-LLM support: Anthropic (Claude), OpenAI (GPT-4o), Google Gemini, Ollama (local)
+- LLM-powered plain-English anomaly explanations generated per anomaly at sync time
+- BYO-LLM support: Anthropic (Claude Sonnet), OpenAI (GPT-4o), Google Gemini, Ollama (local)
 - Weekly digest delivery via Slack webhook and SMTP email
-- Built-in APScheduler (no external cron required)
-- Dark-themed web UI (React 18 + TypeScript + Vite + Tailwind CSS + Recharts)
+- Built-in APScheduler with independently configurable sync cron and report cron
+- Dark-themed web UI (React 18 + TypeScript + Vite 7 + Tailwind CSS + Recharts)
 - REST API (FastAPI) with endpoints for dashboard, queries, warehouses, anomalies, reports, settings, sync, and scheduler
+- `POST /api/settings/test-snowflake` and `POST /api/settings/test-email` connection test endpoints
+- Rate limiting on `POST /api/sync` (10 requests/minute via slowapi)
 - CLI: `frostwatch serve`, `sync`, `config init`, `config show`, `version`
 - Docker + docker-compose single-container deployment
 - YAML config file with `FROSTWATCH_` environment variable overrides
 - Async SQLite persistence (SQLAlchemy 2.0 + aiosqlite)
+- Settings UI: SMTP configuration, Snowflake and SMTP connection test buttons, configurable sync schedule and query fetch limit
+- Configurable `snowflake_query_limit` (default 500) passed through to Snowflake query
+- Security scanning: CodeQL, Trivy, pip-audit, npm-audit, dependency-review in CI
 
 [Unreleased]: https://github.com/arunrajiah/frostwatch/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/arunrajiah/frostwatch/releases/tag/v0.1.0
