@@ -49,6 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment: pypi
+    continue-on-error: true
     steps:
       - name: Download dist
         uses: actions/download-artifact@v4
