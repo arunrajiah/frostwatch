@@ -78,8 +78,8 @@ jobs:
         id: changelog
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          # Extract the section between this version and the previous heading
-          NOTES=$(awk "/^## v${VERSION}/{found=1; next} found && /^## v/{exit} found{print}" CHANGELOG.md 2>/dev/null || echo "See ROADMAP.md for details.")
+          # Extract the section between this version heading and the next heading (Keep a Changelog format)
+          NOTES=$(awk "/^\#\# \[${VERSION}\]/{found=1; next} found && /^\#\# /{exit} found{print}" CHANGELOG.md 2>/dev/null || echo "See ROADMAP.md for details.")
           echo "notes<<EOF" >> "$GITHUB_OUTPUT"
           echo "$NOTES" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
