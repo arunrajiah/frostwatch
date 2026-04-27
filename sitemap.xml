@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://arunrajiah.github.io/frostwatch/</loc>
+         <lastmod>2026-04-27</lastmod>
+    </url>
+    <url>
+         <loc>https://arunrajiah.github.io/frostwatch/api/</loc>
+         <lastmod>2026-04-27</lastmod>
+    </url>
+    <url>
+         <loc>https://arunrajiah.github.io/frostwatch/configuration/</loc>
+         <lastmod>2026-04-27</lastmod>
+    </url>
+    <url>
+         <loc>https://arunrajiah.github.io/frostwatch/dbt/</loc>
+         <lastmod>2026-04-27</lastmod>
+    </url>
+    <url>
+         <loc>https://arunrajiah.github.io/frostwatch/installation/</loc>
+         <lastmod>2026-04-27</lastmod>
+    </url>
+</urlset>
