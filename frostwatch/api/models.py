@@ -18,6 +18,7 @@ class QueryRecord(BaseModel):
     end_time: datetime | None = None
     query_text_preview: str | None = None
     query_tag: str | None = None
+    dbt_model: str | None = None
     status: str | None = None
 
 
@@ -30,6 +31,14 @@ class WarehouseMetric(BaseModel):
 
 class WarehouseAgg(BaseModel):
     warehouse_name: str
+    total_credits: float
+    total_cost_usd: float
+    query_count: int
+    avg_execution_ms: float
+
+
+class DbtModelAgg(BaseModel):
+    dbt_model: str
     total_credits: float
     total_cost_usd: float
     query_count: int

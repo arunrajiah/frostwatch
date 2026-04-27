@@ -9,6 +9,20 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.6] - 2026-04-28
+
+### Added
+- **dbt integration**: automatically parse `query_tag` JSON set by dbt-snowflake to extract model names; `dbt_model` column added to `cached_queries` table with inline migration for existing databases
+- **`GET /api/dbt`** endpoint: returns credit, cost, query count, and avg execution time broken down by dbt model name; supports `?days=` parameter
+- **dbt Models page** in the web UI: summary cards, horizontal bar chart (top 15 models), full sortable table
+- `dbt_model` field surfaced in `GET /api/queries` responses
+- 10 unit tests for dbt query tag parsing covering flat, nested, and edge-case formats
+- **MkDocs documentation site** deployed to GitHub Pages (`https://arunrajiah.github.io/frostwatch/`) with Installation, Configuration, dbt Integration, and API Reference pages
+- CI workflow (`.github/workflows/docs.yml`) auto-deploys docs on every push to `main` that touches `docs/` or `mkdocs.yml`
+
+### Security
+- Redact Slack webhook URL from `GET /api/settings` response; return `slack_webhook_url_set: bool` instead of the raw secret (matching pattern used for `llm_api_key` and Snowflake password)
+
 ## [0.1.5] - 2026-04-26
 
 ### Fixed
@@ -58,7 +72,9 @@ Versions follow [Semantic Versioning](https://semver.org/).
 - Configurable `snowflake_query_limit` (default 500) passed through to Snowflake query
 - Security scanning: CodeQL, Trivy, pip-audit, npm-audit, dependency-review in CI
 
-[Unreleased]: https://github.com/arunrajiah/frostwatch/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/arunrajiah/frostwatch/compare/v0.1.6...HEAD
+[0.1.6]: https://github.com/arunrajiah/frostwatch/compare/v0.1.5...v0.1.6
+[0.1.5]: https://github.com/arunrajiah/frostwatch/compare/v0.1.3...v0.1.5
 [0.1.3]: https://github.com/arunrajiah/frostwatch/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/arunrajiah/frostwatch/compare/v0.1.1...v0.1.2
 [0.1.0]: https://github.com/arunrajiah/frostwatch/releases/tag/v0.1.0

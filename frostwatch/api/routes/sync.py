@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from datetime import UTC, datetime
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
@@ -48,6 +49,7 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
 
         async with get_db() as session:
             for row in query_rows:
+                raw_tag = str(row.get("QUERY_TAG") or row.get("query_tag") or "")
                 stmt = sqlite_insert(CachedQuery).values(
                     query_id=str(row.get("QUERY_ID") or row.get("query_id", "")),
                     warehouse_name=row.get("WAREHOUSE_NAME") or row.get("warehouse_name"),
@@ -63,7 +65,8 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
                     start_time=row.get("START_TIME") or row.get("start_time"),
                     end_time=row.get("END_TIME") or row.get("end_time"),
                     query_text=str(row.get("QUERY_TEXT") or row.get("query_text") or ""),
-                    query_tag=str(row.get("QUERY_TAG") or row.get("query_tag") or ""),
+                    query_tag=raw_tag,
+                    dbt_model=_extract_dbt_model(raw_tag),
                     status=str(row.get("STATUS") or row.get("status") or ""),
                     synced_at=synced_at,
                 )
@@ -73,6 +76,7 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
                         "credits_used": stmt.excluded.credits_used,
                         "execution_time_ms": stmt.excluded.execution_time_ms,
                         "bytes_scanned": stmt.excluded.bytes_scanned,
+                        "dbt_model": stmt.excluded.dbt_model,
                         "synced_at": stmt.excluded.synced_at,
                     },
                 )
@@ -167,6 +171,34 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
         raise
     finally:
         _sync_running = False
+
+
+def _extract_dbt_model(query_tag: str | None) -> str | None:
+    """Parse dbt model name from Snowflake query_tag JSON.
+
+    dbt sets query_tag to JSON such as:
+      {"app": "dbt", "node_id": "model.project.model_name", ...}
+    or nested:
+      {"dbt_snowflake_query_tags": {"app": "dbt", "node_id": "model.project.model_name"}}
+    """
+    if not query_tag:
+        return None
+    try:
+        tag = json.loads(query_tag)
+        if not isinstance(tag, dict):
+            return None
+        # Unwrap nested dbt_snowflake_query_tags format
+        if "dbt_snowflake_query_tags" in tag:
+            tag = tag["dbt_snowflake_query_tags"]
+        app = tag.get("app", "")
+        if not isinstance(app, str) or not app.lower().startswith("dbt"):
+            return None
+        node_id = tag.get("node_id", "")
+        if isinstance(node_id, str) and node_id.startswith("model."):
+            return node_id.rsplit(".", 1)[-1]
+        return None
+    except (json.JSONDecodeError, AttributeError, TypeError):
+        return None
 
 
 def _to_float(value) -> float | None:

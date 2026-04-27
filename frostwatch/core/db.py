@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import date, datetime
@@ -45,6 +46,7 @@ class CachedQuery(Base):
     end_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     query_text: Mapped[str | None] = mapped_column(Text, nullable=True)
     query_tag: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    dbt_model: Mapped[str | None] = mapped_column(String(256), nullable=True)
     status: Mapped[str | None] = mapped_column(String(64), nullable=True)
     synced_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
@@ -103,6 +105,12 @@ async def init_db(db_path: Path) -> None:
     async with _engine.begin() as conn:
         await conn.execute(text("PRAGMA journal_mode=WAL"))
         await conn.run_sync(Base.metadata.create_all)
+        # Inline migrations for columns added after initial release
+        for migration_sql in [
+            "ALTER TABLE cached_queries ADD COLUMN dbt_model VARCHAR(256)",
+        ]:
+            with contextlib.suppress(Exception):
+                await conn.execute(text(migration_sql))
 
 
 @asynccontextmanager

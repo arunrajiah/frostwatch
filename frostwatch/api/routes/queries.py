@@ -42,6 +42,7 @@ async def get_queries(
                 end_time=row.end_time,
                 query_text_preview=(row.query_text or "")[:300],
                 query_tag=row.query_tag,
+                dbt_model=row.dbt_model,
                 status=row.status,
             )
             for row in rows
