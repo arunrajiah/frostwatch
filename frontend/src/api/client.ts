@@ -79,7 +79,7 @@ export interface SettingsResponse {
   snowflake_database: string;
   snowflake_role: string;
   snowflake_password_set: boolean;
-  slack_webhook_url: string;
+  slack_webhook_url_set: boolean;
   email_recipients: string[];
   email_smtp_host: string;
   email_smtp_port: number;

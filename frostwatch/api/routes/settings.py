@@ -25,7 +25,7 @@ def _config_to_response(config: FrostWatchConfig) -> SettingsResponse:
         snowflake_warehouse=config.snowflake_warehouse,
         snowflake_database=config.snowflake_database,
         snowflake_role=config.snowflake_role,
-        slack_webhook_url=config.slack_webhook_url,
+        slack_webhook_url_set=bool(config.slack_webhook_url),
         email_recipients=config.email_recipients,
         credits_per_dollar=config.credits_per_dollar,
         schedule_cron=config.schedule_cron,
