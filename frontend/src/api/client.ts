@@ -41,7 +41,16 @@ export interface QueryRecord {
   end_time: string;
   query_text_preview: string;
   query_tag: string;
+  dbt_model: string | null;
   status: string;
+}
+
+export interface DbtModelAgg {
+  dbt_model: string;
+  total_credits: number;
+  total_cost_usd: number;
+  query_count: number;
+  avg_execution_ms: number;
 }
 
 export interface WarehouseAgg {
@@ -200,3 +209,9 @@ export const testSnowflakeConnection = (): Promise<{ status: string; message: st
 
 export const testEmailConnection = (): Promise<{ status: string; message: string }> =>
   request<{ status: string; message: string }>('/settings/test-email', { method: 'POST' });
+
+export const getDbtBreakdown = (params: { days?: number } = {}): Promise<DbtModelAgg[]> => {
+  const qs = new URLSearchParams();
+  if (params.days) qs.set('days', String(params.days));
+  return request<DbtModelAgg[]>(`/dbt?${qs}`);
+};

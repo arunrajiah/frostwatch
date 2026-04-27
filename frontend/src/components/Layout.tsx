@@ -11,6 +11,7 @@ import {
   RefreshCw,
   Clock,
   ChevronRight,
+  Package,
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { triggerSync, getSyncStatus } from '../api/client';
@@ -21,6 +22,7 @@ const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/queries', icon: Database, label: 'Queries' },
   { to: '/warehouses', icon: BarChart2, label: 'Warehouses' },
+  { to: '/dbt', icon: Package, label: 'dbt Models' },
   { to: '/anomalies', icon: AlertTriangle, label: 'Anomalies' },
   { to: '/reports', icon: FileText, label: 'Reports' },
   { to: '/settings', icon: Settings, label: 'Settings' },
