@@ -83,7 +83,7 @@ class SettingsResponse(BaseModel):
     snowflake_warehouse: str
     snowflake_database: str
     snowflake_role: str
-    slack_webhook_url: str
+    slack_webhook_url_set: bool
     email_recipients: list[str]
     credits_per_dollar: float
     schedule_cron: str

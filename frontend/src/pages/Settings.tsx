@@ -103,6 +103,7 @@ export default function Settings() {
   const [password, setPassword] = useState('');
   const [llmKey, setLlmKey] = useState('');
   const [smtpPassword, setSmtpPassword] = useState('');
+  const [slackWebhook, setSlackWebhook] = useState('');
   const [emailStr, setEmailStr] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -189,6 +190,7 @@ export default function Settings() {
     if (password) (payload as Record<string, unknown>)['snowflake_password'] = password;
     if (llmKey) (payload as Record<string, unknown>)['llm_api_key'] = llmKey;
     if (smtpPassword) (payload as Record<string, unknown>)['email_smtp_password'] = smtpPassword;
+    if (slackWebhook) (payload as Record<string, unknown>)['slack_webhook_url'] = slackWebhook;
     saveMutation.mutate(payload);
   };
 
@@ -391,12 +393,10 @@ export default function Settings() {
             label="Slack Webhook URL"
             hint="Post anomaly alerts to a Slack channel"
           >
-            <input
-              type="url"
-              value={form.slack_webhook_url ?? ''}
-              onChange={(e) => set('slack_webhook_url', e.target.value)}
-              placeholder="https://hooks.slack.com/services/…"
-              className={inputCls}
+            <PasswordField
+              value={slackWebhook}
+              onChange={setSlackWebhook}
+              placeholder={form.slack_webhook_url_set ? '●●●●●●●●●●●● (configured — enter new URL to change)' : 'https://hooks.slack.com/services/…'}
             />
           </Field>
           <Field
