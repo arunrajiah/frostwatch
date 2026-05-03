@@ -7,6 +7,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
 [![Docker](https://img.shields.io/badge/docker-ghcr.io%2Farunrajiah%2Ffrostwatch-blue)](https://ghcr.io/arunrajiah/frostwatch)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/arunrajiah?label=Sponsors&logo=github)](https://github.com/sponsors/arunrajiah)
 
 FrostWatch is an open source, self-hostable, AI-powered cost and query observability tool for Snowflake. Point it at your Snowflake account and get instant answers to "where is all our money going?" — no SaaS contract, no percentage-of-spend pricing, no phone-home.
 
@@ -179,6 +180,21 @@ FrostWatch runs entirely inside your infrastructure. The only outbound calls are
 ## Roadmap
 
 See [ROADMAP.md](ROADMAP.md).
+
+## Sponsors
+
+FrostWatch is free and MIT-licensed. If it saves your team money on Snowflake, please consider sponsoring to keep development going.
+
+[![Sponsor FrostWatch](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/arunrajiah)
+
+| Tier | Monthly | Perks |
+|------|---------|-------|
+| ☕ Coffee | $5 | Warm fuzzy feeling |
+| 🧊 Supporter | $25 | Name in this README |
+| ❄️ Backer | $100 | Name + priority issue response |
+| 🏔️ Sponsor | $500 | Logo in README + dedicated support |
+
+<!-- sponsors --><!-- sponsors -->
 
 ## Contributing
 
