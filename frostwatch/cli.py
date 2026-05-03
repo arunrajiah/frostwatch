@@ -165,7 +165,9 @@ def config_show() -> None:
 def demo(
     host: str = typer.Option("127.0.0.1", "--host", help="Bind host"),
     port: int = typer.Option(8000, "--port", "-p", help="Bind port"),
-    skip_seed: bool = typer.Option(False, "--skip-seed", help="Skip seeding and just start the server"),
+    skip_seed: bool = typer.Option(
+        False, "--skip-seed", help="Skip seeding and just start the server"
+    ),
 ) -> None:
     """Start FrostWatch with pre-loaded synthetic demo data (no Snowflake needed)."""
     import uvicorn
