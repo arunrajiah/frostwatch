@@ -162,6 +162,47 @@ def config_show() -> None:
 
 
 @app.command()
+def demo(
+    host: str = typer.Option("127.0.0.1", "--host", help="Bind host"),
+    port: int = typer.Option(8000, "--port", "-p", help="Bind port"),
+    skip_seed: bool = typer.Option(False, "--skip-seed", help="Skip seeding and just start the server"),
+) -> None:
+    """Start FrostWatch with pre-loaded synthetic demo data (no Snowflake needed)."""
+    import uvicorn
+
+    from frostwatch.core.config import FrostWatchConfig
+    from frostwatch.core.db import init_db
+
+    async def _seed_and_serve() -> None:
+        config = FrostWatchConfig()  # defaults — no Snowflake creds required
+        await init_db(config.db_path)
+
+        if not skip_seed:
+            from frostwatch.demo.seed import seed_demo
+
+            console.print("[bold cyan]Seeding demo data…[/bold cyan]")
+            await seed_demo(config)
+            console.print("[green]✓ Demo data ready.[/green]")
+
+        console.print(
+            f"\n[bold cyan]FrostWatch v{__version__} — DEMO MODE[/bold cyan]\n"
+            f"  Dashboard → [link]http://{host}:{port}[/link]\n"
+            f"  API docs  → [link]http://{host}:{port}/api/docs[/link]\n"
+            "[dim]No Snowflake connection required. Data is entirely synthetic.[/dim]\n"
+        )
+
+    asyncio.run(_seed_and_serve())
+
+    uvicorn.run(
+        "frostwatch.api.app:app",
+        host=host,
+        port=port,
+        reload=False,
+        log_level="warning",
+    )
+
+
+@app.command()
 def version() -> None:
     """Print FrostWatch version."""
     console.print(f"FrostWatch v{__version__}")

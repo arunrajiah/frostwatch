@@ -65,7 +65,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="FrostWatch",
         description="AI-powered cost and query observability for Snowflake",
-        version="0.1.6",
+        version="0.1.7",
         lifespan=lifespan,
     )
 
