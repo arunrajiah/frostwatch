@@ -10,6 +10,16 @@
 
 FrostWatch is an open source, self-hostable, AI-powered cost and query observability tool for Snowflake. Point it at your Snowflake account and get instant answers to "where is all our money going?" — no SaaS contract, no percentage-of-spend pricing, no phone-home.
 
+## Try it in 30 seconds (no Snowflake needed)
+
+```bash
+pip install frostwatch
+frostwatch demo
+# → open http://localhost:8000
+```
+
+`frostwatch demo` seeds the local database with 35 days of realistic synthetic data — warehouse cost trends, dbt model breakdowns, injected anomaly spikes, AI explanations, and a weekly digest — so you can explore the full UI before connecting a real Snowflake account.
+
 ## What it does
 
 - **Cost breakdown** by warehouse, user, role, and query tag — updated on a schedule you control
@@ -121,6 +131,7 @@ FrostWatch is BYO-LLM. Your data never passes through a hosted proxy — it goes
 ## CLI reference
 
 ```
+frostwatch demo              Seed synthetic data and start server — no Snowflake needed
 frostwatch serve             Start the web server (default: http://localhost:8000)
 frostwatch serve --reload    Start with auto-reload for development
 frostwatch sync              Run a one-off Snowflake sync
@@ -141,6 +152,7 @@ Key endpoints:
 | `GET` | `/api/queries` | Top queries by credit usage |
 | `GET` | `/api/warehouses` | Per-warehouse cost aggregates |
 | `GET` | `/api/anomalies` | Detected anomalies with LLM explanations |
+| `GET` | `/api/dbt` | Credit + cost breakdown by dbt model |
 | `POST` | `/api/sync` | Trigger a manual Snowflake sync |
 | `GET` | `/api/settings` | Current configuration |
 | `PUT` | `/api/settings` | Update configuration |

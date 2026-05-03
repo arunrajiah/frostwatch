@@ -9,6 +9,14 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.7] - 2026-05-03
+
+### Added
+- **`frostwatch demo`** CLI command: seeds the local SQLite database with 35 days of deterministic synthetic data (warehouse metrics, ~500 queries, dbt model attributions, injected anomaly spikes with LLM explanations, weekly report) and starts the server — no Snowflake account or LLM API key required
+- `frostwatch/demo/seed.py`: async `seed_demo()` helper with `random.Random(42)` for reproducible data; includes weekend dips, a 6.5× TRANSFORM_WH spend spike, and realistic log-normal query execution times
+- Updated README: "Try it in 30 seconds" quickstart block, `frostwatch demo` in CLI reference, `/api/dbt` in API table
+- Updated ROADMAP.md to reflect shipped items through v0.1.7
+
 ## [0.1.6] - 2026-04-28
 
 ### Added
