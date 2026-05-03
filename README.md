@@ -183,16 +183,9 @@ See [ROADMAP.md](ROADMAP.md).
 
 ## Sponsors
 
-FrostWatch is free and MIT-licensed. If it saves your team money on Snowflake, please consider sponsoring to keep development going.
+FrostWatch is free and MIT-licensed. If it saves your team money on Snowflake, consider [sponsoring my open-source work](https://github.com/sponsors/arunrajiah) to keep it going.
 
-[![Sponsor FrostWatch](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/arunrajiah)
-
-| Tier | Monthly | Perks |
-|------|---------|-------|
-| ☕ Coffee | $5 | Warm fuzzy feeling |
-| 🧊 Supporter | $25 | Name in this README |
-| ❄️ Backer | $100 | Name + priority issue response |
-| 🏔️ Sponsor | $500 | Logo in README + dedicated support |
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/arunrajiah)
 
 <!-- sponsors --><!-- sponsors -->
 
