@@ -142,3 +142,56 @@ class SchedulerJob(BaseModel):
     name: str
     next_run_time: str | None = None
     trigger_description: str
+
+
+# ── v0.2 — Query deep-dive ────────────────────────────────────────────────────
+
+
+class QueryFingerprintRecord(BaseModel):
+    fingerprint: str
+    canonical_sql: str
+    example_query_id: str | None = None
+    total_executions: int
+    total_credits: float
+    avg_credits: float
+    avg_execution_ms: float
+    first_seen: datetime | None = None
+    last_seen: datetime | None = None
+    most_common_warehouse: str | None = None
+    most_common_user: str | None = None
+
+
+class QueryRegressionRecord(BaseModel):
+    fingerprint: str
+    canonical_sql_preview: str
+    example_query_id: str | None = None
+    avg_credits_this_week: float
+    avg_credits_last_week: float
+    regression_ratio: float
+    executions_this_week: int
+    executions_last_week: int
+    most_common_warehouse: str | None = None
+    severity: str
+
+
+class CostForecastPoint(BaseModel):
+    warehouse_name: str
+    forecast_date: str
+    predicted_credits: float
+    predicted_cost_usd: float
+    trend: str
+    confidence: str
+    projected_30d_credits: float
+    projected_30d_cost_usd: float
+
+
+class QueryRewriteRequest(BaseModel):
+    query_id: str
+
+
+class QueryRewriteResponse(BaseModel):
+    id: int
+    query_id: str
+    fingerprint: str | None = None
+    rewrite_suggestion: str
+    generated_at: datetime

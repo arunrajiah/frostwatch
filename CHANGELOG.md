@@ -9,6 +9,22 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-05-04
+
+### Added
+- **Query fingerprinting** (`frostwatch/analysis/fingerprint.py`): normalize SQL to a canonical form (strip literals, collapse IN-lists, uppercase) and group near-identical queries by MD5 fingerprint; `build_fingerprints()` returns per-pattern stats (total/avg credits, execution count, first/last seen, top warehouse/user)
+- **Week-over-week regression detection** (`detect_regressions()`): compares average per-execution credits this week vs last week per fingerprint; flags patterns that regressed beyond a configurable threshold with `medium / high / critical` severity
+- **Cost forecasting** (`frostwatch/analysis/forecast.py`): per-warehouse ordinary least-squares regression over configurable history window; projects daily credits and USD cost for the next 1–30 days with trend (`up / down / stable`) and confidence (`low / medium / high`) labels
+- **AI rewrite suggestions**: `POST /api/insights/rewrites` submits a `query_id` to the configured LLM and returns a structured Markdown report (optimized SQL, root cause, recommendations, estimated savings %); results are persisted and returned idempotently
+- **New `/api/insights` endpoints**:
+  - `GET /api/insights/fingerprints` — top query patterns by total credits (`?days=`, `?limit=`)
+  - `GET /api/insights/regressions` — week-over-week cost regressions (`?threshold=`, `?limit=`)
+  - `GET /api/insights/forecasts` — per-warehouse cost projections (`?days_ahead=`, `?history_days=`)
+  - `POST /api/insights/rewrites` — request an AI rewrite for a query
+  - `GET /api/insights/rewrites/{query_id}` — fetch a previously generated rewrite
+- **`QueryRewrite` SQLite model**: persists LLM-generated rewrite suggestions; created automatically on first startup
+- **Demo mode enriched**: `frostwatch demo` seeds two pre-baked AI rewrites (ML features query + MERGE query) so the Insights page is immediately useful
+
 ## [0.1.7] - 2026-05-03
 
 ### Added

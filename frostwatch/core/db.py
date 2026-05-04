@@ -94,6 +94,16 @@ class SettingsStore(Base):
     value: Mapped[str] = mapped_column(Text, nullable=False)
 
 
+class QueryRewrite(Base):
+    __tablename__ = "query_rewrites"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    query_id: Mapped[str] = mapped_column(String(256), nullable=False, index=True)
+    fingerprint: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    rewrite_suggestion: Mapped[str | None] = mapped_column(Text, nullable=True)
+    generated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+
 async def init_db(db_path: Path) -> None:
     global _engine, _session_factory
 
