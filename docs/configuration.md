@@ -61,7 +61,7 @@ data_dir: "~/.frostwatch"         # SQLite database and logs location
 | Google Gemini | `gemini` | `gemini-2.0-flash` | |
 | Ollama (local) | `ollama` | `llama3` | Set `llm_base_url` to your Ollama endpoint |
 
-LLM is only used to generate anomaly explanations. FrostWatch functions without it — anomalies will still be detected, just without plain-English summaries.
+LLM is used for anomaly explanations and AI query rewrites (`POST /api/insights/rewrites`). FrostWatch functions without it — anomalies are still detected and all other insights (fingerprinting, regressions, forecasts) still work, just without LLM-generated summaries or rewrite suggestions.
 
 ## Environment variables
 

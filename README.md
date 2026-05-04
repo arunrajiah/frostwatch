@@ -19,14 +19,18 @@ frostwatch demo
 # → open http://localhost:8000
 ```
 
-`frostwatch demo` seeds the local database with 35 days of realistic synthetic data — warehouse cost trends, dbt model breakdowns, injected anomaly spikes, AI explanations, and a weekly digest — so you can explore the full UI before connecting a real Snowflake account.
+`frostwatch demo` seeds the local database with 35 days of realistic synthetic data — warehouse cost trends, dbt model breakdowns, injected anomaly spikes, AI explanations, pre-baked query rewrites, and a weekly digest — so you can explore the full UI before connecting a real Snowflake account.
 
 ## What it does
 
 - **Cost breakdown** by warehouse, user, role, and query tag — updated on a schedule you control
 - **Anomaly detection** that flags unusual spend spikes against a rolling 21-day baseline
 - **Plain-English explanations** of anomalies and expensive queries, powered by your own LLM (Anthropic, OpenAI, Gemini, or a local Ollama model)
-- **Query recommendations** — suggested rewrites, warehouse right-sizing, clustering candidates
+- **Query fingerprinting** — group near-identical queries by SQL pattern, surface the patterns that drive the most spend
+- **Week-over-week regression detection** — automatically flag query patterns that became more expensive this week vs last (medium / high / critical severity)
+- **Cost forecasting** — per-warehouse credit projections for the next 1–30 days using linear regression on historical data
+- **AI query rewrites** — submit any expensive query to your LLM and get back optimized SQL, root-cause analysis, clustering recommendations, and estimated savings %
+- **dbt model attribution** — per-model credit and performance breakdown parsed from `query_tag`
 - **Weekly digests** delivered to Slack or email
 - **Clean web UI** — dark-themed React dashboard, no BI tool required
 - **REST API** — all data accessible via `/api/*` endpoints
@@ -154,6 +158,11 @@ Key endpoints:
 | `GET` | `/api/warehouses` | Per-warehouse cost aggregates |
 | `GET` | `/api/anomalies` | Detected anomalies with LLM explanations |
 | `GET` | `/api/dbt` | Credit + cost breakdown by dbt model |
+| `GET` | `/api/insights/fingerprints` | Top query patterns by total credits |
+| `GET` | `/api/insights/regressions` | Query patterns that regressed week-over-week |
+| `GET` | `/api/insights/forecasts` | Per-warehouse cost projections (7-day) |
+| `POST` | `/api/insights/rewrites` | Request an AI rewrite for a query |
+| `GET` | `/api/insights/rewrites/{query_id}` | Fetch a previously generated rewrite |
 | `POST` | `/api/sync` | Trigger a manual Snowflake sync |
 | `GET` | `/api/settings` | Current configuration |
 | `PUT` | `/api/settings` | Update configuration |

@@ -28,7 +28,17 @@ pip install -e ".[dev]"
 cd frontend && npm install && npm run build && cd ..
 ```
 
-## First-time setup
+## Try it without a Snowflake account
+
+```bash
+pip install frostwatch
+frostwatch demo
+# → open http://localhost:8000
+```
+
+`frostwatch demo` seeds 35 days of realistic synthetic data — warehouse cost trends, dbt model breakdowns, anomaly spikes with AI explanations, pre-baked query rewrites, and a weekly digest — so you can explore the full UI immediately.
+
+## First-time setup (real Snowflake account)
 
 ```bash
 frostwatch config init   # creates ~/.frostwatch/config.yaml with defaults
@@ -58,8 +68,10 @@ Then set `snowflake_role: frostwatch` in your config.
 
 | Command | Description |
 |---------|-------------|
+| `frostwatch demo` | Seed synthetic data and start server — no Snowflake account needed |
 | `frostwatch serve` | Start the API server (default port 8000) |
+| `frostwatch serve --reload` | Start with auto-reload for development |
 | `frostwatch sync` | Run a one-off Snowflake data sync |
 | `frostwatch config init` | Create default config file |
-| `frostwatch config show` | Print current resolved config |
+| `frostwatch config show` | Print current resolved config (secrets masked) |
 | `frostwatch version` | Print installed version |

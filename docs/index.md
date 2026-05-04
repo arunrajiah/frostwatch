@@ -7,6 +7,10 @@ FrostWatch connects to your Snowflake account, pulls from `SNOWFLAKE.ACCOUNT_USA
 - 📊 **Cost breakdown** by warehouse, user, and query tag
 - 🚨 **Anomaly detection** — spend spikes vs. a 21-day rolling baseline per warehouse
 - 🤖 **AI explanations** — plain-English summaries for each anomaly (BYO LLM: Claude, GPT-4o, Gemini, or local Ollama)
+- 🔍 **Query fingerprinting** — group near-identical queries by SQL pattern and surface the patterns driving the most spend
+- 📉 **Week-over-week regression detection** — flag query patterns that became more expensive this week vs last (medium / high / critical)
+- 📈 **Cost forecasting** — per-warehouse credit projections using linear regression on historical data
+- ✏️ **AI query rewrites** — LLM-powered optimized SQL, root-cause analysis, and estimated savings for any expensive query
 - 📦 **dbt model costs** — per-model credit and performance breakdown parsed from `query_tag`
 - 📬 **Weekly digest** delivered to Slack or email
 - 🔌 **REST API** for integration with your own tooling

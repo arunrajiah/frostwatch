@@ -37,6 +37,7 @@ nav:
     - Installation: installation.md
     - Configuration: configuration.md
   - Features:
+    - Query Insights: insights.md
     - dbt Integration: dbt.md
   - Reference:
     - REST API: api.md
