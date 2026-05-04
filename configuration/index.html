@@ -16,7 +16,7 @@
         <link rel="prev" href="../installation/">
       
       
-        <link rel="next" href="../dbt/">
+        <link rel="next" href="../insights/">
       
       
         
@@ -268,7 +268,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../dbt/" class="md-tabs__link">
+        <a href="../insights/" class="md-tabs__link">
           
   
   
@@ -642,6 +642,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../insights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query Insights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../dbt/" class="md-nav__link">
         
   
@@ -933,7 +961,7 @@
 </tr>
 </tbody>
 </table>
-<p>LLM is only used to generate anomaly explanations. FrostWatch functions without it — anomalies will still be detected, just without plain-English summaries.</p>
+<p>LLM is used for anomaly explanations and AI query rewrites (<code>POST /api/insights/rewrites</code>). FrostWatch functions without it — anomalies are still detected and all other insights (fingerprinting, regressions, forecasts) still work, just without LLM-generated summaries or rewrite suggestions.</p>
 <h2 id="environment-variables">Environment variables</h2>
 <p>All config fields are available as env vars by uppercasing the field name and adding the <code>FROSTWATCH_</code> prefix:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FROSTWATCH_SNOWFLAKE_ACCOUNT</span><span class="o">=</span>xy12345.us-east-1

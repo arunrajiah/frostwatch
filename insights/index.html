@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://arunrajiah.github.io/frostwatch/installation/">
+        <link rel="canonical" href="https://arunrajiah.github.io/frostwatch/insights/">
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../configuration/">
       
       
-        <link rel="next" href="../configuration/">
+        <link rel="next" href="../dbt/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Installation - FrostWatch</title>
+        <title>Query Insights - FrostWatch</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#installation" class="md-skip">
+        <a href="#query-insights" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Installation
+              Query Insights
             
           </span>
         </div>
@@ -242,13 +242,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../installation/" class="md-tabs__link">
           
   
   
@@ -264,11 +262,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../insights/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -376,31 +376,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -418,7 +413,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -433,37 +428,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installation
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
         
   
   
@@ -479,114 +447,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Requirements
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-via-pip" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Install via pip
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-via-docker" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Install via Docker
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-from-source" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Install from source
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#try-it-without-a-snowflake-account" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Try it without a Snowflake account
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#first-time-setup-real-snowflake-account" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        First-time setup (real Snowflake account)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#snowflake-permissions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Snowflake permissions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-reference" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CLI reference
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -631,26 +491,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -668,7 +533,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -683,10 +548,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../insights/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query Insights
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -702,6 +594,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#query-fingerprinting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query fingerprinting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#week-over-week-regression-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Week-over-week regression detection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-forecasting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost forecasting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ai-query-rewrites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI query rewrites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Demo mode
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -856,10 +823,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
+  <a href="#query-fingerprinting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Requirements
+        Query fingerprinting
       
     </span>
   </a>
@@ -867,10 +834,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-via-pip" class="md-nav__link">
+  <a href="#week-over-week-regression-detection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install via pip
+        Week-over-week regression detection
       
     </span>
   </a>
@@ -878,10 +845,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-via-docker" class="md-nav__link">
+  <a href="#cost-forecasting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install via Docker
+        Cost forecasting
       
     </span>
   </a>
@@ -889,10 +856,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-from-source" class="md-nav__link">
+  <a href="#ai-query-rewrites" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install from source
+        AI query rewrites
       
     </span>
   </a>
@@ -900,43 +867,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#try-it-without-a-snowflake-account" class="md-nav__link">
+  <a href="#demo-mode" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Try it without a Snowflake account
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#first-time-setup-real-snowflake-account" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        First-time setup (real Snowflake account)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#snowflake-permissions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Snowflake permissions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-reference" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CLI reference
+        Demo mode
       
     </span>
   </a>
@@ -963,85 +897,83 @@
   
 
 
-<h1 id="installation">Installation</h1>
-<h2 id="requirements">Requirements</h2>
-<ul>
-<li>Python 3.11 or later</li>
-<li>A Snowflake account with <code>SELECT</code> on <code>SNOWFLAKE.ACCOUNT_USAGE</code> (see <a href="#snowflake-permissions">Permissions</a>)</li>
-</ul>
-<h2 id="install-via-pip">Install via pip</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>frostwatch
+<h1 id="query-insights">Query Insights</h1>
+<p>The Insights feature set (introduced in v0.2.0) gives you a deeper understanding of <em>which query patterns</em> are driving Snowflake spend, <em>how that spend has changed</em>, and <em>what to do about it</em> — all without writing SQL yourself.</p>
+<h2 id="query-fingerprinting">Query fingerprinting</h2>
+<p>FrostWatch normalizes every query in your history to a canonical form:</p>
+<ol>
+<li>Strip <code>--</code> and <code>/* */</code> comments</li>
+<li>Replace string literals with <code>'?'</code></li>
+<li>Collapse <code>IN (...)</code> value lists to <code>IN (?)</code></li>
+<li>Replace numeric literals with <code>?</code></li>
+<li>Collapse whitespace and uppercase</li>
+</ol>
+<p>The result is an MD5 fingerprint that groups queries that differ only in bind values or formatting into a single pattern. For example, these three queries all map to the same fingerprint:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">456</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">789</span>
 </code></pre></div>
-<h2 id="install-via-docker">Install via Docker</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/arunrajiah/frostwatch:latest
-</code></pre></div>
-<h2 id="install-from-source">Install from source</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/arunrajiah/frostwatch.git
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>frostwatch
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Build the frontend (optional — only needed if developing the UI)</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nb">cd</span><span class="w"> </span>frontend<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>npm<span class="w"> </span>install<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>npm<span class="w"> </span>run<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>..
-</code></pre></div>
-<h2 id="try-it-without-a-snowflake-account">Try it without a Snowflake account</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>frostwatch
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>frostwatch<span class="w"> </span>demo
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># → open http://localhost:8000</span>
-</code></pre></div>
-<p><code>frostwatch demo</code> seeds 35 days of realistic synthetic data — warehouse cost trends, dbt model breakdowns, anomaly spikes with AI explanations, pre-baked query rewrites, and a weekly digest — so you can explore the full UI immediately.</p>
-<h2 id="first-time-setup-real-snowflake-account">First-time setup (real Snowflake account)</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>frostwatch<span class="w"> </span>config<span class="w"> </span>init<span class="w">   </span><span class="c1"># creates ~/.frostwatch/config.yaml with defaults</span>
-</code></pre></div>
-<p>Edit <code>~/.frostwatch/config.yaml</code> and fill in your Snowflake credentials and LLM API key, then:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>frostwatch<span class="w"> </span>serve<span class="w">         </span><span class="c1"># API + UI on http://localhost:8000</span>
-</code></pre></div>
-<p>On first start FrostWatch will not have any data — click <strong>Sync Now</strong> in the sidebar to pull the last 30 days of query history from Snowflake.</p>
-<h2 id="snowflake-permissions">Snowflake permissions</h2>
-<p>FrostWatch only needs read access to the <code>ACCOUNT_USAGE</code> schema. Create a dedicated role:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="n">frostwatch</span><span class="p">;</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">GRANT</span><span class="w"> </span><span class="n">IMPORTED</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">SNOWFLAKE</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="n">frostwatch</span><span class="p">;</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="n">frostwatch</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">my_service_user</span><span class="p">;</span>
-</code></pre></div>
-<p>Then set <code>snowflake_role: frostwatch</code> in your config.</p>
-<h2 id="cli-reference">CLI reference</h2>
+<p>The <strong>Insights → Fingerprints</strong> page shows the top patterns by total credits, with per-pattern stats: total and average credits, execution count, first/last seen, and the most frequent warehouse and user.</p>
+<p><strong>API endpoint:</strong> <code>GET /api/insights/fingerprints?days=30&amp;limit=20</code></p>
+<h2 id="week-over-week-regression-detection">Week-over-week regression detection</h2>
+<p>FrostWatch compares the average credits per execution for each fingerprint between the current week and the previous week. Patterns that grew beyond a configurable threshold are flagged with a severity label:</p>
 <table>
 <thead>
 <tr>
-<th>Command</th>
-<th>Description</th>
+<th>Ratio (this week / last week)</th>
+<th>Severity</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>frostwatch demo</code></td>
-<td>Seed synthetic data and start server — no Snowflake account needed</td>
+<td>2× – 2.9×</td>
+<td><code>medium</code></td>
 </tr>
 <tr>
-<td><code>frostwatch serve</code></td>
-<td>Start the API server (default port 8000)</td>
+<td>3× – 4.9×</td>
+<td><code>high</code></td>
 </tr>
 <tr>
-<td><code>frostwatch serve --reload</code></td>
-<td>Start with auto-reload for development</td>
-</tr>
-<tr>
-<td><code>frostwatch sync</code></td>
-<td>Run a one-off Snowflake data sync</td>
-</tr>
-<tr>
-<td><code>frostwatch config init</code></td>
-<td>Create default config file</td>
-</tr>
-<tr>
-<td><code>frostwatch config show</code></td>
-<td>Print current resolved config (secrets masked)</td>
-</tr>
-<tr>
-<td><code>frostwatch version</code></td>
-<td>Print installed version</td>
+<td>≥ 5×</td>
+<td><code>critical</code></td>
 </tr>
 </tbody>
 </table>
+<p>This catches situations where a query hasn't changed in code but is suddenly scanning much more data — a sign of missing filters, table bloat, or clustering drift.</p>
+<p><strong>API endpoint:</strong> <code>GET /api/insights/regressions?threshold=2.0&amp;limit=10</code></p>
+<h2 id="cost-forecasting">Cost forecasting</h2>
+<p>FrostWatch fits an ordinary least-squares regression to each warehouse's daily credit history and projects forward. Each forecast point includes:</p>
+<ul>
+<li><strong>Predicted credits</strong> and <strong>USD cost</strong> for each future day</li>
+<li><strong>Trend</strong> — <code>up</code>, <code>down</code>, or <code>stable</code> (based on the regression slope)</li>
+<li><strong>Confidence</strong> — <code>low</code> (fewer than 7 data points), <code>medium</code> (7–13), or <code>high</code> (14+)</li>
+<li><strong>Projected 30-day totals</strong> — helpful for budget planning</li>
+</ul>
+<p>Forecasts use the <code>credits_per_dollar</code> value from your config (default: <code>3.0</code>).</p>
+<p><strong>API endpoint:</strong> <code>GET /api/insights/forecasts?days_ahead=7&amp;history_days=30</code></p>
+<h2 id="ai-query-rewrites">AI query rewrites</h2>
+<p>Submit any query ID to get an LLM-generated optimization report. The report includes:</p>
+<ul>
+<li><strong>Rewrite</strong> — optimized SQL with inline comments explaining each change</li>
+<li><strong>Root Cause</strong> — why the original query is expensive (1–2 sentences)</li>
+<li><strong>Recommendations</strong> — clustering keys, filter pushdowns, warehouse right-sizing (bullet list)</li>
+<li><strong>Estimated Savings</strong> — rough credit reduction as a percentage range</li>
+</ul>
+<p>Rewrite results are persisted and returned idempotently — calling the endpoint again for the same query ID returns the cached result without a second LLM call.</p>
+<div class="admonition info">
+<p class="admonition-title">LLM required</p>
+<p>AI rewrites require a configured LLM provider (<code>llm_provider</code> + <code>llm_api_key</code> in your config). Run <code>frostwatch demo</code> to see pre-baked example rewrites without an API key.</p>
+</div>
+<p><strong>API endpoints:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>POST /api/insights/rewrites          { &quot;query_id&quot;: &quot;01b2c3d4-...&quot; }
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>GET  /api/insights/rewrites/{id}     Fetch a previously generated rewrite
+</code></pre></div>
+<h2 id="demo-mode">Demo mode</h2>
+<p><code>frostwatch demo</code> pre-seeds two realistic rewrite examples — an ML features query and a MERGE statement — so the Insights page is immediately populated when you try the demo. No LLM API key required.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span>frostwatch
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>frostwatch<span class="w"> </span>demo
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># → open http://localhost:8000 → Insights</span>
+</code></pre></div>
 
 
 

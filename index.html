@@ -266,7 +266,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="dbt/" class="md-tabs__link">
+        <a href="insights/" class="md-tabs__link">
           
   
   
@@ -613,6 +613,34 @@
   
   
     <li class="md-nav__item">
+      <a href="insights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query Insights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="dbt/" class="md-nav__link">
         
   
@@ -803,6 +831,10 @@
 <li>📊 <strong>Cost breakdown</strong> by warehouse, user, and query tag</li>
 <li>🚨 <strong>Anomaly detection</strong> — spend spikes vs. a 21-day rolling baseline per warehouse</li>
 <li>🤖 <strong>AI explanations</strong> — plain-English summaries for each anomaly (BYO LLM: Claude, GPT-4o, Gemini, or local Ollama)</li>
+<li>🔍 <strong>Query fingerprinting</strong> — group near-identical queries by SQL pattern and surface the patterns driving the most spend</li>
+<li>📉 <strong>Week-over-week regression detection</strong> — flag query patterns that became more expensive this week vs last (medium / high / critical)</li>
+<li>📈 <strong>Cost forecasting</strong> — per-warehouse credit projections using linear regression on historical data</li>
+<li>✏️ <strong>AI query rewrites</strong> — LLM-powered optimized SQL, root-cause analysis, and estimated savings for any expensive query</li>
 <li>📦 <strong>dbt model costs</strong> — per-model credit and performance breakdown parsed from <code>query_tag</code></li>
 <li>📬 <strong>Weekly digest</strong> delivered to Slack or email</li>
 <li>🔌 <strong>REST API</strong> for integration with your own tooling</li>

@@ -264,7 +264,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../dbt/" class="md-tabs__link">
+        <a href="../insights/" class="md-tabs__link">
           
   
   
@@ -544,6 +544,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../insights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Query Insights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../dbt/" class="md-nav__link">
         
   
@@ -807,6 +835,78 @@
     <span class="md-ellipsis">
       
         GET /api/dbt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#insights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Insights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Insights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-apiinsightsfingerprints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/insights/fingerprints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiinsightsregressions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/insights/regressions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiinsightsforecasts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/insights/forecasts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-apiinsightsrewrites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        POST /api/insights/rewrites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiinsightsrewritesquery_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/insights/rewrites/{query_id}
       
     </span>
   </a>
@@ -1190,6 +1290,78 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#insights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Insights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Insights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-apiinsightsfingerprints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/insights/fingerprints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiinsightsregressions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/insights/regressions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiinsightsforecasts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/insights/forecasts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-apiinsightsrewrites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        POST /api/insights/rewrites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiinsightsrewritesquery_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/insights/rewrites/{query_id}
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#anomalies" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1560,6 +1732,152 @@
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">]</span>
 </code></pre></div>
+<h2 id="insights">Insights</h2>
+<p>The <code>/api/insights</code> group provides deeper analysis of query patterns, cost trends, and AI-powered optimization suggestions.</p>
+<h3 id="get-apiinsightsfingerprints"><code>GET /api/insights/fingerprints</code></h3>
+<p>Groups queries by normalized SQL fingerprint and returns the top patterns by total credits.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>days</code></td>
+<td>int</td>
+<td>30</td>
+<td>Look-back window (1–90)</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>int</td>
+<td>20</td>
+<td>Max patterns to return (1–100)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response</strong> — array of <code>QueryFingerprintRecord</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">[</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="p">{</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">&quot;fingerprint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a3f1b2c4...&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">&quot;canonical_sql&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SELECT * FROM ORDERS WHERE STATUS = &#39;?&#39; AND CREATED_AT &gt;= ?&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">&quot;example_query_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;01b2c3d4-...&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="nt">&quot;total_executions&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">142</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="nt">&quot;total_credits&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.8431</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">&quot;avg_credits&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.005938</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="nt">&quot;avg_execution_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">3210.5</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="nt">&quot;first_seen&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-04-01T00:00:00Z&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="nt">&quot;last_seen&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-04-30T18:42:00Z&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="nt">&quot;most_common_warehouse&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;COMPUTE_WH&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="nt">&quot;most_common_user&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TRANSFORMER&quot;</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="p">]</span>
+</code></pre></div>
+<h3 id="get-apiinsightsregressions"><code>GET /api/insights/regressions</code></h3>
+<p>Returns query patterns whose average per-execution cost rose this week compared to last week.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>threshold</code></td>
+<td>float</td>
+<td>2.0</td>
+<td>Min ratio (this week avg / last week avg) to flag (1.1–20.0)</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>int</td>
+<td>10</td>
+<td>Max patterns to return (1–50)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response</strong> — array of <code>QueryRegressionRecord</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">[</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">&quot;fingerprint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a3f1b2c4...&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;canonical_sql_preview&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SELECT * FROM ORDERS ...&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">&quot;example_query_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;01b2c3d4-...&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nt">&quot;avg_credits_this_week&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.012</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">&quot;avg_credits_last_week&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.003</span><span class="p">,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nt">&quot;regression_ratio&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4.0</span><span class="p">,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nt">&quot;executions_this_week&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">38</span><span class="p">,</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="nt">&quot;executions_last_week&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">41</span><span class="p">,</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="nt">&quot;most_common_warehouse&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;COMPUTE_WH&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;high&quot;</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="p">]</span>
+</code></pre></div>
+<p>Severity levels: <code>medium</code> (ratio ≥ 2×), <code>high</code> (≥ 3×), <code>critical</code> (≥ 5×).</p>
+<h3 id="get-apiinsightsforecasts"><code>GET /api/insights/forecasts</code></h3>
+<p>Projects per-warehouse credit and USD cost for the next N days using ordinary least-squares regression on historical warehouse metrics.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>days_ahead</code></td>
+<td>int</td>
+<td>7</td>
+<td>Days to project ahead (1–30)</td>
+</tr>
+<tr>
+<td><code>history_days</code></td>
+<td>int</td>
+<td>30</td>
+<td>History window used to fit the model (7–90)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response</strong> — array of <code>CostForecastPoint</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">[</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">&quot;warehouse_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;COMPUTE_WH&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">&quot;forecast_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-05&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">&quot;predicted_credits&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4.21</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="nt">&quot;predicted_cost_usd&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.40</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nt">&quot;trend&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;up&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nt">&quot;confidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;high&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="nt">&quot;projected_30d_credits&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">126.3</span><span class="p">,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="nt">&quot;projected_30d_cost_usd&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">42.1</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="p">]</span>
+</code></pre></div>
+<p><code>trend</code> is <code>up</code>, <code>down</code>, or <code>stable</code>. <code>confidence</code> is <code>low</code> (&lt; 7 data points), <code>medium</code> (7–13), or <code>high</code> (≥ 14).</p>
+<h3 id="post-apiinsightsrewrites"><code>POST /api/insights/rewrites</code></h3>
+<p>Submits an expensive query to your configured LLM and returns an optimization report. Results are persisted and returned idempotently — calling this endpoint twice for the same <code>query_id</code> returns the cached result without making a second LLM call.</p>
+<p><strong>Request body:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;query_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;01b2c3d4-...&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p><strong>Response</strong> — <code>QueryRewriteResponse</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">&quot;query_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;01b2c3d4-...&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">&quot;fingerprint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a3f1b2c4...&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">&quot;rewrite_suggestion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;## Rewrite\n```sql\nSELECT id, status, ...```\n\n## Root Cause\n...\n\n## Recommendations\n- Add clustering key on STATUS\n...\n\n## Estimated Savings\n40–60% credit reduction&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">  </span><span class="nt">&quot;generated_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-04T10:00:00Z&quot;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>Returns <code>503</code> if no LLM provider is configured, <code>404</code> if the <code>query_id</code> is not found, <code>404</code> if no rewrite exists yet (use POST to generate one).</p>
+<h3 id="get-apiinsightsrewritesquery_id"><code>GET /api/insights/rewrites/{query_id}</code></h3>
+<p>Fetches the most recent rewrite suggestion for a query. Returns <code>404</code> if none has been generated yet.</p>
 <h2 id="anomalies">Anomalies</h2>
 <h3 id="get-apianomalies"><code>GET /api/anomalies</code></h3>
 <p>Returns detected spend anomalies with optional LLM explanations.</p>
@@ -1592,12 +1910,12 @@
 <p><strong>Response:</strong> <code>{"status": "started"}</code></p>
 <h3 id="get-apisyncstatus"><code>GET /api/sync/status</code></h3>
 <p>Returns the status of the most recent sync run.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;idle&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;last_run_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-04-28T08:00:00Z&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">&quot;last_error&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">&quot;rows_synced&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">482</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;idle&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;last_run_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-04-28T08:00:00Z&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">&quot;last_error&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">&quot;rows_synced&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">482</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="settings">Settings</h2>
 <h3 id="get-apisettings"><code>GET /api/settings</code></h3>
