@@ -29,15 +29,15 @@ The minimum useful product. Gets a team from zero to "oh, *that's* where the mon
 
 ---
 
-## v0.2 — Query deep-dive
+## v0.2 — Query deep-dive (shipped)
 
 Richer analysis of individual expensive queries.
 
-- [ ] Query fingerprinting — detect repeated / near-identical queries, surface patterns driving spend
-- [ ] AI rewrite suggestions — Claude/GPT reviews top-5 expensive queries, suggests rewrites, clustering keys, filter pushdowns
+- [x] Query fingerprinting — detect repeated / near-identical queries, surface patterns driving spend
+- [x] AI rewrite suggestions — LLM reviews expensive queries, suggests rewrites, clustering keys, filter pushdowns
 - [ ] Partition pruning analysis — detect full-table scans that could be pruned
-- [ ] "Most improved" and "most regressed" queries week-over-week
-- [ ] Cost forecasting — project next month's spend based on 90-day trend
+- [x] "Most regressed" queries week-over-week — flag patterns that became more expensive this week vs last
+- [x] Cost forecasting — project per-warehouse spend using linear regression on historical metrics
 
 ---
 

@@ -14,6 +14,7 @@ from sqlalchemy import text
 from frostwatch.core.config import FrostWatchConfig
 from frostwatch.core.db import (
     AnomalyRecord,
+    QueryRewrite,
     ReportRecord,
     SyncRun,
     get_db,
@@ -283,6 +284,94 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
                 rows_synced=len(queries) + days * len(WAREHOUSES),
             )
         )
+
+    # ── Pre-baked AI rewrites ─────────────────────────────────────────────────
+    if queries:
+        from frostwatch.analysis.fingerprint import fingerprint_sql
+
+        sorted_queries = sorted(queries, key=lambda x: x["credits_used"], reverse=True)
+        ml_query = next((q for q in sorted_queries if "ml_features" in q["query_text"]), None)
+        merge_query = next((q for q in sorted_queries if "MERGE INTO" in q["query_text"]), None)
+
+        async with get_db() as session:
+            if ml_query:
+                session.add(
+                    QueryRewrite(
+                        query_id=ml_query["query_id"],
+                        fingerprint=fingerprint_sql(ml_query["query_text"]),
+                        generated_at=now - timedelta(hours=1),
+                        rewrite_suggestion=(
+                            "## Rewrite\n\n"
+                            "```sql\n"
+                            "-- Specify only the columns you need instead of SELECT *\n"
+                            "-- and add a selectivity filter before the ORDER BY.\n"
+                            "SELECT user_id, score, feature_a, feature_b, updated_at\n"
+                            "FROM ANALYTICS.ml_features\n"
+                            "WHERE updated_at >= DATEADD('hour', -1, CURRENT_TIMESTAMP())\n"
+                            "  AND score > 0.5   -- push high-selectivity filter first\n"
+                            "ORDER BY score DESC\n"
+                            "LIMIT 10000;\n"
+                            "```\n\n"
+                            "## Root Cause\n\n"
+                            "`SELECT *` forces Snowflake to read every column (typically 30-50) "
+                            "even though only a handful are consumed downstream. The recency filter "
+                            "on `updated_at` is applied after the full micro-partition scan rather "
+                            "than being pruned early.\n\n"
+                            "## Recommendations\n\n"
+                            "- Replace `SELECT *` with explicit columns — reduces bytes scanned "
+                            "by 60-80%.\n"
+                            "- Add a **clustering key on `updated_at`** so Snowflake prunes "
+                            "micro-partitions automatically.\n"
+                            "- Consider a **materialized view** for the top-N rows by score if "
+                            "this runs on a fixed cadence.\n"
+                            "- This query is I/O-bound; downsize the warehouse to X-Small "
+                            "for sub-1 GB result sets.\n\n"
+                            "## Estimated Savings\n\n"
+                            "Explicit columns + clustering key: **55–70%** fewer credits per run."
+                        ),
+                    )
+                )
+            if merge_query:
+                session.add(
+                    QueryRewrite(
+                        query_id=merge_query["query_id"],
+                        fingerprint=fingerprint_sql(merge_query["query_text"]),
+                        generated_at=now - timedelta(hours=2),
+                        rewrite_suggestion=(
+                            "## Rewrite\n\n"
+                            "```sql\n"
+                            "-- Filter staging to only rows modified since last sync\n"
+                            "MERGE INTO ANALYTICS.customers t\n"
+                            "USING (\n"
+                            "    SELECT id, email, created_at\n"
+                            "    FROM ANALYTICS.customers_staging\n"
+                            "    WHERE updated_at >= DATEADD('hour', -6, CURRENT_TIMESTAMP())\n"
+                            ") s\n"
+                            "ON t.id = s.id\n"
+                            "WHEN MATCHED AND t.email <> s.email\n"
+                            "    THEN UPDATE SET t.email = s.email,\n"
+                            "                   t.updated_at = CURRENT_TIMESTAMP()\n"
+                            "WHEN NOT MATCHED\n"
+                            "    THEN INSERT (id, email, created_at, updated_at)\n"
+                            "         VALUES (s.id, s.email, s.created_at, CURRENT_TIMESTAMP());\n"
+                            "```\n\n"
+                            "## Root Cause\n\n"
+                            "The MERGE reads the entire `customers_staging` table every run. "
+                            "For incremental loads this is unnecessary — most rows haven't changed. "
+                            "The MATCHED branch also re-updates rows even when `email` is identical, "
+                            "generating unnecessary write I/O.\n\n"
+                            "## Recommendations\n\n"
+                            "- **Filter staging to incremental rows** using an `updated_at` "
+                            "predicate — reduces the join dataset by 90%+.\n"
+                            "- Add `AND t.email <> s.email` to skip no-op updates.\n"
+                            "- **Cluster `customers` on `id`** for faster join pruning.\n"
+                            "- Use a large warehouse only for the initial backfill; subsequent "
+                            "incremental MERGEs run fine on X-Small.\n\n"
+                            "## Estimated Savings\n\n"
+                            "Incremental filter + no-op guard: **70–85%** fewer credits per run."
+                        ),
+                    )
+                )
 
     # ── Report ────────────────────────────────────────────────────────────
     period_end = now
