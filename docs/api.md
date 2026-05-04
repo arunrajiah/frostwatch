@@ -102,6 +102,125 @@ Returns credit and performance breakdown by dbt model name.
 ]
 ```
 
+## Insights
+
+The `/api/insights` group provides deeper analysis of query patterns, cost trends, and AI-powered optimization suggestions.
+
+### `GET /api/insights/fingerprints`
+
+Groups queries by normalized SQL fingerprint and returns the top patterns by total credits.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `days` | int | 30 | Look-back window (1–90) |
+| `limit` | int | 20 | Max patterns to return (1–100) |
+
+**Response** — array of `QueryFingerprintRecord`:
+
+```json
+[
+  {
+    "fingerprint": "a3f1b2c4...",
+    "canonical_sql": "SELECT * FROM ORDERS WHERE STATUS = '?' AND CREATED_AT >= ?",
+    "example_query_id": "01b2c3d4-...",
+    "total_executions": 142,
+    "total_credits": 0.8431,
+    "avg_credits": 0.005938,
+    "avg_execution_ms": 3210.5,
+    "first_seen": "2026-04-01T00:00:00Z",
+    "last_seen": "2026-04-30T18:42:00Z",
+    "most_common_warehouse": "COMPUTE_WH",
+    "most_common_user": "TRANSFORMER"
+  }
+]
+```
+
+### `GET /api/insights/regressions`
+
+Returns query patterns whose average per-execution cost rose this week compared to last week.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `threshold` | float | 2.0 | Min ratio (this week avg / last week avg) to flag (1.1–20.0) |
+| `limit` | int | 10 | Max patterns to return (1–50) |
+
+**Response** — array of `QueryRegressionRecord`:
+
+```json
+[
+  {
+    "fingerprint": "a3f1b2c4...",
+    "canonical_sql_preview": "SELECT * FROM ORDERS ...",
+    "example_query_id": "01b2c3d4-...",
+    "avg_credits_this_week": 0.012,
+    "avg_credits_last_week": 0.003,
+    "regression_ratio": 4.0,
+    "executions_this_week": 38,
+    "executions_last_week": 41,
+    "most_common_warehouse": "COMPUTE_WH",
+    "severity": "high"
+  }
+]
+```
+
+Severity levels: `medium` (ratio ≥ 2×), `high` (≥ 3×), `critical` (≥ 5×).
+
+### `GET /api/insights/forecasts`
+
+Projects per-warehouse credit and USD cost for the next N days using ordinary least-squares regression on historical warehouse metrics.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `days_ahead` | int | 7 | Days to project ahead (1–30) |
+| `history_days` | int | 30 | History window used to fit the model (7–90) |
+
+**Response** — array of `CostForecastPoint`:
+
+```json
+[
+  {
+    "warehouse_name": "COMPUTE_WH",
+    "forecast_date": "2026-05-05",
+    "predicted_credits": 4.21,
+    "predicted_cost_usd": 1.40,
+    "trend": "up",
+    "confidence": "high",
+    "projected_30d_credits": 126.3,
+    "projected_30d_cost_usd": 42.1
+  }
+]
+```
+
+`trend` is `up`, `down`, or `stable`. `confidence` is `low` (< 7 data points), `medium` (7–13), or `high` (≥ 14).
+
+### `POST /api/insights/rewrites`
+
+Submits an expensive query to your configured LLM and returns an optimization report. Results are persisted and returned idempotently — calling this endpoint twice for the same `query_id` returns the cached result without making a second LLM call.
+
+**Request body:**
+
+```json
+{ "query_id": "01b2c3d4-..." }
+```
+
+**Response** — `QueryRewriteResponse`:
+
+```json
+{
+  "id": 1,
+  "query_id": "01b2c3d4-...",
+  "fingerprint": "a3f1b2c4...",
+  "rewrite_suggestion": "## Rewrite\n```sql\nSELECT id, status, ...```\n\n## Root Cause\n...\n\n## Recommendations\n- Add clustering key on STATUS\n...\n\n## Estimated Savings\n40–60% credit reduction",
+  "generated_at": "2026-05-04T10:00:00Z"
+}
+```
+
+Returns `503` if no LLM provider is configured, `404` if the `query_id` is not found, `404` if no rewrite exists yet (use POST to generate one).
+
+### `GET /api/insights/rewrites/{query_id}`
+
+Fetches the most recent rewrite suggestion for a query. Returns `404` if none has been generated yet.
+
 ## Anomalies
 
 ### `GET /api/anomalies`
