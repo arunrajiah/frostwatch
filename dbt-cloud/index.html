@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://arunrajiah.github.io/frostwatch/dbt/">
+        <link rel="canonical" href="https://arunrajiah.github.io/frostwatch/dbt-cloud/">
       
       
-        <link rel="prev" href="../insights/">
+        <link rel="prev" href="../dbt/">
       
       
-        <link rel="next" href="../dbt-cloud/">
+        <link rel="next" href="../api/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>dbt Integration - FrostWatch</title>
+        <title>dbt Cloud - FrostWatch</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#dbt-integration" class="md-skip">
+        <a href="#dbt-cloud-integration" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              dbt Integration
+              dbt Cloud
             
           </span>
         </div>
@@ -576,6 +576,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../dbt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    dbt Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -595,7 +623,7 @@
   <span class="md-ellipsis">
     
   
-    dbt Integration
+    dbt Cloud
   
 
     
@@ -613,7 +641,7 @@
   <span class="md-ellipsis">
     
   
-    dbt Integration
+    dbt Cloud
   
 
     
@@ -639,90 +667,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#automatic-model-attribution" class="md-nav__link">
+  <a href="#configuration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Automatic model attribution
+        Configuration
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Automatic model attribution">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-dbt-models-page" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The dbt Models page
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#backfilling-existing-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Backfilling existing data
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#supported-node-types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Supported node types
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#dbt-cloud-integration" class="md-nav__link">
+  <a href="#syncing-run-metadata" class="md-nav__link">
     <span class="md-ellipsis">
       
-        dbt Cloud integration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="dbt Cloud integration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Setup
+        Syncing run metadata
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#syncing-dbt-cloud-metadata" class="md-nav__link">
-    <span class="md-ellipsis">
       
-        Syncing dbt Cloud metadata
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
+        <li class="md-nav__item">
   <a href="#cost-breakdown-by-job-and-environment" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -732,8 +698,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#spend-threshold-alerts" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -743,8 +709,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#manifest-enrichment" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -754,12 +720,35 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#github-actions-pr-cost-comments" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#pr-cost-comment-github-actions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GitHub Actions — PR cost comments
+        PR cost comment (GitHub Actions)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PR cost comment (GitHub Actions)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-github-actions-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required GitHub Actions permissions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#third-party-actions-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Third-party actions used
       
     </span>
   </a>
@@ -775,34 +764,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../dbt-cloud/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    dbt Cloud
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -929,90 +890,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#automatic-model-attribution" class="md-nav__link">
+  <a href="#configuration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Automatic model attribution
+        Configuration
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Automatic model attribution">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-dbt-models-page" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The dbt Models page
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#backfilling-existing-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Backfilling existing data
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#supported-node-types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Supported node types
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#dbt-cloud-integration" class="md-nav__link">
+  <a href="#syncing-run-metadata" class="md-nav__link">
     <span class="md-ellipsis">
       
-        dbt Cloud integration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="dbt Cloud integration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Setup
+        Syncing run metadata
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#syncing-dbt-cloud-metadata" class="md-nav__link">
-    <span class="md-ellipsis">
       
-        Syncing dbt Cloud metadata
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
+        <li class="md-nav__item">
   <a href="#cost-breakdown-by-job-and-environment" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1022,8 +921,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#spend-threshold-alerts" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1033,8 +932,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#manifest-enrichment" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1044,12 +943,35 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#github-actions-pr-cost-comments" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#pr-cost-comment-github-actions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GitHub Actions — PR cost comments
+        PR cost comment (GitHub Actions)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PR cost comment (GitHub Actions)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-github-actions-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required GitHub Actions permissions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#third-party-actions-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Third-party actions used
       
     </span>
   </a>
@@ -1081,90 +1003,99 @@
   
 
 
-<h1 id="dbt-integration">dbt Integration</h1>
-<p>FrostWatch provides two layers of dbt integration:</p>
-<ol>
-<li><strong>Automatic model attribution</strong> — parse the <code>query_tag</code> Snowflake sets on every dbt query and group credits by model name. Zero config required.</li>
-<li><strong>dbt Cloud deep-dive</strong> — connect to the dbt Cloud API to get run-level metadata, cost breakdown by job and environment, spend threshold alerts, and manifest-enriched model metadata.</li>
-</ol>
-<hr />
-<h2 id="automatic-model-attribution">Automatic model attribution</h2>
-<p>When dbt runs a model against Snowflake, it sets the <code>QUERY_TAG</code> session parameter to a JSON string such as:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;app&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dbt&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;dbt_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.8.0&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">&quot;profile_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_project&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">&quot;target_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;prod&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">&quot;node_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;model.my_project.orders&quot;</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">}</span>
-</code></pre></div>
-<p>FrostWatch parses this tag during each sync and extracts the model name from <code>node_id</code>. Both the flat format above and the nested <code>dbt_snowflake_query_tags</code> wrapper are supported.</p>
-<p>dbt sets <code>query_tag</code> automatically for Snowflake connections from dbt-snowflake v1.0 onwards — no extra configuration needed.</p>
-<h3 id="the-dbt-models-page">The dbt Models page</h3>
-<p>Once FrostWatch has synced data containing dbt query tags, the <strong>dbt Models</strong> page shows:</p>
-<ul>
-<li><strong>Models detected</strong> — total number of distinct dbt models observed</li>
-<li><strong>Total credits</strong> — Snowflake credits consumed across all dbt models</li>
-<li><strong>Bar chart</strong> — top 15 models by credit consumption</li>
-<li><strong>Detail table</strong> — credits, USD cost, query count, and average execution time per model</li>
-</ul>
-<h3 id="backfilling-existing-data">Backfilling existing data</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>frostwatch<span class="w"> </span>sync
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># or click Sync Now in the sidebar</span>
-</code></pre></div>
-<p>The sync upsert updates <code>dbt_model</code> on every re-synced query, so existing rows are enriched automatically.</p>
-<h3 id="supported-node-types">Supported node types</h3>
-<p>Only <code>model</code> nodes are tracked. Seeds (<code>seed.*</code>), snapshots (<code>snapshot.*</code>), tests (<code>test.*</code>), and other node types are ignored.</p>
-<hr />
-<h2 id="dbt-cloud-integration">dbt Cloud integration</h2>
-<h3 id="setup">Setup</h3>
-<p>Add the following to your <code>~/.frostwatch/config.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">dbt_cloud_account_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;12345&quot;</span><span class="w">           </span><span class="c1"># Your dbt Cloud account ID</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">dbt_cloud_api_token</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dbtc_...&quot;</span><span class="w">         </span><span class="c1"># Service token with read access</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">dbt_model_credit_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w">        </span><span class="c1"># Alert when a model exceeds 0.5 credits/day (0 = disabled)</span>
+<h1 id="dbt-cloud-integration">dbt Cloud Integration</h1>
+<p>Connect FrostWatch to the dbt Cloud API to get run-level cost attribution, per-job and per-environment breakdowns, model spend threshold alerts, and manifest-enriched model metadata.</p>
+<h2 id="configuration">Configuration</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># ~/.frostwatch/config.yaml</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">dbt_cloud_account_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;12345&quot;</span><span class="w">          </span><span class="c1"># Your dbt Cloud account ID (Settings → Account)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">dbt_cloud_api_token</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dbtc_...&quot;</span><span class="w">        </span><span class="c1"># Service token with Viewer access</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">dbt_model_credit_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w">        </span><span class="c1"># Alert when a model exceeds this many credits/day (0 = disabled)</span>
 </code></pre></div>
 <p>Or via environment variables:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FROSTWATCH_DBT_CLOUD_ACCOUNT_ID</span><span class="o">=</span><span class="m">12345</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FROSTWATCH_DBT_CLOUD_API_TOKEN</span><span class="o">=</span>dbtc_...
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FROSTWATCH_DBT_MODEL_CREDIT_THRESHOLD</span><span class="o">=</span><span class="m">0</span>.5
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FROSTWATCH_DBT_CLOUD_ACCOUNT_ID</span><span class="o">=</span><span class="m">12345</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FROSTWATCH_DBT_CLOUD_API_TOKEN</span><span class="o">=</span>dbtc_...
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">FROSTWATCH_DBT_MODEL_CREDIT_THRESHOLD</span><span class="o">=</span><span class="m">0</span>.5
 </code></pre></div>
-<h3 id="syncing-dbt-cloud-metadata">Syncing dbt Cloud metadata</h3>
-<p>Trigger a one-off sync from the dbt Cloud API:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/api/dbt/sync-cloud
+<h2 id="syncing-run-metadata">Syncing run metadata</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/api/dbt/sync-cloud
 </code></pre></div>
-<p>This pulls the last 30 days of runs, enriches them with job and environment names, and attributes Snowflake credits to each run by matching dbt-tagged queries inside the run time window.</p>
-<h3 id="cost-breakdown-by-job-and-environment">Cost breakdown by job and environment</h3>
-<p><code>GET /api/dbt/jobs</code> — credits, cost, run count, avg duration, and last-run status per job.</p>
-<p><code>GET /api/dbt/environments</code> — credits, cost, run count, and distinct job count per environment.</p>
-<h3 id="spend-threshold-alerts">Spend threshold alerts</h3>
-<p>When <code>dbt_model_credit_threshold</code> is set (&gt; 0), FrostWatch checks at the end of every Snowflake sync whether any dbt model exceeded its daily credit limit. Violations are stored and returned by <code>GET /api/dbt/threshold-alerts</code>.</p>
-<p>Set a per-model threshold in your config:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">dbt_model_credit_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w">   </span><span class="c1"># flag any model that uses &gt; 0.5 credits today</span>
+<p>Returns <code>{"runs_synced": N, "jobs_enriched": N, "environments_enriched": N}</code>.</p>
+<p>FrostWatch pulls the last 30 days of runs and attributes Snowflake credits to each run by summing dbt-tagged queries whose <code>start_time</code> falls inside the run window.</p>
+<h2 id="cost-breakdown-by-job-and-environment">Cost breakdown by job and environment</h2>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /api/dbt/jobs</code></td>
+<td>Credits, cost, run count, avg duration, last-run status per job</td>
+</tr>
+<tr>
+<td><code>GET /api/dbt/environments</code></td>
+<td>Credits, cost, run count, distinct jobs per environment</td>
+</tr>
+<tr>
+<td><code>GET /api/dbt/runs</code></td>
+<td>Individual runs with full metadata, newest first</td>
+</tr>
+</tbody>
+</table>
+<p>All three endpoints accept a <code>?days=</code> parameter (1–90, default 30).</p>
+<h2 id="spend-threshold-alerts">Spend threshold alerts</h2>
+<p>Set <code>dbt_model_credit_threshold</code> in your config to a positive value. After every Snowflake sync, FrostWatch checks each dbt model's total credits for the current calendar day. If any model exceeds the threshold, an alert is created.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>GET /api/dbt/threshold-alerts
 </code></pre></div>
-<h3 id="manifest-enrichment">Manifest enrichment</h3>
-<p>Upload your <code>manifest.json</code> to enrich the dbt model catalogue with owner, description, materialization type, and tags — metadata that isn't available in Snowflake's <code>QUERY_HISTORY</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/api/dbt/manifest<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">     </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">     </span>--data-binary<span class="w"> </span>@target/manifest.json
+<p>Example response:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">[</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;detected_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-04T23:59:00Z&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">&quot;dbt_model&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;revenue_daily&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nt">&quot;period_start&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-04T00:00:00Z&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">&quot;period_end&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-04T23:59:00Z&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nt">&quot;credits_used&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.612</span><span class="p">,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nt">&quot;threshold&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">]</span>
 </code></pre></div>
-<p>Returns <code>{"models_upserted": N}</code>. The enriched catalogue is available at <code>GET /api/dbt/metadata</code>.</p>
-<p>You can automate this in your dbt CI pipeline:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># In your dbt GitHub Actions workflow, after dbt compile or dbt run:</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload manifest to FrostWatch</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="no">curl -X POST &quot;${{ secrets.FROSTWATCH_URL }}/api/dbt/manifest&quot; \</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">         </span><span class="no">-H &quot;Content-Type: application/json&quot; \</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">         </span><span class="no">--data-binary @target/manifest.json</span>
+<h2 id="manifest-enrichment">Manifest enrichment</h2>
+<p>Upload your <code>manifest.json</code> to add owner, description, materialization type, and tags to every model in FrostWatch.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/api/dbt/manifest<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">     </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">     </span>--data-binary<span class="w"> </span>@target/manifest.json
 </code></pre></div>
-<h3 id="github-actions-pr-cost-comments">GitHub Actions — PR cost comments</h3>
-<p>The bundled workflow <code>.github/workflows/dbt-cost-comment.yml</code> posts a dbt model cost summary and threshold alert table as a PR comment after every dbt run.</p>
+<p>Automate this in CI (add after <code>dbt run</code> or <code>dbt compile</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload dbt manifest to FrostWatch</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="no">curl -X POST &quot;${{ secrets.FROSTWATCH_URL }}/api/dbt/manifest&quot; \</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">         </span><span class="no">-H &quot;Content-Type: application/json&quot; \</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">         </span><span class="no">--data-binary @target/manifest.json</span>
+</code></pre></div>
+<p>Retrieve enriched metadata:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>GET /api/dbt/metadata
+</code></pre></div>
+<h2 id="pr-cost-comment-github-actions">PR cost comment (GitHub Actions)</h2>
+<p>The bundled workflow <code>.github/workflows/dbt-cost-comment.yml</code> posts a dbt model cost table + threshold alerts as a PR comment after every dbt run.</p>
 <p><strong>Setup:</strong></p>
 <ol>
-<li>Add a <code>FROSTWATCH_URL</code> repository secret pointing to your FrostWatch instance.</li>
-<li>Edit the <code>workflow_run.workflows</code> trigger to match the name of your dbt workflow.</li>
-<li>Ensure your FrostWatch instance is reachable from GitHub Actions (or use a self-hosted runner on the same network).</li>
+<li>Add a <code>FROSTWATCH_URL</code> repository secret.</li>
+<li>In the workflow file, update <code>workflow_run.workflows</code> to match the name of your dbt workflow.</li>
+<li>Ensure FrostWatch is reachable from your CI runner.</li>
 </ol>
-<p>The comment is edited (not duplicated) on subsequent runs using <code>peter-evans/create-or-update-comment</code>.</p>
+<p>The comment is edited on subsequent runs — one comment per PR, always up to date.</p>
+<h3 id="required-github-actions-permissions">Required GitHub Actions permissions</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">permissions</span><span class="p">:</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">pull-requests</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+</code></pre></div>
+<h3 id="third-party-actions-used">Third-party actions used</h3>
+<ul>
+<li><code>peter-evans/find-comment@v3</code></li>
+<li><code>peter-evans/create-or-update-comment@v4</code></li>
+</ul>
 
 
 
