@@ -655,6 +655,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#partition-pruning-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition pruning analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#demo-mode" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -867,6 +878,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#partition-pruning-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition pruning analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#demo-mode" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -968,6 +990,37 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>POST /api/insights/rewrites          { &quot;query_id&quot;: &quot;01b2c3d4-...&quot; }
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>GET  /api/insights/rewrites/{id}     Fetch a previously generated rewrite
 </code></pre></div>
+<h2 id="partition-pruning-analysis">Partition pruning analysis</h2>
+<p>Snowflake stores data in micro-partitions. When a query has good clustering key alignment, Snowflake <em>prunes</em> (skips) partitions that cannot contain matching rows. A query that scans 95 % of partitions is performing a near-full-table-scan — usually fixable with a clustering key or a better WHERE filter.</p>
+<p>FrostWatch computes the <strong>pruning ratio</strong> (<code>partitions_scanned / partitions_total</code>) for every query that has partition metadata, groups results by SQL fingerprint, and surfaces patterns where the average ratio is high and the credit cost is significant.</p>
+<table>
+<thead>
+<tr>
+<th>Avg pruning ratio</th>
+<th>Severity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50 % – 69 %</td>
+<td><code>medium</code></td>
+</tr>
+<tr>
+<td>70 % – 89 %</td>
+<td><code>high</code></td>
+</tr>
+<tr>
+<td>≥ 90 %</td>
+<td><code>critical</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each result includes a tailored recommendation (add a clustering key, push selective filters earlier, etc.) and the average/total credits consumed so you can prioritise fixes by ROI.</p>
+<div class="admonition tip">
+<p class="admonition-title">Small tables are excluded</p>
+<p>Tables with fewer than 100 average partitions are excluded by default — full scans on small tables are cheap and not worth the noise. Adjust the <code>min_partitions</code> query parameter to raise or lower this threshold.</p>
+</div>
+<p><strong>API endpoint:</strong> <code>GET /api/insights/pruning?days=30&amp;limit=20&amp;min_partitions=100&amp;min_ratio=0.5</code></p>
 <h2 id="demo-mode">Demo mode</h2>
 <p><code>frostwatch demo</code> pre-seeds two realistic rewrite examples — an ML features query and a MERGE statement — so the Insights page is immediately populated when you try the demo. No LLM API key required.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span>frostwatch
