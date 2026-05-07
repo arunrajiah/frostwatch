@@ -186,6 +186,17 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
             sql = tmpl.format(db=DB)
             bytes_scanned = rng.uniform(1e7, 5e10)
 
+            # Partition stats — total partitions drawn from table size proxy;
+            # most queries have decent pruning, but ~25% are poor (ratio > 0.6)
+            partitions_total = int(rng.uniform(200, 8000))
+            if rng.random() < 0.25:
+                # Poor pruning: scan 65–100% of partitions
+                pruning_ratio = rng.uniform(0.65, 1.0)
+            else:
+                # Good pruning: scan 5–45% of partitions
+                pruning_ratio = rng.uniform(0.05, 0.45)
+            partitions_scanned = max(1, int(partitions_total * pruning_ratio))
+
             # ~40 % of queries are dbt
             if user == "DBT_SVC" or rng.random() < 0.35:
                 model = rng.choice(DBT_MODELS)
@@ -205,6 +216,8 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
                     "schema_name": "PUBLIC",
                     "execution_time_ms": round(exec_ms, 2),
                     "bytes_scanned": round(bytes_scanned, 0),
+                    "partitions_scanned": partitions_scanned,
+                    "partitions_total": partitions_total,
                     "credits_used": round(credits, 8),
                     "start_time": start,
                     "end_time": end,
@@ -223,10 +236,12 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
                 text(
                     "INSERT OR IGNORE INTO cached_queries "
                     "(query_id, warehouse_name, user_name, role_name, database_name, "
-                    "schema_name, execution_time_ms, bytes_scanned, credits_used, "
+                    "schema_name, execution_time_ms, bytes_scanned, partitions_scanned, "
+                    "partitions_total, credits_used, "
                     "start_time, end_time, query_text, query_tag, dbt_model, status, synced_at) "
                     "VALUES (:query_id, :warehouse_name, :user_name, :role_name, :database_name, "
-                    ":schema_name, :execution_time_ms, :bytes_scanned, :credits_used, "
+                    ":schema_name, :execution_time_ms, :bytes_scanned, :partitions_scanned, "
+                    ":partitions_total, :credits_used, "
                     ":start_time, :end_time, :query_text, :query_tag, :dbt_model, :status, :synced_at)"
                 ),
                 q,

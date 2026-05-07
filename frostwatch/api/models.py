@@ -185,6 +185,23 @@ class CostForecastPoint(BaseModel):
     projected_30d_cost_usd: float
 
 
+class PartitionPruningRecord(BaseModel):
+    fingerprint: str
+    canonical_sql_preview: str
+    example_query_id: str
+    total_executions: int
+    executions_analyzed: int
+    avg_pruning_ratio: float
+    avg_partitions_scanned: float
+    avg_partitions_total: float
+    avg_credits: float
+    total_credits: float
+    most_common_warehouse: str | None = None
+    most_common_user: str | None = None
+    severity: str
+    recommendation: str
+
+
 class QueryRewriteRequest(BaseModel):
     query_id: str
 

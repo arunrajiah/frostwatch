@@ -217,6 +217,42 @@ Submits an expensive query to your configured LLM and returns an optimization re
 
 Returns `503` if no LLM provider is configured, `404` if the `query_id` is not found, `404` if no rewrite exists yet (use POST to generate one).
 
+### `GET /api/insights/pruning`
+
+Returns query patterns with poor partition pruning efficiency, sorted by impact (pruning ratio × total credits × executions).
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `days` | int | 30 | Look-back window (1–90) |
+| `limit` | int | 20 | Max patterns to return (1–100) |
+| `min_partitions` | int | 100 | Min average `partitions_total` to include (filters out small tables) |
+| `min_ratio` | float | 0.5 | Min average pruning ratio (0.1–1.0) to flag |
+
+**Response** — array of `PartitionPruningRecord`:
+
+```json
+[
+  {
+    "fingerprint": "a3f1b2c4...",
+    "canonical_sql_preview": "SELECT * FROM ORDERS WHERE STATUS = '?'",
+    "example_query_id": "01b2c3d4-...",
+    "total_executions": 87,
+    "executions_analyzed": 85,
+    "avg_pruning_ratio": 0.92,
+    "avg_partitions_scanned": 4140.0,
+    "avg_partitions_total": 4500.0,
+    "avg_credits": 0.0182,
+    "total_credits": 1.547,
+    "most_common_warehouse": "COMPUTE_WH",
+    "most_common_user": "ANALYST_ALICE",
+    "severity": "critical",
+    "recommendation": "Add a clustering key on the high-cardinality filter column(s)..."
+  }
+]
+```
+
+Severity levels: `medium` (ratio ≥ 0.5), `high` (≥ 0.7), `critical` (≥ 0.9).
+
 ### `GET /api/insights/rewrites/{query_id}`
 
 Fetches the most recent rewrite suggestion for a query. Returns `404` if none has been generated yet.

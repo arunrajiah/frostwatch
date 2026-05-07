@@ -8,6 +8,8 @@ SELECT
     schema_name,
     execution_time AS execution_time_ms,
     bytes_scanned,
+    partitions_scanned,
+    partitions_total,
     credits_used_cloud_services AS credits_used,
     start_time,
     end_time,

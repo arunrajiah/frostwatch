@@ -35,7 +35,7 @@ Richer analysis of individual expensive queries.
 
 - [x] Query fingerprinting — detect repeated / near-identical queries, surface patterns driving spend
 - [x] AI rewrite suggestions — LLM reviews expensive queries, suggests rewrites, clustering keys, filter pushdowns
-- [ ] Partition pruning analysis — detect full-table scans that could be pruned
+- [x] Partition pruning analysis — detect full-table scans that could be pruned
 - [x] "Most regressed" queries week-over-week — flag patterns that became more expensive this week vs last
 - [x] Cost forecasting — project per-warehouse spend using linear regression on historical metrics
 
