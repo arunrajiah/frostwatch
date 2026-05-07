@@ -41,6 +41,8 @@ class CachedQuery(Base):
     schema_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
     execution_time_ms: Mapped[float | None] = mapped_column(Float, nullable=True)
     bytes_scanned: Mapped[float | None] = mapped_column(Float, nullable=True)
+    partitions_scanned: Mapped[float | None] = mapped_column(Float, nullable=True)
+    partitions_total: Mapped[float | None] = mapped_column(Float, nullable=True)
     credits_used: Mapped[float | None] = mapped_column(Float, nullable=True)
     start_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     end_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
@@ -118,6 +120,8 @@ async def init_db(db_path: Path) -> None:
         # Inline migrations for columns added after initial release
         for migration_sql in [
             "ALTER TABLE cached_queries ADD COLUMN dbt_model VARCHAR(256)",
+            "ALTER TABLE cached_queries ADD COLUMN partitions_scanned FLOAT",
+            "ALTER TABLE cached_queries ADD COLUMN partitions_total FLOAT",
         ]:
             with contextlib.suppress(Exception):
                 await conn.execute(text(migration_sql))

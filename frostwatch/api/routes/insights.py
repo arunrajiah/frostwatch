@@ -5,6 +5,7 @@ Routes
 GET  /api/insights/fingerprints   — Top query patterns by total credits
 GET  /api/insights/regressions    — Patterns that regressed week-over-week
 GET  /api/insights/forecasts      — Per-warehouse cost projections (7-day)
+GET  /api/insights/pruning        — Patterns with poor partition pruning efficiency
 POST /api/insights/rewrites       — Request an AI rewrite for a query
 GET  /api/insights/rewrites/{id}  — Fetch a previously generated rewrite
 """
@@ -18,8 +19,10 @@ from sqlalchemy import select
 
 from frostwatch.analysis.fingerprint import build_fingerprints, detect_regressions
 from frostwatch.analysis.forecast import forecast_warehouse_costs
+from frostwatch.analysis.pruning import detect_poor_pruning
 from frostwatch.api.models import (
     CostForecastPoint,
+    PartitionPruningRecord,
     QueryFingerprintRecord,
     QueryRegressionRecord,
     QueryRewriteRequest,
@@ -119,6 +122,52 @@ async def get_forecasts(
         credits_per_dollar=credits_per_dollar,
     )
     return [CostForecastPoint(**f) for f in forecasts]
+
+
+# ── Partition pruning ─────────────────────────────────────────────────────────
+
+
+@router.get("/insights/pruning", response_model=list[PartitionPruningRecord])
+async def get_pruning(
+    days: int = Query(30, ge=1, le=90, description="Look-back window in days"),
+    limit: int = Query(20, ge=1, le=100, description="Max patterns to return"),
+    min_partitions: int = Query(
+        100,
+        ge=10,
+        description="Min avg partitions_total to include (filters out small tables)",
+    ),
+    min_ratio: float = Query(
+        0.5,
+        ge=0.1,
+        le=1.0,
+        description="Min avg pruning ratio (partitions_scanned / partitions_total) to flag",
+    ),
+) -> list[PartitionPruningRecord]:
+    """Return query patterns with poor partition pruning efficiency.
+
+    Only patterns where ``partitions_total >= min_partitions`` on average are
+    included — small tables with few partitions are excluded to avoid noise.
+    Results are sorted by impact: pruning_ratio × total_credits × executions.
+    """
+    from datetime import timedelta
+
+    cutoff = datetime.now(UTC) - timedelta(days=days)
+
+    async with get_db() as session:
+        result = await session.execute(select(CachedQuery).where(CachedQuery.start_time >= cutoff))
+        rows = result.scalars().all()
+
+    queries = [
+        {c.name: getattr(row, c.name) for c in CachedQuery.__table__.columns} for row in rows
+    ]
+
+    pruning_issues = detect_poor_pruning(
+        queries,
+        min_partitions=min_partitions,
+        min_ratio=min_ratio,
+        top_n=limit,
+    )
+    return [PartitionPruningRecord(**p) for p in pruning_issues]
 
 
 # ── Rewrites ──────────────────────────────────────────────────────────────────

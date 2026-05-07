@@ -72,6 +72,25 @@ POST /api/insights/rewrites          { "query_id": "01b2c3d4-..." }
 GET  /api/insights/rewrites/{id}     Fetch a previously generated rewrite
 ```
 
+## Partition pruning analysis
+
+Snowflake stores data in micro-partitions. When a query has good clustering key alignment, Snowflake *prunes* (skips) partitions that cannot contain matching rows. A query that scans 95 % of partitions is performing a near-full-table-scan — usually fixable with a clustering key or a better WHERE filter.
+
+FrostWatch computes the **pruning ratio** (`partitions_scanned / partitions_total`) for every query that has partition metadata, groups results by SQL fingerprint, and surfaces patterns where the average ratio is high and the credit cost is significant.
+
+| Avg pruning ratio | Severity |
+|-------------------|----------|
+| 50 % – 69 % | `medium` |
+| 70 % – 89 % | `high` |
+| ≥ 90 % | `critical` |
+
+Each result includes a tailored recommendation (add a clustering key, push selective filters earlier, etc.) and the average/total credits consumed so you can prioritise fixes by ROI.
+
+!!! tip "Small tables are excluded"
+    Tables with fewer than 100 average partitions are excluded by default — full scans on small tables are cheap and not worth the noise. Adjust the `min_partitions` query parameter to raise or lower this threshold.
+
+**API endpoint:** `GET /api/insights/pruning?days=30&limit=20&min_partitions=100&min_ratio=0.5`
+
 ## Demo mode
 
 `frostwatch demo` pre-seeds two realistic rewrite examples — an ML features query and a MERGE statement — so the Insights page is immediately populated when you try the demo. No LLM API key required.

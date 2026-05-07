@@ -61,6 +61,12 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
                         row.get("EXECUTION_TIME_MS") or row.get("execution_time_ms")
                     ),
                     bytes_scanned=_to_float(row.get("BYTES_SCANNED") or row.get("bytes_scanned")),
+                    partitions_scanned=_to_float(
+                        row.get("PARTITIONS_SCANNED") or row.get("partitions_scanned")
+                    ),
+                    partitions_total=_to_float(
+                        row.get("PARTITIONS_TOTAL") or row.get("partitions_total")
+                    ),
                     credits_used=_to_float(row.get("CREDITS_USED") or row.get("credits_used")),
                     start_time=row.get("START_TIME") or row.get("start_time"),
                     end_time=row.get("END_TIME") or row.get("end_time"),
@@ -76,6 +82,8 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
                         "credits_used": stmt.excluded.credits_used,
                         "execution_time_ms": stmt.excluded.execution_time_ms,
                         "bytes_scanned": stmt.excluded.bytes_scanned,
+                        "partitions_scanned": stmt.excluded.partitions_scanned,
+                        "partitions_total": stmt.excluded.partitions_total,
                         "dbt_model": stmt.excluded.dbt_model,
                         "synced_at": stmt.excluded.synced_at,
                     },

@@ -161,6 +161,7 @@ Key endpoints:
 | `GET` | `/api/insights/fingerprints` | Top query patterns by total credits |
 | `GET` | `/api/insights/regressions` | Query patterns that regressed week-over-week |
 | `GET` | `/api/insights/forecasts` | Per-warehouse cost projections (7-day) |
+| `GET` | `/api/insights/pruning` | Query patterns with poor partition pruning |
 | `POST` | `/api/insights/rewrites` | Request an AI rewrite for a query |
 | `GET` | `/api/insights/rewrites/{query_id}` | Fetch a previously generated rewrite |
 | `POST` | `/api/sync` | Trigger a manual Snowflake sync |

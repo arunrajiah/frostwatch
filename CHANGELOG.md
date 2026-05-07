@@ -9,6 +9,16 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-05-07
+
+### Added
+- **Partition pruning analysis** (`frostwatch/analysis/pruning.py`): detect query patterns that scan an excessive fraction of micro-partitions; groups by SQL fingerprint, computes avg pruning ratio (`partitions_scanned / partitions_total`), severity (`medium` ≥ 50 %, `high` ≥ 70 %, `critical` ≥ 90 %); small tables (< 100 avg partitions) excluded to avoid noise
+- **`GET /api/insights/pruning`** endpoint: returns patterns sorted by impact (pruning ratio × total credits × executions); supports `?days=`, `?limit=`, `?min_partitions=`, `?min_ratio=`
+- `partitions_scanned` and `partitions_total` columns added to `CachedQuery` (inline SQLite migration applied on first start — no manual migration needed)
+- `QUERY_HISTORY_SQL` updated to fetch `partitions_scanned` and `partitions_total` from `SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY`
+- Demo mode seeds realistic partition stats — 25 % of queries with poor pruning (ratio 0.65–1.0), 75 % with good pruning (0.05–0.45)
+- Docs: "Partition pruning analysis" section added to `docs/insights.md`; pruning endpoint with full request/response reference added to `docs/api.md`
+
 ## [0.2.0] - 2026-05-04
 
 ### Added
