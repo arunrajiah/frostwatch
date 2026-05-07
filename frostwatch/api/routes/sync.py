@@ -14,6 +14,7 @@ from frostwatch.core.db import (
     AnomalyRecord,
     CachedQuery,
     CachedWarehouseMetric,
+    DbtModelThresholdAlert,
     SyncRun,
     get_db,
 )
@@ -160,6 +161,11 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
                     )
                     session.add(record)
 
+        # ── dbt model threshold alerts ─────────────────────────────────────
+        threshold = getattr(config, "dbt_model_credit_threshold", 0.0)
+        if threshold and threshold > 0:
+            await _check_dbt_thresholds(threshold, detection_time)
+
         async with get_db() as session:
             result = await session.execute(select(SyncRun).where(SyncRun.id == sync_run_id))
             run = result.scalar_one()
@@ -179,6 +185,46 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
         raise
     finally:
         _sync_running = False
+
+
+async def _check_dbt_thresholds(threshold: float, now: datetime) -> None:
+    """Fire threshold alerts for any dbt model that exceeded *threshold* credits today."""
+    from collections import defaultdict
+
+    period_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    period_end = now
+
+    async with get_db() as session:
+        result = await session.execute(
+            select(CachedQuery).where(
+                CachedQuery.dbt_model.isnot(None),
+                CachedQuery.start_time >= period_start,
+                CachedQuery.start_time <= period_end,
+            )
+        )
+        rows = result.scalars().all()
+
+    model_credits: dict[str, float] = defaultdict(float)
+    for q in rows:
+        model_credits[q.dbt_model or ""] += float(q.credits_used or 0)
+
+    alerts = [
+        DbtModelThresholdAlert(
+            detected_at=now,
+            dbt_model=model,
+            period_start=period_start,
+            period_end=period_end,
+            credits_used=round(credits, 6),
+            threshold=threshold,
+        )
+        for model, credits in model_credits.items()
+        if credits > threshold
+    ]
+
+    if alerts:
+        async with get_db() as session:
+            for alert in alerts:
+                session.add(alert)
 
 
 def _extract_dbt_model(query_tag: str | None) -> str | None:

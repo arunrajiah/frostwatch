@@ -41,15 +41,15 @@ Richer analysis of individual expensive queries.
 
 ---
 
-## v0.3 — dbt integration (deeper)
+## v0.3 — dbt integration (deeper) (shipped)
 
 First-class support for dbt model cost attribution beyond tag parsing.
 
-- [ ] dbt Cloud integration — pull run metadata directly from dbt Cloud API
-- [ ] Cost breakdown by dbt invocation, job, and environment
-- [ ] Warning when a model crosses a configurable spend threshold
-- [ ] Optional: pull dbt manifest for richer model metadata (owner, description, materialization)
-- [ ] GitHub Actions integration — post dbt job cost summary as PR comment after each `dbt run`
+- [x] dbt Cloud integration — pull run metadata directly from dbt Cloud API
+- [x] Cost breakdown by dbt invocation, job, and environment
+- [x] Warning when a model crosses a configurable spend threshold
+- [x] Optional: pull dbt manifest for richer model metadata (owner, description, materialization)
+- [x] GitHub Actions integration — post dbt job cost summary as PR comment after each `dbt run`
 
 ---
 

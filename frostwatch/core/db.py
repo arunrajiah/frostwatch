@@ -106,6 +106,60 @@ class QueryRewrite(Base):
     generated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
 
+class DbtCloudRun(Base):
+    """Metadata for a dbt Cloud job run, synced from the dbt Cloud API."""
+
+    __tablename__ = "dbt_cloud_runs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[int] = mapped_column(Integer, unique=True, nullable=False, index=True)
+    job_id: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    job_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    environment_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    environment_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    project_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    project_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    triggered_by: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    status: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    duration_seconds: Mapped[float | None] = mapped_column(Float, nullable=True)
+    models_executed: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    credits_used: Mapped[float | None] = mapped_column(Float, nullable=True)
+    synced_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+
+class DbtModelThresholdAlert(Base):
+    """Fired when a dbt model exceeds its daily credit threshold."""
+
+    __tablename__ = "dbt_model_threshold_alerts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    detected_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    dbt_model: Mapped[str] = mapped_column(String(256), nullable=False, index=True)
+    period_start: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    period_end: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    credits_used: Mapped[float] = mapped_column(Float, nullable=False)
+    threshold: Mapped[float] = mapped_column(Float, nullable=False)
+
+
+class DbtModelMetadata(Base):
+    """Enriched model metadata parsed from a dbt manifest.json."""
+
+    __tablename__ = "dbt_model_metadata"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    model_name: Mapped[str] = mapped_column(String(256), unique=True, nullable=False, index=True)
+    project_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    owner: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    materialization: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    tags: Mapped[str | None] = mapped_column(Text, nullable=True)  # JSON list
+    schema_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    database_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+
 async def init_db(db_path: Path) -> None:
     global _engine, _session_factory
 

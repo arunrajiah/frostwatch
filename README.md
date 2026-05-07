@@ -31,6 +31,8 @@ frostwatch demo
 - **Cost forecasting** — per-warehouse credit projections for the next 1–30 days using linear regression on historical data
 - **AI query rewrites** — submit any expensive query to your LLM and get back optimized SQL, root-cause analysis, clustering recommendations, and estimated savings %
 - **dbt model attribution** — per-model credit and performance breakdown parsed from `query_tag`
+- **dbt Cloud integration** — sync run metadata from dbt Cloud; cost breakdown by job and environment; model spend threshold alerts; manifest.json enrichment (owner, description, materialization, tags)
+- **GitHub Actions** — built-in workflow to post dbt cost summaries as PR comments after every `dbt run`
 - **Weekly digests** delivered to Slack or email
 - **Clean web UI** — dark-themed React dashboard, no BI tool required
 - **REST API** — all data accessible via `/api/*` endpoints
@@ -164,6 +166,13 @@ Key endpoints:
 | `GET` | `/api/insights/pruning` | Query patterns with poor partition pruning |
 | `POST` | `/api/insights/rewrites` | Request an AI rewrite for a query |
 | `GET` | `/api/insights/rewrites/{query_id}` | Fetch a previously generated rewrite |
+| `GET` | `/api/dbt/runs` | dbt Cloud runs with cost attribution |
+| `GET` | `/api/dbt/jobs` | Cost breakdown by dbt Cloud job |
+| `GET` | `/api/dbt/environments` | Cost breakdown by dbt Cloud environment |
+| `GET` | `/api/dbt/threshold-alerts` | Models that exceeded daily credit threshold |
+| `GET` | `/api/dbt/metadata` | Enriched model metadata from manifest.json |
+| `POST` | `/api/dbt/sync-cloud` | Sync run metadata from dbt Cloud API |
+| `POST` | `/api/dbt/manifest` | Upload and parse a dbt manifest.json |
 | `POST` | `/api/sync` | Trigger a manual Snowflake sync |
 | `GET` | `/api/settings` | Current configuration |
 | `PUT` | `/api/settings` | Update configuration |

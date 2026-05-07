@@ -1,0 +1,104 @@
+# FrostWatch — dbt cost summary PR comment
+#
+# Posts a dbt model cost breakdown as a PR comment after every `dbt run`.
+# Requires a FrostWatch instance accessible from your CI runner.
+#
+# Setup
+# -----
+# 1. Set the FROSTWATCH_URL repository secret to your FrostWatch server URL
+#    (e.g. https://frostwatch.yourcompany.com).  No trailing slash.
+# 2. Ensure your dbt workflow calls this one (or copy the steps below into it).
+#
+# The comment shows the top models by credit spend over the last 7 days,
+# plus any active threshold alerts.  It is updated (not duplicated) on each run.
+
+name: dbt Cost Summary
+
+on:
+  workflow_run:
+    workflows: ["dbt"]          # ← replace with the name of your dbt workflow
+    types: [completed]
+  workflow_dispatch:            # allow manual trigger for testing
+
+permissions:
+  pull-requests: write          # needed to post/update PR comments
+
+jobs:
+  cost-comment:
+    name: Post dbt cost summary
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion != 'cancelled'
+
+    steps:
+      - name: Fetch dbt model costs from FrostWatch
+        id: costs
+        env:
+          FROSTWATCH_URL: ${{ secrets.FROSTWATCH_URL }}
+        run: |
+          # Fetch top dbt models (last 7 days)
+          MODELS=$(curl -sf "${FROSTWATCH_URL}/api/dbt?days=7" | \
+            python3 -c "
+          import json, sys
+          rows = json.load(sys.stdin)[:10]
+          lines = ['| Model | Credits | Cost (USD) | Queries |',
+                   '|-------|---------|------------|---------|']
+          for r in rows:
+              lines.append(f\"| \`{r['dbt_model']}\` | {r['total_credits']:.4f} | \${r['total_cost_usd']:.4f} | {r['query_count']} |\")
+          print('\n'.join(lines))
+          " 2>/dev/null || echo "_FrostWatch unreachable — model data unavailable._")
+
+          # Fetch active threshold alerts (last 7 days)
+          ALERTS=$(curl -sf "${FROSTWATCH_URL}/api/dbt/threshold-alerts?days=7" | \
+            python3 -c "
+          import json, sys
+          rows = json.load(sys.stdin)
+          if not rows:
+              print('_No threshold alerts in the last 7 days._')
+          else:
+              lines = ['| Model | Credits Used | Threshold | Detected |',
+                       '|-------|-------------|-----------|---------|']
+              for r in rows:
+                  dt = r['detected_at'][:10]
+                  lines.append(f\"| \`{r['dbt_model']}\` | {r['credits_used']:.4f} | {r['threshold']:.4f} | {dt} |\")
+              print('\n'.join(lines))
+          " 2>/dev/null || echo "_FrostWatch unreachable — alert data unavailable._")
+
+          # Write to step outputs (multi-line safe)
+          echo "models<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$MODELS" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+          echo "alerts<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$ALERTS" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Find existing FrostWatch comment
+        id: find-comment
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.workflow_run.pull_requests[0].number || github.event.number }}
+          comment-author: github-actions[bot]
+          body-includes: "<!-- frostwatch-dbt-cost -->"
+
+      - name: Post or update PR comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.workflow_run.pull_requests[0].number || github.event.number }}
+          edit-mode: replace
+          body: |
+            <!-- frostwatch-dbt-cost -->
+            ## ❄️ FrostWatch — dbt Cost Summary (last 7 days)
+
+            ### Top models by credit spend
+
+            ${{ steps.costs.outputs.models }}
+
+            ### Threshold alerts
+
+            ${{ steps.costs.outputs.alerts }}
+
+            ---
+            *Powered by [FrostWatch](https://github.com/arunrajiah/frostwatch) •
+            [Full dashboard](${{ secrets.FROSTWATCH_URL }}) •
+            Updated: ${{ github.event.workflow_run.updated_at || 'now' }}*
