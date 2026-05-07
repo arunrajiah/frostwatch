@@ -212,3 +212,77 @@ class QueryRewriteResponse(BaseModel):
     fingerprint: str | None = None
     rewrite_suggestion: str
     generated_at: datetime
+
+
+# ── v0.3 dbt Cloud models ─────────────────────────────────────────────────────
+
+
+class DbtCloudRunRecord(BaseModel):
+    id: int
+    run_id: int
+    job_id: int
+    job_name: str | None = None
+    environment_id: int | None = None
+    environment_name: str | None = None
+    project_id: int | None = None
+    project_name: str | None = None
+    triggered_by: str | None = None
+    status: str | None = None
+    started_at: datetime | None = None
+    finished_at: datetime | None = None
+    duration_seconds: float | None = None
+    models_executed: int | None = None
+    credits_used: float | None = None
+
+
+class DbtJobCostRecord(BaseModel):
+    job_id: int
+    job_name: str | None = None
+    environment_id: int | None = None
+    environment_name: str | None = None
+    project_id: int | None = None
+    project_name: str | None = None
+    run_count: int
+    total_credits: float
+    total_cost_usd: float
+    avg_duration_seconds: float | None = None
+    last_run_at: datetime | None = None
+    last_run_status: str | None = None
+
+
+class DbtEnvironmentCostRecord(BaseModel):
+    environment_id: int | None = None
+    environment_name: str | None = None
+    project_id: int | None = None
+    project_name: str | None = None
+    run_count: int
+    total_credits: float
+    total_cost_usd: float
+    distinct_jobs: int
+
+
+class DbtThresholdAlertRecord(BaseModel):
+    id: int
+    detected_at: datetime
+    dbt_model: str
+    period_start: datetime
+    period_end: datetime
+    credits_used: float
+    threshold: float
+
+
+class DbtModelMetadataRecord(BaseModel):
+    model_name: str
+    project_name: str | None = None
+    owner: str | None = None
+    description: str | None = None
+    materialization: str | None = None
+    tags: list[str] = []
+    schema_name: str | None = None
+    database_name: str | None = None
+
+
+class DbtCloudSyncResponse(BaseModel):
+    runs_synced: int
+    jobs_enriched: int
+    environments_enriched: int

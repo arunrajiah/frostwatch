@@ -14,6 +14,9 @@ from sqlalchemy import text
 from frostwatch.core.config import FrostWatchConfig
 from frostwatch.core.db import (
     AnomalyRecord,
+    DbtCloudRun,
+    DbtModelMetadata,
+    DbtModelThresholdAlert,
     QueryRewrite,
     ReportRecord,
     SyncRun,
@@ -387,6 +390,215 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
                         ),
                     )
                 )
+
+    # ── dbt Cloud runs (30 days, 3 jobs, 2 environments) ─────────────────
+    dbt_jobs = [
+        (101, "Nightly Production Run", 201, "production"),
+        (102, "Hourly Staging Refresh", 202, "staging"),
+        (103, "Weekly Full Refresh", 201, "production"),
+    ]
+    dbt_run_id = 5000
+    async with get_db() as session:
+        for d_offset in range(30):
+            run_date = today - timedelta(days=29 - d_offset)
+            is_weekend = run_date.weekday() >= 5
+            # Nightly runs every day; hourly ~3/day on weekdays; weekly on Mondays
+            run_schedule = [
+                (101, 1),  # nightly — 1 run/day
+                (102, 0 if is_weekend else 3),  # hourly staging — 3/day on weekdays
+                (103, 1 if run_date.weekday() == 0 else 0),  # weekly — Mondays only
+            ]
+            for job_id, n_runs in run_schedule:
+                job_name, env_id, env_name = next(
+                    (j[1], j[2], j[3]) for j in dbt_jobs if j[0] == job_id
+                )
+                for r_idx in range(n_runs):
+                    start_hour = 2 + r_idx * 6 if job_id == 102 else (1 if job_id == 101 else 3)
+                    started = datetime(
+                        run_date.year,
+                        run_date.month,
+                        run_date.day,
+                        start_hour,
+                        rng.randint(0, 10),
+                        tzinfo=UTC,
+                    )
+                    duration = rng.uniform(
+                        420, 900 if job_id == 101 else (180 if job_id == 102 else 1800)
+                    )
+                    finished = started + timedelta(seconds=duration)
+                    # Credits ≈ fraction of that day's TRANSFORM_WH credits
+                    credits = round(rng.uniform(0.02, 0.18 if job_id != 103 else 0.45), 6)
+                    status = "error" if rng.random() < 0.04 else "success"
+
+                    session.add(
+                        DbtCloudRun(
+                            run_id=dbt_run_id,
+                            job_id=job_id,
+                            job_name=job_name,
+                            environment_id=env_id,
+                            environment_name=env_name,
+                            project_id=1,
+                            project_name="analytics",
+                            triggered_by="scheduled",
+                            status=status,
+                            started_at=started,
+                            finished_at=finished,
+                            duration_seconds=round(duration, 1),
+                            models_executed=rng.randint(8, 45) if status == "success" else None,
+                            credits_used=credits,
+                            synced_at=synced_at,
+                        )
+                    )
+                    dbt_run_id += 1
+
+    # ── dbt model threshold alerts ────────────────────────────────────────
+    threshold = 0.3  # demo threshold: 0.3 credits/day
+    async with get_db() as session:
+        for model, excess_day_offset in [("revenue_daily", 3), ("churn_features", 8)]:
+            alert_day = today - timedelta(days=excess_day_offset)
+            period_start_dt = datetime(
+                alert_day.year, alert_day.month, alert_day.day, 0, 0, 0, tzinfo=UTC
+            )
+            period_end_dt = period_start_dt + timedelta(hours=23, minutes=59)
+            credits_used = round(rng.uniform(threshold * 1.3, threshold * 2.2), 6)
+            session.add(
+                DbtModelThresholdAlert(
+                    detected_at=period_end_dt,
+                    dbt_model=model,
+                    period_start=period_start_dt,
+                    period_end=period_end_dt,
+                    credits_used=credits_used,
+                    threshold=threshold,
+                )
+            )
+
+    # ── dbt model metadata (from manifest) ───────────────────────────────
+    manifest_models = [
+        (
+            "orders",
+            "analytics",
+            "data-eng@acme.com",
+            "Core order fact table",
+            "incremental",
+            '["finance","core"]',
+            "dbt_prod",
+            "ANALYTICS",
+        ),
+        (
+            "customers",
+            "analytics",
+            "data-eng@acme.com",
+            "Customer dimension with LTV enrichment",
+            "incremental",
+            '["core"]',
+            "dbt_prod",
+            "ANALYTICS",
+        ),
+        (
+            "order_items",
+            "analytics",
+            None,
+            "Order line-item grain",
+            "incremental",
+            '["finance"]',
+            "dbt_prod",
+            "ANALYTICS",
+        ),
+        (
+            "products",
+            "analytics",
+            "product-team@acme.com",
+            "Product catalog snapshot",
+            "table",
+            '["catalog"]',
+            "dbt_prod",
+            "ANALYTICS",
+        ),
+        (
+            "revenue_daily",
+            "analytics",
+            "finance@acme.com",
+            "Daily revenue rollup used by Finance BI",
+            "table",
+            '["finance","reporting"]',
+            "dbt_prod",
+            "ANALYTICS",
+        ),
+        (
+            "churn_features",
+            "analytics",
+            "ml-team@acme.com",
+            "Feature store for churn prediction model",
+            "incremental",
+            '["ml","churn"]',
+            "dbt_prod",
+            "ANALYTICS",
+        ),
+        (
+            "ltv_model",
+            "analytics",
+            "ml-team@acme.com",
+            "Customer lifetime value predictions",
+            "table",
+            '["ml"]',
+            "dbt_prod",
+            "ANALYTICS",
+        ),
+        (
+            "marketing_attribution",
+            "analytics",
+            "growth@acme.com",
+            "Last-touch attribution for marketing spend",
+            "incremental",
+            '["marketing"]',
+            "dbt_prod",
+            "ANALYTICS",
+        ),
+        (
+            "inventory_snapshot",
+            "analytics",
+            None,
+            "Daily inventory snapshot via dbt snapshot strategy",
+            "snapshot",
+            '["ops"]',
+            "dbt_prod",
+            "ANALYTICS",
+        ),
+        (
+            "funnel_stages",
+            "analytics",
+            "growth@acme.com",
+            "User funnel stage transitions",
+            "view",
+            '["marketing","product"]',
+            "dbt_prod",
+            "ANALYTICS",
+        ),
+    ]
+    async with get_db() as session:
+        for (
+            model_name,
+            project_name,
+            owner,
+            description,
+            materialization,
+            tags,
+            schema_name,
+            database_name,
+        ) in manifest_models:
+            session.add(
+                DbtModelMetadata(
+                    model_name=model_name,
+                    project_name=project_name,
+                    owner=owner,
+                    description=description,
+                    materialization=materialization,
+                    tags=tags,
+                    schema_name=schema_name,
+                    database_name=database_name,
+                    updated_at=now - timedelta(hours=6),
+                )
+            )
 
     # ── Report ────────────────────────────────────────────────────────────
     period_end = now

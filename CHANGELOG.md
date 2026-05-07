@@ -9,6 +9,19 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-05-07
+
+### Added
+- **dbt Cloud integration** (`frostwatch/dbt_cloud/client.py`): async client for the dbt Cloud REST API v2; pulls runs, jobs, and environments with full pagination; `POST /api/dbt/sync-cloud` persists run metadata and attributes Snowflake credits to each run by matching dbt-tagged queries inside the run time window
+- **Cost breakdown by job and environment**: `GET /api/dbt/jobs` and `GET /api/dbt/environments` aggregate credits, run counts, avg duration, and last-run status from synced dbt Cloud runs
+- **dbt model spend threshold alerts**: configurable `dbt_model_credit_threshold` (credits/day per model); detected automatically at the end of every Snowflake sync; stored in new `DbtModelThresholdAlert` table; retrieved via `GET /api/dbt/threshold-alerts`
+- **dbt manifest enrichment** (`frostwatch/dbt_cloud/manifest.py`): parse a `manifest.json` to extract owner, description, materialization, tags, schema, and database per model; `POST /api/dbt/manifest` upserts this into a new `DbtModelMetadata` table; `GET /api/dbt/metadata` returns the enriched catalogue
+- **GitHub Actions workflow** (`.github/workflows/dbt-cost-comment.yml`): posts a dbt model cost summary + threshold alert table as a PR comment after every dbt run; uses `peter-evans/create-or-update-comment` to edit rather than duplicate
+- **New DB models**: `DbtCloudRun`, `DbtModelThresholdAlert`, `DbtModelMetadata` — created automatically on first startup
+- **New config fields**: `dbt_cloud_account_id`, `dbt_cloud_api_token` (secret), `dbt_model_credit_threshold`; `dbt_cloud_api_token` redacted in `save_config`
+- **Demo mode enriched**: seeds 30 days of dbt Cloud runs across 3 jobs / 2 environments, 2 threshold alert examples, and manifest metadata for all 10 demo dbt models (owner, description, materialization, tags)
+- Bump version to 0.3.0
+
 ## [0.2.1] - 2026-05-07
 
 ### Added

@@ -45,6 +45,12 @@ class FrostWatchConfig(BaseSettings):
     snowflake_query_limit: int = 500
     alert_threshold_multiplier: float = 3.0
 
+    # ── dbt Cloud integration ─────────────────────────────────────────────────
+    dbt_cloud_account_id: str = ""
+    dbt_cloud_api_token: SecretStr = SecretStr("")
+    # Daily credit limit per dbt model — 0.0 disables threshold alerts
+    dbt_model_credit_threshold: float = 0.0
+
     data_dir: Path = Path("~/.frostwatch").expanduser()
     db_path: Path = Path("")
 
@@ -94,7 +100,12 @@ def save_config(config: FrostWatchConfig, path: Path | None = None) -> None:
         mode="json",
     )
 
-    for secret_field in ("snowflake_password", "llm_api_key", "email_smtp_password"):
+    for secret_field in (
+        "snowflake_password",
+        "llm_api_key",
+        "email_smtp_password",
+        "dbt_cloud_api_token",
+    ):
         if secret_field in data and isinstance(data[secret_field], dict):
             data[secret_field] = data[secret_field].get("secret_value", "")
 

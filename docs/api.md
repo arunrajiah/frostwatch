@@ -102,6 +102,103 @@ Returns credit and performance breakdown by dbt model name.
 ]
 ```
 
+## dbt Cloud
+
+### `GET /api/dbt/runs`
+
+Returns dbt Cloud job runs stored by the last cloud sync, newest first.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `days` | int | 30 | Look-back window (1–90) |
+| `limit` | int | 50 | Max rows (1–200) |
+
+### `GET /api/dbt/jobs`
+
+Returns credit and performance breakdown by dbt Cloud job, sorted by total credits.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `days` | int | 30 | Look-back window (1–90) |
+
+**Response** — array of `DbtJobCostRecord`:
+
+```json
+[
+  {
+    "job_id": 101,
+    "job_name": "Nightly Production Run",
+    "environment_id": 201,
+    "environment_name": "production",
+    "run_count": 30,
+    "total_credits": 1.842,
+    "total_cost_usd": 0.614,
+    "avg_duration_seconds": 612.3,
+    "last_run_at": "2026-05-06T01:04:00Z",
+    "last_run_status": "success"
+  }
+]
+```
+
+### `GET /api/dbt/environments`
+
+Returns credit breakdown by dbt Cloud environment, sorted by total credits.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `days` | int | 30 | Look-back window (1–90) |
+
+### `GET /api/dbt/threshold-alerts`
+
+Returns dbt model threshold alerts (models that exceeded `dbt_model_credit_threshold` credits in a day), newest first.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `days` | int | 30 | Look-back window (1–90) |
+| `limit` | int | 50 | Max rows (1–200) |
+
+**Response** — array of `DbtThresholdAlertRecord`:
+
+```json
+[
+  {
+    "id": 1,
+    "detected_at": "2026-05-04T23:59:00Z",
+    "dbt_model": "revenue_daily",
+    "period_start": "2026-05-04T00:00:00Z",
+    "period_end": "2026-05-04T23:59:00Z",
+    "credits_used": 0.612,
+    "threshold": 0.3
+  }
+]
+```
+
+### `GET /api/dbt/metadata`
+
+Returns enriched model metadata from the last uploaded `manifest.json`.
+
+### `POST /api/dbt/sync-cloud`
+
+Pulls the last 30 days of run + job + environment metadata from the dbt Cloud API and attributes Snowflake credits to each run. Requires `dbt_cloud_account_id` and `dbt_cloud_api_token` in config.
+
+**Response:**
+
+```json
+{ "runs_synced": 87, "jobs_enriched": 3, "environments_enriched": 2 }
+```
+
+### `POST /api/dbt/manifest`
+
+Parses a `manifest.json` sent as the raw request body and upserts enriched model metadata.
+
+```bash
+curl -X POST http://localhost:8000/api/dbt/manifest \
+     -H "Content-Type: application/json" \
+     --data-binary @target/manifest.json
+```
+
+**Response:** `{"models_upserted": N}`
+
 ## Insights
 
 The `/api/insights` group provides deeper analysis of query patterns, cost trends, and AI-powered optimization suggestions.
