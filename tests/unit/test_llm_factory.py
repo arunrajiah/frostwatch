@@ -1,9 +1,10 @@
 import pytest
-from frostwatch.llm.factory import get_llm_provider
+
 from frostwatch.llm.anthropic_provider import AnthropicProvider
-from frostwatch.llm.openai_provider import OpenAIProvider
+from frostwatch.llm.factory import get_llm_provider
 from frostwatch.llm.gemini_provider import GeminiProvider
 from frostwatch.llm.ollama_provider import OllamaProvider
+from frostwatch.llm.openai_provider import OpenAIProvider
 
 
 class _Cfg:

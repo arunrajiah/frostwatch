@@ -422,3 +422,166 @@ Returns the list of scheduled APScheduler jobs (sync cron and report cron).
 ### `POST /api/scheduler/trigger`
 
 Manually triggers the report generation job.
+
+## Resource Monitors
+
+### `GET /api/resource-monitors`
+
+Returns all resource monitors synced from `SNOWFLAKE.ACCOUNT_USAGE.RESOURCE_MONITORS`.
+
+**Response** — array of `ResourceMonitorRecord`:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "RM_TRANSFORM_WH",
+    "credit_quota": 250.0,
+    "used_credits": 238.5,
+    "remaining_credits": 11.5,
+    "level": "WAREHOUSE",
+    "frequency": "MONTHLY",
+    "notify_at_percentage": 75.0,
+    "suspend_at_percentage": 100.0,
+    "suspend_immediately_at_percentage": 110.0,
+    "warehouses": ["TRANSFORM_WH"],
+    "owner": "ACCOUNTADMIN",
+    "synced_at": "2026-05-08T08:00:00Z"
+  }
+]
+```
+
+---
+
+### `GET /api/resource-monitors/recommendations`
+
+Analyse per-warehouse spend and recommend resource monitor quotas. Uses the p95 daily credits over the history window, multiplied by 30 days and a buffer, then rounded to a clean milestone.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `history_days` | int | 30 | Days of history to use (7–90) |
+| `buffer_pct` | float | 0.20 | Overhead buffer fraction (0.0–1.0) |
+
+**Response** — array of `MonitorRecommendationRecord`:
+
+```json
+[
+  {
+    "warehouse_name": "TRANSFORM_WH",
+    "avg_daily_credits": 0.85,
+    "p95_daily_credits": 1.42,
+    "monthly_credits_p95": 42.6,
+    "recommended_quota": 50,
+    "recommended_cost_usd": 16.67,
+    "frequency": "MONTHLY",
+    "notify_at_percentage": 75.0,
+    "suspend_at_percentage": 100.0,
+    "suspend_immediately_at_percentage": 110.0,
+    "existing_monitor": "RM_TRANSFORM_WH",
+    "current_quota": 250.0,
+    "quota_status": "oversized",
+    "priority": "medium",
+    "history_days_used": 30
+  }
+]
+```
+
+`quota_status` is one of `uncovered`, `undersized`, `oversized`, or `adequate`. `priority` is `high`, `medium`, or `low` (based on spend volatility and average usage).
+
+---
+
+### `GET /api/resource-monitors/generate-sql`
+
+Generate a copy-paste-ready `CREATE OR REPLACE RESOURCE MONITOR` DDL statement for a specific warehouse.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `warehouse` | string | ✓ | Warehouse name |
+| `history_days` | int | | 7–90 (default 30) |
+| `buffer_pct` | float | | 0.0–1.0 (default 0.20) |
+
+**Response:**
+
+```json
+{
+  "warehouse_name": "TRANSFORM_WH",
+  "monitor_name": "RM_TRANSFORM_WH",
+  "sql": "-- Resource monitor for TRANSFORM_WH\n..."
+}
+```
+
+The `sql` field is a complete DDL block with inline comments, ready to run in a Snowflake worksheet.
+
+---
+
+### `GET /api/resource-monitors/proximity-alerts`
+
+Returns monitors that are close to a trigger threshold (notify / suspend / suspend-immediately), sorted by `used_pct` descending.
+
+**Response** — array of `ProximityAlertRecord`:
+
+```json
+[
+  {
+    "monitor_name": "RM_TRANSFORM_WH",
+    "warehouse_names": ["TRANSFORM_WH"],
+    "credit_quota": 250.0,
+    "used_credits": 238.5,
+    "remaining_credits": 11.5,
+    "used_pct": 95.4,
+    "nearest_trigger": "suspend",
+    "nearest_trigger_pct": 100.0,
+    "margin_to_trigger_ppt": 4.6,
+    "frequency": "MONTHLY",
+    "severity": "critical"
+  }
+]
+```
+
+**Severity bands:**
+
+| Severity | Condition |
+|----------|-----------|
+| `critical` | Within 5 pp of a trigger threshold |
+| `high` | Within 15 pp of a trigger threshold |
+| `medium` | Trigger ahead but > 15 pp away |
+
+---
+
+### `GET /api/resource-monitors/budgets`
+
+Return per-user and per-role credit spend vs configured daily budgets.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `days` | int | 1 | Lookback window in days (1–30) |
+
+Budgets are configured in `user_credit_budgets` and `role_credit_budgets` in your `config.yaml`. All budgeted entities are always returned, plus any unbudgeted users/roles that had spend in the period.
+
+**Response:**
+
+```json
+{
+  "days": 1,
+  "users": [
+    {
+      "name": "ANALYST_ALICE",
+      "credits_used": 1.24,
+      "daily_budget": 5.0,
+      "period_budget": 5.0,
+      "pct_of_budget": 24.8,
+      "over_budget": false
+    }
+  ],
+  "roles": [
+    {
+      "name": "TRANSFORMER",
+      "credits_used": 12.4,
+      "daily_budget": 10.0,
+      "period_budget": 10.0,
+      "pct_of_budget": 124.0,
+      "over_budget": true
+    }
+  ]
+}
+```

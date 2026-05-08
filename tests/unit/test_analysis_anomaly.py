@@ -1,9 +1,15 @@
-import pytest
 from datetime import date, timedelta
+
 from frostwatch.analysis.anomaly import detect_anomalies
 
 
-def _make_metrics(warehouse: str, days: int, credits_per_day: float, spike_day: int | None = None, spike_multiplier: float = 5.0):
+def _make_metrics(
+    warehouse: str,
+    days: int,
+    credits_per_day: float,
+    spike_day: int | None = None,
+    spike_multiplier: float = 5.0,
+):
     today = date.today()
     metrics = []
     for i in range(days):

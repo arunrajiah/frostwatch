@@ -1,4 +1,5 @@
 """Unit tests for dbt query tag parsing."""
+
 from __future__ import annotations
 
 import pytest

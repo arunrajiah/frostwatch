@@ -52,6 +52,25 @@ ORDER BY timestamp DESC
 LIMIT 1000
 """
 
+RESOURCE_MONITORS_SQL = """
+SELECT
+    name,
+    credit_quota,
+    used_credits,
+    remaining_credits,
+    level,
+    frequency,
+    start_time,
+    end_time,
+    notify_at_percentage,
+    suspend_at_percentage,
+    suspend_immediately_at_percentage,
+    owner,
+    created_on
+FROM SNOWFLAKE.ACCOUNT_USAGE.RESOURCE_MONITORS
+ORDER BY name
+"""
+
 STORAGE_USAGE_SQL = """
 SELECT
     usage_date,

@@ -9,6 +9,25 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-05-08
+
+### Added
+- **Resource monitor syncing**: `RESOURCE_MONITORS_SQL` fetches all monitors from `SNOWFLAKE.ACCOUNT_USAGE.RESOURCE_MONITORS`; new `ResourceMonitor` SQLite table stores quota, usage, thresholds, assigned warehouses, and owner; upserted on every sync
+- **Quota recommendations** (`frostwatch/analysis/resource_monitors.py`): per-warehouse analysis using p95 daily credits over a configurable history window; recommended quota = `ceil(p95 × 30 × (1 + buffer_pct))` rounded to a clean milestone (10, 25, 50, 100, 250 … 10 000); flags existing monitors as `uncovered`, `undersized`, `oversized`, or `adequate`; priority scoring via coefficient of variation
+- **DDL generation** (`generate_monitor_sql()`): renders a complete `CREATE OR REPLACE RESOURCE MONITOR … ALTER WAREHOUSE … SET RESOURCE_MONITOR` block with inline comments; immediately copy-paste ready for a Snowflake worksheet
+- **Proximity alerts** (`detect_proximity_alerts()`): compares current `used_credits / credit_quota` against notify/suspend/suspend-immediately thresholds; severity bands — `critical` (within 5 pp), `high` (within 15 pp), `medium` (beyond 15 pp but threshold ahead)
+- **Per-user and per-role budget tracking** (`compute_budget_usage()`): compares actual credits from `CachedQuery` against configurable daily limits (`user_credit_budgets`, `role_credit_budgets` in config); returns spend, budget, percentage used, and over-budget flag
+- **New API endpoints** (`/api/resource-monitors`):
+  - `GET /api/resource-monitors` — list all synced monitors
+  - `GET /api/resource-monitors/recommendations` — quota recommendations with `?history_days=` and `?buffer_pct=` params
+  - `GET /api/resource-monitors/generate-sql?warehouse=` — copy-paste DDL for a specific warehouse
+  - `GET /api/resource-monitors/proximity-alerts` — monitors near their limits, sorted by used %
+  - `GET /api/resource-monitors/budgets?days=` — per-user and per-role spend vs budget
+- **New config fields**: `user_credit_budgets` and `role_credit_budgets` (dict[str, float]) for per-user/role daily credit limits
+- **Demo mode enriched**: seeds 4 resource monitors with realistic usage levels — one critical (95 % used), one high (81 %), one medium (57 %), one healthy (41 %)
+- **New documentation**: `docs/resource-monitors.md` — full guide on quota recommendations, DDL generation, proximity alerts, and budget tracking; `docs/api.md` extended with all 5 new endpoints
+- Bump version to 0.4.0
+
 ## [0.3.0] - 2026-05-07
 
 ### Added

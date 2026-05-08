@@ -40,6 +40,7 @@ nav:
     - Query Insights: insights.md
     - dbt Integration: dbt.md
     - dbt Cloud: dbt-cloud.md
+    - Resource Monitors: resource-monitors.md
   - Reference:
     - REST API: api.md
 

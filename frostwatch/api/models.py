@@ -286,3 +286,75 @@ class DbtCloudSyncResponse(BaseModel):
     runs_synced: int
     jobs_enriched: int
     environments_enriched: int
+
+
+# ── v0.4 Resource Monitor models ──────────────────────────────────────────────
+
+
+class ResourceMonitorRecord(BaseModel):
+    id: int
+    name: str
+    credit_quota: float | None = None
+    used_credits: float | None = None
+    remaining_credits: float | None = None
+    level: str | None = None
+    frequency: str | None = None
+    notify_at_percentage: float | None = None
+    suspend_at_percentage: float | None = None
+    suspend_immediately_at_percentage: float | None = None
+    warehouses: list[str] = []
+    owner: str | None = None
+    synced_at: datetime | None = None
+
+
+class MonitorRecommendationRecord(BaseModel):
+    warehouse_name: str
+    avg_daily_credits: float
+    p95_daily_credits: float
+    monthly_credits_p95: float
+    recommended_quota: int
+    recommended_cost_usd: float
+    frequency: str
+    notify_at_percentage: float
+    suspend_at_percentage: float
+    suspend_immediately_at_percentage: float
+    existing_monitor: str | None = None
+    current_quota: float | None = None
+    quota_status: str
+    priority: str
+    history_days_used: int
+
+
+class ProximityAlertRecord(BaseModel):
+    monitor_name: str | None = None
+    warehouse_names: list[str] = []
+    credit_quota: float
+    used_credits: float
+    remaining_credits: float
+    used_pct: float
+    nearest_trigger: str | None = None
+    nearest_trigger_pct: float | None = None
+    margin_to_trigger_ppt: float | None = None
+    frequency: str | None = None
+    severity: str
+
+
+class BudgetUsageRecord(BaseModel):
+    name: str
+    credits_used: float
+    daily_budget: float | None = None
+    period_budget: float | None = None
+    pct_of_budget: float | None = None
+    over_budget: bool
+
+
+class BudgetSummary(BaseModel):
+    days: int
+    users: list[BudgetUsageRecord]
+    roles: list[BudgetUsageRecord]
+
+
+class GenerateSqlResponse(BaseModel):
+    warehouse_name: str
+    monitor_name: str
+    sql: str
