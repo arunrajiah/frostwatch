@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://arunrajiah.github.io/frostwatch/api/">
       
       
-        <link rel="prev" href="../dbt-cloud/">
+        <link rel="prev" href="../resource-monitors/">
       
       
       
@@ -608,6 +608,34 @@
     
   
     dbt Cloud
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resource-monitors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resource Monitors
   
 
     
@@ -1257,6 +1285,78 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#resource-monitors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resource Monitors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resource Monitors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-apiresource-monitors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/resource-monitors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiresource-monitorsrecommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/resource-monitors/recommendations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiresource-monitorsgenerate-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/resource-monitors/generate-sql
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiresource-monitorsproximity-alerts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/resource-monitors/proximity-alerts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiresource-monitorsbudgets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/resource-monitors/budgets
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1794,6 +1894,78 @@
     <span class="md-ellipsis">
       
         POST /api/scheduler/trigger
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resource-monitors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resource Monitors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resource Monitors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-apiresource-monitors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/resource-monitors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiresource-monitorsrecommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/resource-monitors/recommendations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiresource-monitorsgenerate-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/resource-monitors/generate-sql
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiresource-monitorsproximity-alerts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/resource-monitors/proximity-alerts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-apiresource-monitorsbudgets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /api/resource-monitors/budgets
       
     </span>
   </a>
@@ -2364,6 +2536,208 @@
 <p>Returns the list of scheduled APScheduler jobs (sync cron and report cron).</p>
 <h3 id="post-apischedulertrigger"><code>POST /api/scheduler/trigger</code></h3>
 <p>Manually triggers the report generation job.</p>
+<h2 id="resource-monitors">Resource Monitors</h2>
+<h3 id="get-apiresource-monitors"><code>GET /api/resource-monitors</code></h3>
+<p>Returns all resource monitors synced from <code>SNOWFLAKE.ACCOUNT_USAGE.RESOURCE_MONITORS</code>.</p>
+<p><strong>Response</strong> — array of <code>ResourceMonitorRecord</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">[</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="p">{</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RM_TRANSFORM_WH&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">    </span><span class="nt">&quot;credit_quota&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">250.0</span><span class="p">,</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="nt">&quot;used_credits&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">238.5</span><span class="p">,</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">    </span><span class="nt">&quot;remaining_credits&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">11.5</span><span class="p">,</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">    </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WAREHOUSE&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="w">    </span><span class="nt">&quot;frequency&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MONTHLY&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">    </span><span class="nt">&quot;notify_at_percentage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">75.0</span><span class="p">,</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">    </span><span class="nt">&quot;suspend_at_percentage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">100.0</span><span class="p">,</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">    </span><span class="nt">&quot;suspend_immediately_at_percentage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">110.0</span><span class="p">,</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">    </span><span class="nt">&quot;warehouses&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;TRANSFORM_WH&quot;</span><span class="p">],</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="w">    </span><span class="nt">&quot;owner&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ACCOUNTADMIN&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="w">    </span><span class="nt">&quot;synced_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-08T08:00:00Z&quot;</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="p">]</span>
+</code></pre></div>
+<hr />
+<h3 id="get-apiresource-monitorsrecommendations"><code>GET /api/resource-monitors/recommendations</code></h3>
+<p>Analyse per-warehouse spend and recommend resource monitor quotas. Uses the p95 daily credits over the history window, multiplied by 30 days and a buffer, then rounded to a clean milestone.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>history_days</code></td>
+<td>int</td>
+<td>30</td>
+<td>Days of history to use (7–90)</td>
+</tr>
+<tr>
+<td><code>buffer_pct</code></td>
+<td>float</td>
+<td>0.20</td>
+<td>Overhead buffer fraction (0.0–1.0)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response</strong> — array of <code>MonitorRecommendationRecord</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">[</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="p">{</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="nt">&quot;warehouse_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TRANSFORM_WH&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="nt">&quot;avg_daily_credits&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.85</span><span class="p">,</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="nt">&quot;p95_daily_credits&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.42</span><span class="p">,</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="nt">&quot;monthly_credits_p95&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">42.6</span><span class="p">,</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="nt">&quot;recommended_quota&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">    </span><span class="nt">&quot;recommended_cost_usd&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">16.67</span><span class="p">,</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">    </span><span class="nt">&quot;frequency&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MONTHLY&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">    </span><span class="nt">&quot;notify_at_percentage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">75.0</span><span class="p">,</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">    </span><span class="nt">&quot;suspend_at_percentage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">100.0</span><span class="p">,</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="w">    </span><span class="nt">&quot;suspend_immediately_at_percentage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">110.0</span><span class="p">,</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="w">    </span><span class="nt">&quot;existing_monitor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RM_TRANSFORM_WH&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="w">    </span><span class="nt">&quot;current_quota&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">250.0</span><span class="p">,</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="w">    </span><span class="nt">&quot;quota_status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;oversized&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="w">    </span><span class="nt">&quot;priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="w">    </span><span class="nt">&quot;history_days_used&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="p">]</span>
+</code></pre></div>
+<p><code>quota_status</code> is one of <code>uncovered</code>, <code>undersized</code>, <code>oversized</code>, or <code>adequate</code>. <code>priority</code> is <code>high</code>, <code>medium</code>, or <code>low</code> (based on spend volatility and average usage).</p>
+<hr />
+<h3 id="get-apiresource-monitorsgenerate-sql"><code>GET /api/resource-monitors/generate-sql</code></h3>
+<p>Generate a copy-paste-ready <code>CREATE OR REPLACE RESOURCE MONITOR</code> DDL statement for a specific warehouse.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>warehouse</code></td>
+<td>string</td>
+<td>✓</td>
+<td>Warehouse name</td>
+</tr>
+<tr>
+<td><code>history_days</code></td>
+<td>int</td>
+<td></td>
+<td>7–90 (default 30)</td>
+</tr>
+<tr>
+<td><code>buffer_pct</code></td>
+<td>float</td>
+<td></td>
+<td>0.0–1.0 (default 0.20)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">&quot;warehouse_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TRANSFORM_WH&quot;</span><span class="p">,</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">&quot;monitor_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RM_TRANSFORM_WH&quot;</span><span class="p">,</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span><span class="nt">&quot;sql&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;-- Resource monitor for TRANSFORM_WH\n...&quot;</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="p">}</span>
+</code></pre></div>
+<p>The <code>sql</code> field is a complete DDL block with inline comments, ready to run in a Snowflake worksheet.</p>
+<hr />
+<h3 id="get-apiresource-monitorsproximity-alerts"><code>GET /api/resource-monitors/proximity-alerts</code></h3>
+<p>Returns monitors that are close to a trigger threshold (notify / suspend / suspend-immediately), sorted by <code>used_pct</code> descending.</p>
+<p><strong>Response</strong> — array of <code>ProximityAlertRecord</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">[</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="p">{</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="nt">&quot;monitor_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RM_TRANSFORM_WH&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="nt">&quot;warehouse_names&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;TRANSFORM_WH&quot;</span><span class="p">],</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="nt">&quot;credit_quota&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">250.0</span><span class="p">,</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="nt">&quot;used_credits&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">238.5</span><span class="p">,</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="nt">&quot;remaining_credits&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">11.5</span><span class="p">,</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">    </span><span class="nt">&quot;used_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">95.4</span><span class="p">,</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">    </span><span class="nt">&quot;nearest_trigger&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;suspend&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">    </span><span class="nt">&quot;nearest_trigger_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">100.0</span><span class="p">,</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">    </span><span class="nt">&quot;margin_to_trigger_ppt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4.6</span><span class="p">,</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="w">    </span><span class="nt">&quot;frequency&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MONTHLY&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="w">    </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;critical&quot;</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="p">]</span>
+</code></pre></div>
+<p><strong>Severity bands:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Severity</th>
+<th>Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>critical</code></td>
+<td>Within 5 pp of a trigger threshold</td>
+</tr>
+<tr>
+<td><code>high</code></td>
+<td>Within 15 pp of a trigger threshold</td>
+</tr>
+<tr>
+<td><code>medium</code></td>
+<td>Trigger ahead but &gt; 15 pp away</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="get-apiresource-monitorsbudgets"><code>GET /api/resource-monitors/budgets</code></h3>
+<p>Return per-user and per-role credit spend vs configured daily budgets.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>days</code></td>
+<td>int</td>
+<td>1</td>
+<td>Lookback window in days (1–30)</td>
+</tr>
+</tbody>
+</table>
+<p>Budgets are configured in <code>user_credit_budgets</code> and <code>role_credit_budgets</code> in your <code>config.yaml</code>. All budgeted entities are always returned, plus any unbudgeted users/roles that had spend in the period.</p>
+<p><strong>Response:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="p">{</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">&quot;days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span><span class="nt">&quot;users&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ANALYST_ALICE&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">      </span><span class="nt">&quot;credits_used&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.24</span><span class="p">,</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">      </span><span class="nt">&quot;daily_budget&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="w">      </span><span class="nt">&quot;period_budget&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="w">      </span><span class="nt">&quot;pct_of_budget&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">24.8</span><span class="p">,</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="w">      </span><span class="nt">&quot;over_budget&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">  </span><span class="nt">&quot;roles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TRANSFORMER&quot;</span><span class="p">,</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="w">      </span><span class="nt">&quot;credits_used&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">12.4</span><span class="p">,</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="w">      </span><span class="nt">&quot;daily_budget&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">10.0</span><span class="p">,</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="w">      </span><span class="nt">&quot;period_budget&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">10.0</span><span class="p">,</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="w">      </span><span class="nt">&quot;pct_of_budget&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">124.0</span><span class="p">,</span>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="w">      </span><span class="nt">&quot;over_budget&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="p">}</span>
+</code></pre></div>
 
 
 
