@@ -53,15 +53,15 @@ First-class support for dbt model cost attribution beyond tag parsing.
 
 ---
 
-## v0.4 — Resource monitor management
+## v0.4 — Resource monitor management (shipped)
 
 FrostWatch helps set up Snowflake's own cost controls.
 
-- [ ] Read existing resource monitors from `RESOURCE_MONITORS` view
-- [ ] Recommend new resource monitors based on observed warehouse spend patterns
-- [ ] Generate the `CREATE RESOURCE MONITOR` SQL, ready to apply
-- [ ] Alert when a warehouse approaches its resource monitor limit
-- [ ] Per-user and per-role credit budget tracking
+- [x] Read existing resource monitors from `RESOURCE_MONITORS` view
+- [x] Recommend new resource monitors based on observed warehouse spend patterns
+- [x] Generate the `CREATE RESOURCE MONITOR` SQL, ready to apply
+- [x] Alert when a warehouse approaches its resource monitor limit
+- [x] Per-user and per-role credit budget tracking
 
 ---
 

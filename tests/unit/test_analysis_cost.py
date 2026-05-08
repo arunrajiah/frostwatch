@@ -1,16 +1,34 @@
 import pytest
+
 from frostwatch.analysis.cost import compute_cost_breakdown
 
-
 SAMPLE_QUERIES = [
-    {"warehouse_name": "COMPUTE_WH", "user_name": "alice", "query_tag": "dbt", "credits_used": 2.0, "start_time": "2026-01-20"},
-    {"warehouse_name": "COMPUTE_WH", "user_name": "bob",   "query_tag": "",    "credits_used": 1.0, "start_time": "2026-01-20"},
-    {"warehouse_name": "REPORTING",  "user_name": "alice", "query_tag": "bi",  "credits_used": 3.0, "start_time": "2026-01-21"},
+    {
+        "warehouse_name": "COMPUTE_WH",
+        "user_name": "alice",
+        "query_tag": "dbt",
+        "credits_used": 2.0,
+        "start_time": "2026-01-20",
+    },
+    {
+        "warehouse_name": "COMPUTE_WH",
+        "user_name": "bob",
+        "query_tag": "",
+        "credits_used": 1.0,
+        "start_time": "2026-01-20",
+    },
+    {
+        "warehouse_name": "REPORTING",
+        "user_name": "alice",
+        "query_tag": "bi",
+        "credits_used": 3.0,
+        "start_time": "2026-01-21",
+    },
 ]
 
 SAMPLE_METRICS = [
     {"warehouse_name": "COMPUTE_WH", "date": "2026-01-20", "credits_used": 3.0},
-    {"warehouse_name": "REPORTING",  "date": "2026-01-21", "credits_used": 3.0},
+    {"warehouse_name": "REPORTING", "date": "2026-01-21", "credits_used": 3.0},
 ]
 
 

@@ -19,6 +19,7 @@ from frostwatch.core.db import (
     DbtModelThresholdAlert,
     QueryRewrite,
     ReportRecord,
+    ResourceMonitor,
     SyncRun,
     get_db,
 )
@@ -597,6 +598,81 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
                     schema_name=schema_name,
                     database_name=database_name,
                     updated_at=now - timedelta(hours=6),
+                )
+            )
+
+    # ── Resource monitors ─────────────────────────────────────────────────
+    # Four monitors — two well-tuned, one approaching its limit, one exceeded
+    demo_monitors = [
+        {
+            "name": "RM_TRANSFORM_WH",
+            "credit_quota": 250.0,
+            "used_credits": 238.5,  # 95.4% used → critical proximity
+            "remaining_credits": 11.5,
+            "level": "WAREHOUSE",
+            "frequency": "MONTHLY",
+            "notify_at_percentage": 75.0,
+            "suspend_at_percentage": 100.0,
+            "suspend_immediately_at_percentage": 110.0,
+            "warehouses": json.dumps(["TRANSFORM_WH"]),
+            "owner": "ACCOUNTADMIN",
+        },
+        {
+            "name": "RM_ML_WH",
+            "credit_quota": 100.0,
+            "used_credits": 81.0,  # 81% used → high proximity (within 19pp of suspend)
+            "remaining_credits": 19.0,
+            "level": "WAREHOUSE",
+            "frequency": "MONTHLY",
+            "notify_at_percentage": 75.0,
+            "suspend_at_percentage": 100.0,
+            "suspend_immediately_at_percentage": 110.0,
+            "warehouses": json.dumps(["ML_WH"]),
+            "owner": "ACCOUNTADMIN",
+        },
+        {
+            "name": "RM_COMPUTE_WH",
+            "credit_quota": 50.0,
+            "used_credits": 28.4,  # 56.8% used → within 75% notify threshold, medium
+            "remaining_credits": 21.6,
+            "level": "WAREHOUSE",
+            "frequency": "MONTHLY",
+            "notify_at_percentage": 75.0,
+            "suspend_at_percentage": 100.0,
+            "suspend_immediately_at_percentage": 110.0,
+            "warehouses": json.dumps(["COMPUTE_WH"]),
+            "owner": "ACCOUNTADMIN",
+        },
+        {
+            "name": "RM_REPORTING_WH",
+            "credit_quota": 25.0,
+            "used_credits": 10.2,  # 40.8% used → healthy
+            "remaining_credits": 14.8,
+            "level": "WAREHOUSE",
+            "frequency": "MONTHLY",
+            "notify_at_percentage": 75.0,
+            "suspend_at_percentage": 100.0,
+            "suspend_immediately_at_percentage": 110.0,
+            "warehouses": json.dumps(["REPORTING_WH"]),
+            "owner": "ACCOUNTADMIN",
+        },
+    ]
+    async with get_db() as session:
+        for m in demo_monitors:
+            session.add(
+                ResourceMonitor(
+                    name=m["name"],
+                    credit_quota=m["credit_quota"],
+                    used_credits=m["used_credits"],
+                    remaining_credits=m["remaining_credits"],
+                    level=m["level"],
+                    frequency=m["frequency"],
+                    notify_at_percentage=m["notify_at_percentage"],
+                    suspend_at_percentage=m["suspend_at_percentage"],
+                    suspend_immediately_at_percentage=m["suspend_immediately_at_percentage"],
+                    warehouses=m["warehouses"],
+                    owner=m["owner"],
+                    synced_at=synced_at,
                 )
             )
 

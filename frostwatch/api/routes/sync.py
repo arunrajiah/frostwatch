@@ -15,10 +15,15 @@ from frostwatch.core.db import (
     CachedQuery,
     CachedWarehouseMetric,
     DbtModelThresholdAlert,
+    ResourceMonitor,
     SyncRun,
     get_db,
 )
-from frostwatch.snowflake.queries import QUERY_HISTORY_SQL, WAREHOUSE_METERING_SQL
+from frostwatch.snowflake.queries import (
+    QUERY_HISTORY_SQL,
+    RESOURCE_MONITORS_SQL,
+    WAREHOUSE_METERING_SQL,
+)
 
 router = APIRouter()
 
@@ -44,6 +49,10 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
             QUERY_HISTORY_SQL, {"days": 30, "limit": query_limit}
         )
         metric_rows = await snowflake_client.execute(WAREHOUSE_METERING_SQL, {"days": 30})
+        try:
+            monitor_rows = await snowflake_client.execute(RESOURCE_MONITORS_SQL, {})
+        except Exception:
+            monitor_rows = []  # not all accounts have resource monitors; skip gracefully
 
         synced_at = datetime.now(UTC)
         rows_synced = 0
@@ -122,6 +131,53 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
                 )
                 await session.execute(stmt)
                 rows_synced += 1
+
+        # ── Resource monitors ──────────────────────────────────────────────
+        if monitor_rows:
+            async with get_db() as session:
+                for row in monitor_rows:
+                    name = str(row.get("NAME") or row.get("name") or "")
+                    if not name:
+                        continue
+                    wh_raw = row.get("WAREHOUSES") or row.get("warehouses") or ""
+                    wh_list = [w.strip() for w in str(wh_raw).split(",") if w.strip()]
+                    stmt = sqlite_insert(ResourceMonitor).values(
+                        name=name,
+                        credit_quota=_to_float(row.get("CREDIT_QUOTA") or row.get("credit_quota")),
+                        used_credits=_to_float(row.get("USED_CREDITS") or row.get("used_credits")),
+                        remaining_credits=_to_float(
+                            row.get("REMAINING_CREDITS") or row.get("remaining_credits")
+                        ),
+                        level=str(row.get("LEVEL") or row.get("level") or ""),
+                        frequency=str(row.get("FREQUENCY") or row.get("frequency") or ""),
+                        start_time=row.get("START_TIME") or row.get("start_time"),
+                        end_time=row.get("END_TIME") or row.get("end_time"),
+                        notify_at_percentage=_to_float(
+                            row.get("NOTIFY_AT_PERCENTAGE") or row.get("notify_at_percentage")
+                        ),
+                        suspend_at_percentage=_to_float(
+                            row.get("SUSPEND_AT_PERCENTAGE") or row.get("suspend_at_percentage")
+                        ),
+                        suspend_immediately_at_percentage=_to_float(
+                            row.get("SUSPEND_IMMEDIATELY_AT_PERCENTAGE")
+                            or row.get("suspend_immediately_at_percentage")
+                        ),
+                        warehouses=json.dumps(wh_list),
+                        owner=str(row.get("OWNER") or row.get("owner") or ""),
+                        created_on=row.get("CREATED_ON") or row.get("created_on"),
+                        synced_at=synced_at,
+                    )
+                    stmt = stmt.on_conflict_do_update(
+                        index_elements=["name"],
+                        set_={
+                            "credit_quota": stmt.excluded.credit_quota,
+                            "used_credits": stmt.excluded.used_credits,
+                            "remaining_credits": stmt.excluded.remaining_credits,
+                            "synced_at": stmt.excluded.synced_at,
+                        },
+                    )
+                    await session.execute(stmt)
+                    rows_synced += 1
 
         async with get_db() as session:
             wm_result = await session.execute(select(CachedWarehouseMetric))

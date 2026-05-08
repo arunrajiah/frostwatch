@@ -33,6 +33,8 @@ frostwatch demo
 - **dbt model attribution** — per-model credit and performance breakdown parsed from `query_tag`
 - **dbt Cloud integration** — sync run metadata from dbt Cloud; cost breakdown by job and environment; model spend threshold alerts; manifest.json enrichment (owner, description, materialization, tags)
 - **GitHub Actions** — built-in workflow to post dbt cost summaries as PR comments after every `dbt run`
+- **Resource monitor management** — sync existing monitors, recommend quota sizes using p95 spend analysis, generate copy-paste `CREATE RESOURCE MONITOR` DDL, alert when monitors approach their limits
+- **Budget tracking** — configurable per-user and per-role daily credit budgets with over-budget flagging
 - **Weekly digests** delivered to Slack or email
 - **Clean web UI** — dark-themed React dashboard, no BI tool required
 - **REST API** — all data accessible via `/api/*` endpoints
@@ -173,6 +175,11 @@ Key endpoints:
 | `GET` | `/api/dbt/metadata` | Enriched model metadata from manifest.json |
 | `POST` | `/api/dbt/sync-cloud` | Sync run metadata from dbt Cloud API |
 | `POST` | `/api/dbt/manifest` | Upload and parse a dbt manifest.json |
+| `GET` | `/api/resource-monitors` | Synced Snowflake resource monitors |
+| `GET` | `/api/resource-monitors/recommendations` | Quota recommendations per warehouse |
+| `GET` | `/api/resource-monitors/generate-sql` | Copy-paste DDL for a warehouse |
+| `GET` | `/api/resource-monitors/proximity-alerts` | Monitors near their credit limits |
+| `GET` | `/api/resource-monitors/budgets` | Per-user and per-role spend vs budget |
 | `POST` | `/api/sync` | Trigger a manual Snowflake sync |
 | `GET` | `/api/settings` | Current configuration |
 | `PUT` | `/api/settings` | Update configuration |

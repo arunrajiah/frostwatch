@@ -51,6 +51,12 @@ class FrostWatchConfig(BaseSettings):
     # Daily credit limit per dbt model — 0.0 disables threshold alerts
     dbt_model_credit_threshold: float = 0.0
 
+    # ── Resource monitor budgets ──────────────────────────────────────────────
+    # Per-user and per-role daily credit budgets — empty dict disables tracking
+    # Example: user_credit_budgets: {"ANALYST_ALICE": 5.0, "DBT_SVC": 50.0}
+    user_credit_budgets: dict[str, float] = {}
+    role_credit_budgets: dict[str, float] = {}
+
     data_dir: Path = Path("~/.frostwatch").expanduser()
     db_path: Path = Path("")
 

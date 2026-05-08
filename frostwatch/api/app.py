@@ -17,6 +17,7 @@ from frostwatch.api.routes.dbt import router as dbt_router
 from frostwatch.api.routes.insights import router as insights_router
 from frostwatch.api.routes.queries import router as queries_router
 from frostwatch.api.routes.reports import router as reports_router
+from frostwatch.api.routes.resource_monitors import router as resource_monitors_router
 from frostwatch.api.routes.scheduler_routes import router as scheduler_router
 from frostwatch.api.routes.settings import router as settings_router
 from frostwatch.api.routes.sync import router as sync_router
@@ -66,7 +67,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="FrostWatch",
         description="AI-powered cost and query observability for Snowflake",
-        version="0.3.0",
+        version="0.4.0",
         lifespan=lifespan,
     )
 
@@ -93,6 +94,7 @@ def create_app() -> FastAPI:
     app.include_router(scheduler_router, prefix=api_prefix, tags=["scheduler"])
     app.include_router(dbt_router, prefix=api_prefix, tags=["dbt"])
     app.include_router(insights_router, prefix=api_prefix, tags=["insights"])
+    app.include_router(resource_monitors_router, prefix=api_prefix, tags=["resource-monitors"])
 
     frontend_dist = Path(__file__).parent.parent.parent / "frontend" / "dist"
 

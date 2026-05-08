@@ -160,6 +160,29 @@ class DbtModelMetadata(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
 
+class ResourceMonitor(Base):
+    """Snowflake resource monitor definition, synced from ACCOUNT_USAGE."""
+
+    __tablename__ = "resource_monitors"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(256), unique=True, nullable=False, index=True)
+    credit_quota: Mapped[float | None] = mapped_column(Float, nullable=True)
+    used_credits: Mapped[float | None] = mapped_column(Float, nullable=True)
+    remaining_credits: Mapped[float | None] = mapped_column(Float, nullable=True)
+    level: Mapped[str | None] = mapped_column(String(32), nullable=True)  # ACCOUNT or WAREHOUSE
+    frequency: Mapped[str | None] = mapped_column(String(32), nullable=True)  # MONTHLY, DAILY, …
+    start_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    end_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    notify_at_percentage: Mapped[float | None] = mapped_column(Float, nullable=True)
+    suspend_at_percentage: Mapped[float | None] = mapped_column(Float, nullable=True)
+    suspend_immediately_at_percentage: Mapped[float | None] = mapped_column(Float, nullable=True)
+    warehouses: Mapped[str | None] = mapped_column(Text, nullable=True)  # JSON list
+    owner: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    created_on: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    synced_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+
 async def init_db(db_path: Path) -> None:
     global _engine, _session_factory
 
