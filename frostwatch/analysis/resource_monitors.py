@@ -326,7 +326,7 @@ def compute_budget_usage(
                     "over_budget": (spent > period_budget if period_budget is not None else False),
                 }
             )
-        records.sort(key=lambda x: x["credits_used"], reverse=True)
+        records.sort(key=lambda x: cast(float, x["credits_used"]), reverse=True)
         return records
 
     return {
