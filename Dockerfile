@@ -2,9 +2,21 @@ FROM python:3.11-slim AS base
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Run apt-get upgrade to pick up any OS-level security patches available
+# in the base image, then install runtime deps.
+RUN apt-get update && apt-get upgrade -y --no-install-recommends \
+    && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip, wheel, and jaraco.context to versions that fix known CVEs:
+#   pip        < 26.1  → CVE-2026-6357, CVE-2026-1703, CVE-2025-8869
+#   wheel      < 0.46.2 → CVE-2026-24049
+#   jaraco.context < 6.1.0 → CVE-2026-23949 (transitive via pip)
+RUN pip install --no-cache-dir --upgrade \
+    "pip>=26.1" \
+    "wheel>=0.46.2" \
+    "jaraco.context>=6.1.0"
 
 # ── Build frontend ────────────────────────────────────────────────────────────
 FROM node:20-slim AS frontend-build
