@@ -19,6 +19,7 @@ import math
 import statistics
 from collections import defaultdict
 from datetime import UTC, date, datetime, timedelta
+from typing import cast
 
 # Proximity severity bands (used_pct relative to the relevant trigger %)
 _PROXIMITY_CRITICAL_MARGIN = 5.0  # within 5 pp of the trigger
@@ -143,7 +144,7 @@ def recommend_monitors(
             }
         )
 
-    recommendations.sort(key=lambda x: x["monthly_credits_p95"], reverse=True)
+    recommendations.sort(key=lambda x: cast(float, x["monthly_credits_p95"]), reverse=True)
     return recommendations
 
 
@@ -270,7 +271,7 @@ def detect_proximity_alerts(monitors: list[dict]) -> list[dict]:
             }
         )
 
-    alerts.sort(key=lambda x: x["used_pct"], reverse=True)
+    alerts.sort(key=lambda x: cast(float, x["used_pct"]), reverse=True)
     return alerts
 
 
@@ -325,7 +326,7 @@ def compute_budget_usage(
                     "over_budget": (spent > period_budget if period_budget is not None else False),
                 }
             )
-        records.sort(key=lambda x: x["credits_used"], reverse=True)
+        records.sort(key=lambda x: cast(float, x["credits_used"]), reverse=True)
         return records
 
     return {
