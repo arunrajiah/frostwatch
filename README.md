@@ -209,9 +209,26 @@ See [ROADMAP.md](ROADMAP.md).
 
 ## Sponsors
 
-FrostWatch is free and MIT-licensed. If it saves your team money on Snowflake, consider [sponsoring my open-source work](https://github.com/sponsors/arunrajiah) to keep it going.
+FrostWatch is free, MIT-licensed, self-hosted, and solo-maintained. It runs on your infrastructure with your LLM key — no SaaS contract, no percentage-of-spend pricing, no phone-home.
 
-[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/arunrajiah)
+**For data teams running FrostWatch in production:** sponsorship is the sustainable replacement for paid FinOps tooling. A $500/month org sponsorship is roughly **1% of what Select.dev charges to monitor a $50k/month Snowflake spend**, and it funds the project for everyone — including smaller teams and non-profits who can't justify either.
+
+**Sponsorship currently funds:**
+
+- Multi-account support (currently single-account; tracked in [ROADMAP.md](ROADMAP.md))
+- Snowflake-native scheduled task migration helpers
+- Expanded forecasting models beyond linear regression (seasonality, change-point detection)
+- Direct integrations with PagerDuty / Opsgenie for real-time alerts
+
+**Suggested tiers:**
+
+- **$25/month (individual)** — keeps the project alive; shoutout in the next release notes
+- **$100/month (team)** — priority issue triage + roadmap input
+- **$500/month (org)** — your logo in the README + a quarterly call to discuss your team's Snowflake workflows
+
+**Who should sponsor:** data engineering teams at companies running Snowflake, Snowflake consulting partners whose engagements include cost optimization, FinOps practices using FrostWatch in client work, and anyone whose Snowflake bill has surprised them in the last quarter.
+
+[![Sponsor arunrajiah](https://img.shields.io/badge/sponsor-%E2%9D%A4-pink?logo=github&style=for-the-badge)](https://github.com/sponsors/arunrajiah)
 
 <!-- sponsors --><!-- sponsors -->
 
@@ -226,3 +243,4 @@ Contributions are welcome! Please open an issue before starting large changes so
 ## License
 
 [MIT](LICENSE) — free to use, modify, and self-host. See the license file for details.
+
