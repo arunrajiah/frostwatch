@@ -8,8 +8,13 @@
 [![Docker](https://img.shields.io/badge/docker-ghcr.io%2Farunrajiah%2Ffrostwatch-blue)](https://ghcr.io/arunrajiah/frostwatch)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/arunrajiah?label=Sponsors&logo=github)](https://github.com/sponsors/arunrajiah)
+[![GitHub Stars](https://img.shields.io/github/stars/arunrajiah/frostwatch?style=social)](https://github.com/arunrajiah/frostwatch/stargazers)
 
 FrostWatch is an open source, self-hostable, AI-powered cost and query observability tool for Snowflake. Point it at your Snowflake account and get instant answers to "where is all our money going?" — no SaaS contract, no percentage-of-spend pricing, no phone-home.
+
+![FrostWatch Dashboard](docs/screenshots/dashboard.png)
+
+> *Cost breakdown by warehouse, anomaly detection, and AI-powered explanations — all in one dark-themed dashboard.*
 
 ## Try it in 30 seconds (no Snowflake needed)
 
