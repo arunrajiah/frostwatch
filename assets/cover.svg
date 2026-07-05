@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="FrostWatch product cover">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#082F49"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0EA5E9" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#64748B" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="950" cy="100" r="280" fill="url(#glow)"/>
+  <circle cx="1100" cy="500" r="150" fill="#64748B" fill-opacity="0.08"/>
+  <circle cx="80" cy="550" r="200" fill="#0EA5E9" fill-opacity="0.06"/>
+  <line x1="0" y1="210" x2="1200" y2="210" stroke="white" stroke-opacity="0.04" stroke-width="1"/>
+  <line x1="0" y1="420" x2="1200" y2="420" stroke="white" stroke-opacity="0.04" stroke-width="1"/>
+  <line x1="400" y1="0" x2="400" y2="630" stroke="white" stroke-opacity="0.04" stroke-width="1"/>
+  <line x1="800" y1="0" x2="800" y2="630" stroke="white" stroke-opacity="0.04" stroke-width="1"/>
+  <image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJGcm9zdFdhdGNoIGxvZ28iPgogIDxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjEyIiB5MT0iMTIiIHgyPSI4NCIgeTI9Ijg0IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iIzBFQTVFOSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzMzNDE1NSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgogIDxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgcng9IjIyIiBmaWxsPSJ1cmwoI2cpIi8+CiAgPHBhdGggZD0iTTQ4IDIwdjU2TTI1IDM0bDQ2IDI4TTcxIDM0IDI1IDYyIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iNyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iOCIgZmlsbD0iI0JBRTZGRCIvPgo8L3N2Zz4K" x="92" y="240" width="150" height="150" filter="url(#shadow)"/>
+  <rect x="260" y="155" width="141" height="34" rx="17" fill="#0EA5E9" fill-opacity="0.5" stroke="#0EA5E9" stroke-width="1"/>
+  <text x="330.5" y="178" font-size="15" font-family="Inter,system-ui,-apple-system,Segoe UI,sans-serif" font-weight="600" fill="#BAE6FD" text-anchor="middle">AI · Data</text>
+  <text x="260" y="270" font-size="80" font-family="Inter,system-ui,-apple-system,Segoe UI,sans-serif" font-weight="800" fill="white" letter-spacing="-3">FrostWatch</text>
+  <text x="262" y="330" font-size="28" font-family="Inter,system-ui,-apple-system,Segoe UI,sans-serif" font-weight="400" fill="#BAE6FD">Self-hosted Snowflake cost and query observability</text>
+  <line x1="262" y1="370" x2="980" y2="370" stroke="white" stroke-opacity="0.12" stroke-width="1"/>
+  <rect x="262" y="390" width="180" height="36" rx="8" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.15" stroke-width="1"/>
+  <text x="352" y="413" font-size="15" font-family="Inter,system-ui,-apple-system,Segoe UI,sans-serif" fill="white" fill-opacity="0.8" text-anchor="middle">Cost attribution</text>
+  <rect x="456" y="390" width="144" height="36" rx="8" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.15" stroke-width="1"/>
+  <text x="528" y="413" font-size="15" font-family="Inter,system-ui,-apple-system,Segoe UI,sans-serif" fill="white" fill-opacity="0.8" text-anchor="middle">Slow queries</text>
+  <rect x="614" y="390" width="126" height="36" rx="8" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.15" stroke-width="1"/>
+  <text x="677" y="413" font-size="15" font-family="Inter,system-ui,-apple-system,Segoe UI,sans-serif" fill="white" fill-opacity="0.8" text-anchor="middle">AI explain</text>
+  <rect x="262" y="450" width="162" height="44" rx="10" fill="#0EA5E9"/>
+  <text x="343" y="477" font-size="22" font-family="Inter,system-ui,-apple-system,Segoe UI,sans-serif" font-weight="700" fill="white" text-anchor="middle">Open source</text>
+  <text x="1140" y="600" font-size="18" font-family="Inter,system-ui,-apple-system,Segoe UI,sans-serif" fill="white" fill-opacity="0.35" text-anchor="end">hub.arunrajiah.com</text>
+</svg>
