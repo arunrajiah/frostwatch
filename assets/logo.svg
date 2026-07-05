@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="FrostWatch logo">
+  <defs><linearGradient id="g" x1="12" y1="12" x2="84" y2="84" gradientUnits="userSpaceOnUse"><stop stop-color="#0EA5E9"/><stop offset="1" stop-color="#334155"/></linearGradient></defs>
+  <rect width="96" height="96" rx="22" fill="url(#g)"/>
+  <path d="M48 20v56M25 34l46 28M71 34 25 62" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="48" cy="48" r="8" fill="#BAE6FD"/>
+</svg>
