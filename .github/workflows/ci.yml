@@ -63,7 +63,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install package + test deps
-        run: mkdir -p frontend/dist  # satisfy the wheel force-include; assets not needed here
+        run: |
+          mkdir -p frontend/dist  # satisfy the wheel force-include; assets not needed here
           pip install -e ".[dev]"
 
       - name: Run tests
