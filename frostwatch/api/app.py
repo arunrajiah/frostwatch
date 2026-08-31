@@ -64,11 +64,16 @@ async def lifespan(app: FastAPI):
 
 
 def create_app() -> FastAPI:
+    from frostwatch import __version__
+
     app = FastAPI(
         title="FrostWatch",
         description="AI-powered cost and query observability for Snowflake",
-        version="0.4.0",
+        version=__version__,
         lifespan=lifespan,
+        docs_url="/api/docs",
+        openapi_url="/api/openapi.json",
+        redoc_url=None,
     )
 
     app.state.limiter = limiter
@@ -96,7 +101,11 @@ def create_app() -> FastAPI:
     app.include_router(insights_router, prefix=api_prefix, tags=["insights"])
     app.include_router(resource_monitors_router, prefix=api_prefix, tags=["resource-monitors"])
 
-    frontend_dist = Path(__file__).parent.parent.parent / "frontend" / "dist"
+    # Installed wheel bundles the built frontend at frostwatch/frontend_dist;
+    # a source checkout serves frontend/dist instead.
+    _pkg_dist = Path(__file__).parent.parent / "frontend_dist"
+    _repo_dist = Path(__file__).parent.parent.parent / "frontend" / "dist"
+    frontend_dist = _pkg_dist if _pkg_dist.exists() else _repo_dist
 
     if frontend_dist.exists():
         app.mount(

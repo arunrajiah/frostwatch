@@ -62,7 +62,8 @@ class FrostWatchConfig(BaseSettings):
 
     @model_validator(mode="after")
     def set_db_path(self) -> FrostWatchConfig:
-        if not self.db_path or str(self.db_path) == "":
+        # Path("") normalizes to Path("."), so compare against both sentinels.
+        if not self.db_path or str(self.db_path) in ("", "."):
             self.db_path = self.data_dir / "frostwatch.db"
         return self
 

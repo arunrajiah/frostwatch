@@ -9,6 +9,15 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-08-31
+
+### Fixed
+
+- `frostwatch demo` and `frostwatch serve` crashed on startup with `sqlite3.OperationalError: unable to open database file`: the `db_path` default `Path("")` normalizes to `Path(".")`, so the fallback to `~/.frostwatch/frostwatch.db` never ran and SQLite tried to open a directory.
+- `pip install frostwatch` shipped no dashboard at all: the built React frontend was never included in the wheel, so every route outside `/api` returned 404. The wheel now bundles the frontend at `frostwatch/frontend_dist`, and the app serves it from there (source checkouts still use `frontend/dist`).
+- API docs are now actually at `/api/docs`, matching what the CLI banner prints (they were at the FastAPI default `/docs`).
+- The API now reports the real package version instead of a hardcoded one.
+
 ## [0.4.0] - 2026-05-08
 
 ### Added

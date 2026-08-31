@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "frostwatch"
-version = "0.3.0"
+version = "0.4.1"
 description = "AI-powered cost and query observability for Snowflake"
 readme = "README.md"
 license = { text = "MIT" }
@@ -84,6 +84,12 @@ frostwatch = "frostwatch.cli:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["frostwatch"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"frontend/dist" = "frostwatch/frontend_dist"
+
+[tool.hatch.build.targets.sdist]
+include = ["frostwatch", "frontend/dist", "tests", "README.md", "CHANGELOG.md", "LICENSE"]
 
 [tool.ruff]
 line-length = 100
