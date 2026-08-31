@@ -9,6 +9,13 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-08-31
+
+### Fixed
+
+- Docker image build failed after 0.4.1: the Python build stage ran `hatch build` before the built frontend existed, tripping the new wheel force-include. The builder stage now copies `frontend/dist` in from the frontend build stage.
+- CI editable installs likewise now satisfy the force-include.
+
 ## [0.4.1] - 2026-08-31
 
 ### Fixed

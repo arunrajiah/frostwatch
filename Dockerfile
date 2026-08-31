@@ -36,6 +36,8 @@ RUN pip install --no-cache-dir hatch
 COPY pyproject.toml .
 COPY README.md .
 COPY frostwatch/ ./frostwatch/
+# The wheel force-includes the built frontend, so it must exist before hatch runs
+COPY --from=frontend-build /frontend/dist ./frontend/dist
 
 RUN hatch build -t wheel
 
