@@ -9,6 +9,17 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-10-27
+
+### Fixed
+
+- `frostwatch demo` and `frostwatch serve` crashed on fresh installs with `ImportError: The SQLAlchemy asyncio module requires that the Python 'greenlet' library is installed`. SQLAlchemy 2.1 no longer pulls in `greenlet` by default, so FrostWatch now depends on `sqlalchemy[asyncio]`.
+- Dashboard "Top users" chart truncated longer user names; the label column is now wider.
+
+### Docs
+
+- README now shows real screenshots of the Dashboard, Anomalies, and Query Explorer pages.
+
 ## [0.4.2] - 2026-08-31
 
 ### Fixed
