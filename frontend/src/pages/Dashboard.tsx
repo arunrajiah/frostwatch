@@ -240,7 +240,7 @@ export default function Dashboard() {
                   tick={{ fill: '#9ca3af', fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
-                  width={90}
+                  width={140}
                 />
                 <Tooltip
                   contentStyle={{ background: '#111827', border: '1px solid #374151', borderRadius: 8 }}

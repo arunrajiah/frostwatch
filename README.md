@@ -22,7 +22,11 @@ FrostWatch is an open source, self-hostable, AI-powered cost and query observabi
 
 ![FrostWatch Dashboard](docs/screenshots/dashboard.png)
 
-> *Cost breakdown by warehouse, anomaly detection, and AI-powered explanations - all in one dark-themed dashboard.*
+> *Cost breakdown by warehouse, anomaly detection, and AI-powered explanations, all in one dashboard.*
+
+| Anomalies | Query Explorer |
+|---|---|
+| ![Anomalies](docs/screenshots/anomalies.png) | ![Query Explorer](docs/screenshots/queries.png) |
 
 ## Try it in 30 seconds (no Snowflake needed)
 
