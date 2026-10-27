@@ -43,6 +43,8 @@ nav:
     - Resource Monitors: resource-monitors.md
   - Reference:
     - REST API: api.md
+  - Compare:
+    - Chaos Genius alternative: chaos-genius-alternative.md
 
 plugins:
   - search

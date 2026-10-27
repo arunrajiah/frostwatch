@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import os
 from pathlib import Path
 
 import typer
@@ -174,6 +175,13 @@ def demo(
 
     from frostwatch.core.config import FrostWatchConfig
     from frostwatch.core.db import init_db
+
+    # Demo data lives in its own database so it never mixes with real synced
+    # data, and is rebuilt on each run so reruns don't hit unique constraints.
+    demo_db = FrostWatchConfig().data_dir / "demo" / "frostwatch.db"
+    if not skip_seed:
+        demo_db.unlink(missing_ok=True)
+    os.environ["FROSTWATCH_DB_PATH"] = str(demo_db)  # picked up by the API's load_config()
 
     async def _seed_and_serve() -> None:
         config = FrostWatchConfig()  # defaults — no Snowflake creds required

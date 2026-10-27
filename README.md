@@ -18,7 +18,7 @@
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/arunrajiah?label=Sponsors&logo=github)](https://github.com/sponsors/arunrajiah)
 [![GitHub Stars](https://img.shields.io/github/stars/arunrajiah/frostwatch?style=social)](https://github.com/arunrajiah/frostwatch/stargazers)
 
-FrostWatch is an open source, self-hostable, AI-powered cost and query observability tool for Snowflake. Point it at your Snowflake account and get instant answers to "where is all our money going?" - no SaaS contract, no percentage-of-spend pricing, no phone-home.
+FrostWatch is an open source, self-hosted cost and query observability tool for Snowflake. Snowflake's built-in Cost Management can now tell you *that* spend spiked. FrostWatch tells you **which dbt model, query pattern, and user** caused it, rewrites the expensive SQL, and generates the resource monitors to cap it. It runs in your own infrastructure, works with your own LLM (including a fully local one), and costs nothing: no SaaS contract, no percentage-of-spend pricing, no phone-home.
 
 ![FrostWatch Dashboard](docs/screenshots/dashboard.png)
 
@@ -38,24 +38,55 @@ frostwatch demo
 
 `frostwatch demo` seeds the local database with 35 days of realistic synthetic data - warehouse cost trends, dbt model breakdowns, injected anomaly spikes, AI explanations, pre-baked query rewrites, and a weekly digest - so you can explore the full UI before connecting a real Snowflake account.
 
+## Why FrostWatch
+
+**vs. Snowflake's built-in Cost Management (free):** Snowflake now does anomaly detection and AI explanations natively, and for simple spike alerts on one account that is enough. FrostWatch adds what it doesn't cover:
+
+- Cost per **dbt model**, dbt Cloud job, and environment, plus a cost summary posted on your **pull requests**
+- **Query fingerprinting** and week-over-week regression detection, so you see the SQL *pattern* driving spend, not one query at a time
+- **AI query rewrites** that return optimized SQL, clustering suggestions, and estimated savings
+- **Resource monitor sizing** from your actual p95 spend, with ready-to-run `CREATE RESOURCE MONITOR` DDL
+- Per-user and per-role **budgets**, and a weekly digest to Slack or email
+
+**vs. SELECT and other paid tools (from $1,499/month or a percentage of spend):**
+
+- **Free and MIT licensed.** Your savings stay savings.
+- **Self-hosted.** Query history never leaves your network. Outbound calls go only to Snowflake, the LLM you choose (with Ollama, even that stays local), and any Slack, email, or dbt Cloud integration you turn on.
+- **Read-only.** FrostWatch recommends and generates SQL; it never changes your warehouses on its own.
+- **Auditable.** Every query it runs against `ACCOUNT_USAGE` is in this repo.
+
+**When to pick something else:** if you need multi-account rollups today (FrostWatch is single-account until v0.5) or automatic warehouse tuning, a paid tool fits better. If you only want spike alerts on one account, Snowflake's built-in tools are enough.
+
+*Comparison based on public docs as of October 2026. Spot something out of date? Open an issue.*
+
 ## What it does
 
-- **Cost breakdown** by warehouse, user, role, and query tag - updated on a schedule you control
-- **Anomaly detection** that flags unusual spend spikes against a rolling 21-day baseline
+**Find what's driving spend**
+
+- **Cost breakdown** by warehouse, user, role, and query tag, updated on a schedule you control
+- **dbt model attribution**: per-model credit, USD cost, and performance parsed from `query_tag`
+- **dbt Cloud integration**: run metadata, cost by job and environment, model spend threshold alerts, and manifest.json enrichment (owner, description, materialization, tags)
+- **Query fingerprinting**: group near-identical queries by SQL pattern and surface the patterns that drive the most spend
+- **Week-over-week regression detection**: flag query patterns that got more expensive this week (medium / high / critical severity)
+
+**Fix it**
+
+- **AI query rewrites**: send any expensive query to your LLM and get back optimized SQL, root-cause analysis, clustering recommendations, and estimated savings %
 - **Plain-English explanations** of anomalies and expensive queries, powered by your own LLM (Anthropic, OpenAI, Gemini, or a local Ollama model)
-- **Query fingerprinting** - group near-identical queries by SQL pattern, surface the patterns that drive the most spend
-- **Week-over-week regression detection** - automatically flag query patterns that became more expensive this week vs last (medium / high / critical severity)
-- **Cost forecasting** - per-warehouse credit projections for the next 1–30 days using linear regression on historical data
-- **AI query rewrites** - submit any expensive query to your LLM and get back optimized SQL, root-cause analysis, clustering recommendations, and estimated savings %
-- **dbt model attribution** - per-model credit and performance breakdown parsed from `query_tag`
-- **dbt Cloud integration** - sync run metadata from dbt Cloud; cost breakdown by job and environment; model spend threshold alerts; manifest.json enrichment (owner, description, materialization, tags)
-- **GitHub Actions** - built-in workflow to post dbt cost summaries as PR comments after every `dbt run`
-- **Resource monitor management** - sync existing monitors, recommend quota sizes using p95 spend analysis, generate copy-paste `CREATE RESOURCE MONITOR` DDL, alert when monitors approach their limits
-- **Budget tracking** - configurable per-user and per-role daily credit budgets with over-budget flagging
+- **Resource monitor management**: sync existing monitors, recommend quotas from p95 spend, generate copy-paste `CREATE RESOURCE MONITOR` DDL
+
+**Keep it fixed**
+
+- **GitHub Actions**: post a dbt cost summary and threshold alerts as a PR comment after every `dbt run`
+- **Anomaly detection** against a rolling 21-day baseline
+- **Budget tracking**: per-user and per-role daily credit budgets with over-budget flagging
+- **Cost forecasting**: per-warehouse credit projections for the next 1 to 30 days
+- **Alerts** when a warehouse approaches its resource monitor limit
 - **Weekly digests** delivered to Slack or email
-- **Clean web UI** - dark-themed React dashboard, no BI tool required
-- **REST API** - all data accessible via `/api/*` endpoints
-- **CLI** - sync, config, and server management from the terminal
+
+**Use it your way:** dark-themed web UI (no BI tool required), a REST API at `/api/*`, and a CLI for sync, config, and server management.
+
+Coming from Chaos Genius? See the [migration guide](https://arunrajiah.github.io/frostwatch/chaos-genius-alternative/).
 
 ## Quickstart
 

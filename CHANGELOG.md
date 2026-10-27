@@ -9,6 +9,19 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Running `frostwatch demo` a second time crashed with `UNIQUE constraint failed: dbt_cloud_runs.run_id`. Demo data now lives in its own database (`~/.frostwatch/demo/frostwatch.db`), rebuilt on every run, so it also no longer mixes with real synced data.
+
+### Security
+
+- Upgraded `react-router-dom` to 7.18.4 and refreshed frontend dependencies to resolve all open npm advisories.
+
+### Docs
+
+- README now leads with what FrostWatch adds over Snowflake's built-in Cost Management and paid tools.
+- New docs page: Chaos Genius alternative and migration guide.
+
 ## [0.4.3] - 2026-10-27
 
 ### Fixed
