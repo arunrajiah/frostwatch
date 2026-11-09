@@ -9,10 +9,12 @@ import {
   Check,
   Download,
   ExternalLink,
+  CheckCircle2,
 } from 'lucide-react';
-import { formatDistanceToNow, parseISO } from 'date-fns';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
+import { format, formatDistanceToNow, parseISO } from 'date-fns';
 import clsx from 'clsx';
-import { getAdvisor, runAdvisor } from '../api/client';
+import { getAdvisor, getAdvisorHistory, runAdvisor } from '../api/client';
 import type { AdvisorFinding } from '../api/client';
 
 const SEVERITY_STYLES: Record<string, string> = {
@@ -132,9 +134,16 @@ function FindingCard({ f, index }: { f: AdvisorFinding; index: number }) {
 export default function Savings() {
   const qc = useQueryClient();
   const { data, isLoading, error } = useQuery({ queryKey: ['advisor'], queryFn: getAdvisor });
+  const { data: history } = useQuery({
+    queryKey: ['advisor-history'],
+    queryFn: getAdvisorHistory,
+  });
   const run = useMutation({
     mutationFn: () => runAdvisor(30),
-    onSuccess: (res) => qc.setQueryData(['advisor'], res),
+    onSuccess: (res) => {
+      qc.setQueryData(['advisor'], res);
+      qc.invalidateQueries({ queryKey: ['advisor-history'] });
+    },
   });
   const [category, setCategory] = useState('all');
 
@@ -237,6 +246,68 @@ export default function Savings() {
               </p>
             </div>
           </div>
+
+          {data.changes && data.changes.resolved.length > 0 && (
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4">
+              <p className="text-sm font-semibold text-emerald-300 flex items-center gap-2">
+                <CheckCircle2 size={16} /> {data.changes.resolved.length} fixed since the last audit,
+                worth {money(data.changes.savings_captured_usd)}/mo
+                {data.changes.new_count > 0 && (
+                  <span className="text-gray-400 font-normal">
+                    {' '}
+                    · {data.changes.new_count} new
+                  </span>
+                )}
+              </p>
+              <ul className="mt-2 space-y-1 text-sm text-gray-300">
+                {data.changes.resolved.map((r) => (
+                  <li key={`${r.title}-${r.object_name}`} className="flex gap-2">
+                    <span className="line-through text-gray-500">{r.title}</span>
+                    <span className="font-mono text-xs text-gray-400 pt-0.5">{r.object_name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {history && history.length > 1 && (
+            <div className="rounded-xl border border-gray-700 bg-gray-800 p-4">
+              <p className="text-xs uppercase tracking-wide text-gray-400 mb-2">
+                Open savings over time (lower is better)
+              </p>
+              <div className="h-32">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={history}>
+                    <XAxis
+                      dataKey="generated_at"
+                      tickFormatter={(v: string) => format(parseISO(v), 'MMM d')}
+                      stroke="#6b7280"
+                      fontSize={11}
+                    />
+                    <YAxis
+                      tickFormatter={(v: number) => money(v)}
+                      stroke="#6b7280"
+                      fontSize={11}
+                      width={60}
+                    />
+                    <Tooltip
+                      formatter={(v) => [`${money(Number(v))}/mo`, 'Open savings']}
+                      labelFormatter={(v) => format(parseISO(String(v)), 'MMM d, HH:mm')}
+                      contentStyle={{ background: '#111827', border: '1px solid #374151' }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="monthly_savings_usd"
+                      stroke="#34d399"
+                      strokeWidth={2}
+                      dot={false}
+                      isAnimationActive={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
 
           {categories.length > 1 && (
             <div className="flex gap-2 flex-wrap">

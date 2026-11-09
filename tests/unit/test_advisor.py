@@ -132,3 +132,16 @@ def test_collect_inputs_isolates_failures():
     assert inp.warehouses[0]["name"] == "WH"
     assert "unused_tables" in inp.skipped
     assert "Enterprise" in inp.skipped["unused_tables"]
+
+
+def test_compare_audits_resolved_and_new():
+    from frostwatch.api.routes.advisor import compare_audits
+
+    before = analyze(demo_inputs())
+    inp = demo_inputs()
+    inp.warehouses = [w for w in inp.warehouses if w["name"] != "COMPUTE_WH"]
+    after = analyze(inp)
+    diff = compare_audits(after, before)
+    assert any(r["object_name"] == "COMPUTE_WH" for r in diff["resolved"])
+    assert diff["savings_captured_usd"] > 0
+    assert compare_audits(after, None)["resolved"] == []

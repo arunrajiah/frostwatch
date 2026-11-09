@@ -17,10 +17,12 @@ from frostwatch.core.db import AdvisorRun, get_db
 router = APIRouter()
 
 
-async def save_audit(result: AuditResult) -> int:
+async def save_audit(result: AuditResult, generated_at: datetime | None = None) -> int:
+    if generated_at is not None:
+        result.generated_at = generated_at.isoformat(timespec="seconds")
     async with get_db() as session:
         run = AdvisorRun(
-            generated_at=datetime.now(UTC),
+            generated_at=generated_at or datetime.now(UTC),
             monthly_savings_usd=result.monthly_savings_usd,
             result_json=json.dumps(result.to_dict()),
         )
@@ -29,23 +31,69 @@ async def save_audit(result: AuditResult) -> int:
         return run.id
 
 
-async def _latest() -> AuditResult | None:
+async def _recent(n: int) -> list[AuditResult]:
     async with get_db() as session:
-        row = (
-            await session.execute(
-                select(AdvisorRun).order_by(AdvisorRun.generated_at.desc()).limit(1)
+        rows = (
+            (
+                await session.execute(
+                    select(AdvisorRun).order_by(AdvisorRun.generated_at.desc()).limit(n)
+                )
             )
-        ).scalar_one_or_none()
-    return AuditResult.from_dict(json.loads(row.result_json)) if row else None
+            .scalars()
+            .all()
+        )
+    return [AuditResult.from_dict(json.loads(r.result_json)) for r in rows]
+
+
+async def _latest() -> AuditResult | None:
+    runs = await _recent(1)
+    return runs[0] if runs else None
+
+
+def compare_audits(latest: AuditResult, previous: AuditResult | None) -> dict:
+    """What changed since the previous audit: fixed findings and new ones."""
+    if previous is None:
+        return {
+            "previous_generated_at": None,
+            "resolved": [],
+            "new_count": 0,
+            "savings_captured_usd": 0.0,
+        }
+
+    # Grouped findings (one row listing many warehouses) are matched by check only,
+    # so a shorter list is not reported as "fixed".
+    grouped = {"no_resource_monitor"}
+
+    def key(f) -> tuple[str, str]:
+        return (f.check_id, "" if f.check_id in grouped else f.object_name)
+
+    now_keys = {key(f) for f in latest.findings}
+    before_keys = {key(f) for f in previous.findings}
+    resolved = [f for f in previous.findings if key(f) not in now_keys]
+    return {
+        "previous_generated_at": previous.generated_at,
+        "resolved": [
+            {
+                "title": f.title,
+                "object_name": f.object_name,
+                "monthly_savings_usd": f.monthly_savings_usd,
+            }
+            for f in resolved
+        ],
+        "new_count": len(now_keys - before_keys),
+        "savings_captured_usd": round(sum(f.monthly_savings_usd for f in resolved), 2),
+    }
 
 
 @router.get("/advisor")
 async def get_advisor() -> dict:
-    """Latest Savings Advisor audit, or an empty result if none has run yet."""
-    result = await _latest()
-    if result is None:
+    """Latest Savings Advisor audit plus what changed since the previous one."""
+    runs = await _recent(2)
+    if not runs:
         return {"findings": [], "monthly_savings_usd": 0, "generated_at": None}
-    return result.to_dict()
+    out = runs[0].to_dict()
+    out["changes"] = compare_audits(runs[0], runs[1] if len(runs) > 1 else None)
+    return out
 
 
 @router.get("/advisor/history")
@@ -80,8 +128,11 @@ async def run_advisor(request: Request, days: int = 30) -> dict:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
     finally:
         client.close()
+    previous = await _latest()
     await save_audit(result)
-    return result.to_dict()
+    out = result.to_dict()
+    out["changes"] = compare_audits(result, previous)
+    return out
 
 
 @router.get("/advisor/report.html", response_class=HTMLResponse)

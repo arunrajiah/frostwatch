@@ -27,10 +27,12 @@ from frostwatch.core.db import (
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 
 WAREHOUSES = [
-    ("COMPUTE_WH", 0.35),  # (name, base_credits_per_day)
-    ("TRANSFORM_WH", 0.85),
-    ("REPORTING_WH", 0.22),
-    ("ML_WH", 0.60),
+    # (name, base_credits_per_day). Sized to match the Savings Advisor demo
+    # (frostwatch/demo/audit_demo.py) so both pages describe the same account.
+    ("COMPUTE_WH", 46.0),
+    ("TRANSFORM_WH", 48.0),
+    ("REPORTING_WH", 20.0),
+    ("ML_WH", 30.0),
 ]
 
 USERS = [
@@ -263,7 +265,7 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
                 description=(
                     "TRANSFORM_WH spent 6.5× its 21-day rolling average on "
                     f"{(today - timedelta(days=8)).isoformat()}. "
-                    "Total credits: 5.53 vs baseline 0.85."
+                    "Total credits: 312 vs baseline 48."
                 ),
                 llm_explanation=(
                     "A significant spend spike was detected on TRANSFORM_WH. "
@@ -606,8 +608,8 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
     demo_monitors = [
         {
             "name": "RM_TRANSFORM_WH",
-            "credit_quota": 250.0,
-            "used_credits": 238.5,  # 95.4% used → critical proximity
+            "credit_quota": 2500.0,
+            "used_credits": 2385.0,  # 95.4% used → critical proximity
             "remaining_credits": 11.5,
             "level": "WAREHOUSE",
             "frequency": "MONTHLY",
@@ -619,8 +621,8 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
         },
         {
             "name": "RM_ML_WH",
-            "credit_quota": 100.0,
-            "used_credits": 81.0,  # 81% used → high proximity (within 19pp of suspend)
+            "credit_quota": 1000.0,
+            "used_credits": 810.0,  # 81% used → high proximity (within 19pp of suspend)
             "remaining_credits": 19.0,
             "level": "WAREHOUSE",
             "frequency": "MONTHLY",
@@ -632,8 +634,8 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
         },
         {
             "name": "RM_COMPUTE_WH",
-            "credit_quota": 50.0,
-            "used_credits": 28.4,  # 56.8% used → within 75% notify threshold, medium
+            "credit_quota": 500.0,
+            "used_credits": 284.0,  # 56.8% used → within 75% notify threshold, medium
             "remaining_credits": 21.6,
             "level": "WAREHOUSE",
             "frequency": "MONTHLY",
@@ -645,8 +647,8 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
         },
         {
             "name": "RM_REPORTING_WH",
-            "credit_quota": 25.0,
-            "used_credits": 10.2,  # 40.8% used → healthy
+            "credit_quota": 250.0,
+            "used_credits": 102.0,  # 40.8% used → healthy
             "remaining_credits": 14.8,
             "level": "WAREHOUSE",
             "frequency": "MONTHLY",
@@ -677,10 +679,52 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
             )
 
     # ── Savings Advisor ───────────────────────────────────────────────────
-    from frostwatch.analysis.advisor import analyze
+    # An audit from a week ago with two findings that have since been fixed,
+    # so the demo shows "fixed since last audit" and a savings trend.
+    from frostwatch.analysis.advisor import AuditInputs, analyze
     from frostwatch.api.routes.advisor import save_audit
     from frostwatch.demo.audit_demo import demo_inputs
 
+    def _with_old_issues(resumes: int) -> AuditInputs:
+        inp = demo_inputs()
+        inp.warehouses.append(
+            {
+                "name": "LEGACY_ETL_WH",
+                "size": "Medium",
+                "auto_suspend": 900,
+                "resource_monitor": "LEGACY",
+                "min_cluster_count": 1,
+            }
+        )
+        inp.metering.append(
+            {"warehouse_name": "LEGACY_ETL_WH", "credits": 700, "active_hours": 300}
+        )
+        inp.resumes.append({"warehouse_name": "LEGACY_ETL_WH", "resumes": resumes})
+        inp.unused_tables.append(
+            {
+                "table_catalog": "ANALYTICS",
+                "table_schema": "SCRATCH",
+                "table_name": "OLD_EXPORT_2023",
+                "active_bytes": 5 * 1024**4,
+            }
+        )
+        return inp
+
+    for weeks_ago, inputs in (
+        (3, _with_old_issues(600)),
+        (2, _with_old_issues(450)),
+        (1, _with_old_issues(300)),
+    ):
+        await save_audit(
+            analyze(
+                inputs,
+                credit_price=config.credits_per_dollar,
+                storage_price_per_tb=config.storage_price_per_tb,
+                account="DEMO_ACCOUNT",
+                demo=True,
+            ),
+            generated_at=now - timedelta(weeks=weeks_ago),
+        )
     await save_audit(
         analyze(
             demo_inputs(),
@@ -703,7 +747,7 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
                 summary_text=(
                     "Weekly digest for the period ending "
                     f"{period_end.strftime('%b %d, %Y')}:\n\n"
-                    "Total spend this week: $14.82 across 4 warehouses.\n"
+                    "Total spend this week: $2,370 across 4 warehouses.\n"
                     "TRANSFORM_WH is your most expensive warehouse (58% of total spend).\n"
                     "dbt models consumed 42% of all Snowflake credits this week.\n"
                     "Top dbt model by cost: `revenue_daily` (0.31 credits).\n"

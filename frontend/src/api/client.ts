@@ -243,7 +243,23 @@ export interface AdvisorResult {
   findings: AdvisorFinding[];
   skipped?: Record<string, string>;
   demo?: boolean;
+  changes?: AdvisorChanges;
 }
+
+export interface AdvisorChanges {
+  previous_generated_at: string | null;
+  resolved: { title: string; object_name: string; monthly_savings_usd: number }[];
+  new_count: number;
+  savings_captured_usd: number;
+}
+
+export interface AdvisorHistoryPoint {
+  generated_at: string;
+  monthly_savings_usd: number;
+}
+
+export const getAdvisorHistory = (): Promise<AdvisorHistoryPoint[]> =>
+  request<AdvisorHistoryPoint[]>('/advisor/history');
 
 export const getAdvisor = (): Promise<AdvisorResult> => request<AdvisorResult>('/advisor');
 

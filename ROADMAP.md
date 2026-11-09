@@ -74,8 +74,8 @@ Make the first win take one minute instead of one afternoon.
 - [x] Savings page in the UI, refreshed after every sync
 - [x] Quick Audit SQL for Snowsight (zero install)
 - [x] SSO (externalbrowser), key-pair, and connections.toml auth
-- [ ] Savings trend over time ("you saved $X since last month") on the Savings page
-- [ ] Track which findings were fixed between audits
+- [x] Savings trend over time on the Savings page (v0.5.1)
+- [x] Track which findings were fixed between audits (v0.5.1)
 - [ ] Optional LLM pass that explains the top findings in business language
 
 ---

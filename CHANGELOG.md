@@ -7,6 +7,17 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.5.1] - 2026-11-09
+
+### Added
+
+- Savings page shows **what you fixed since the last audit** (and the monthly savings captured) plus a trend chart of open savings over time. `GET /api/advisor` now includes a `changes` block.
+
+### Fixed
+
+- CI type check failed because SQLAlchemy 2.1 removed its mypy plugin.
+- Demo data: dashboard spend and warehouse names now match the Savings Advisor demo, so the screenshots describe one consistent account.
+
 ## [0.5.0] - 2026-11-09
 
 ### Added

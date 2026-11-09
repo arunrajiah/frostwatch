@@ -16,10 +16,10 @@ def demo_inputs() -> AuditInputs:
                 "min_cluster_count": 1,
             },
             {
-                "name": "BI_WH",
+                "name": "REPORTING_WH",
                 "size": "Medium",
                 "auto_suspend": 300,
-                "resource_monitor": "BI_MONTHLY",
+                "resource_monitor": "REPORTING_MONTHLY",
                 "min_cluster_count": 1,
             },
             {
@@ -30,14 +30,14 @@ def demo_inputs() -> AuditInputs:
                 "min_cluster_count": 1,
             },
             {
-                "name": "ADHOC_WH",
+                "name": "COMPUTE_WH",
                 "size": "Small",
                 "auto_suspend": None,
                 "resource_monitor": "null",
                 "min_cluster_count": 1,
             },
             {
-                "name": "DATA_SCIENCE_WH",
+                "name": "ML_WH",
                 "size": "X-Large",
                 "auto_suspend": 120,
                 "resource_monitor": "null",
@@ -46,20 +46,20 @@ def demo_inputs() -> AuditInputs:
         ],
         metering=[
             {"warehouse_name": "TRANSFORM_WH", "credits": 1450, "active_hours": 400},
-            {"warehouse_name": "BI_WH", "credits": 610, "active_hours": 520},
+            {"warehouse_name": "REPORTING_WH", "credits": 610, "active_hours": 520},
             {"warehouse_name": "LOADING_WH", "credits": 90, "active_hours": 300},
-            {"warehouse_name": "ADHOC_WH", "credits": 1380, "active_hours": 690},
-            {"warehouse_name": "DATA_SCIENCE_WH", "credits": 900, "active_hours": 150},
+            {"warehouse_name": "COMPUTE_WH", "credits": 1380, "active_hours": 690},
+            {"warehouse_name": "ML_WH", "credits": 900, "active_hours": 150},
         ],
         resumes=[
             {"warehouse_name": "TRANSFORM_WH", "resumes": 250},
-            {"warehouse_name": "BI_WH", "resumes": 600},
+            {"warehouse_name": "REPORTING_WH", "resumes": 600},
             {"warehouse_name": "LOADING_WH", "resumes": 2800},
-            {"warehouse_name": "DATA_SCIENCE_WH", "resumes": 150},
+            {"warehouse_name": "ML_WH", "resumes": 150},
         ],
         wh_stats=[
             {
-                "warehouse_name": "BI_WH",
+                "warehouse_name": "REPORTING_WH",
                 "warehouse_size": "Medium",
                 "queries": 48000,
                 "p95_exec_s": 3.2,
@@ -81,7 +81,7 @@ def demo_inputs() -> AuditInputs:
                 "exec_s": 1_100_000,
             },
             {
-                "warehouse_name": "DATA_SCIENCE_WH",
+                "warehouse_name": "ML_WH",
                 "warehouse_size": "X-Large",
                 "queries": 3100,
                 "p95_exec_s": 410,
@@ -95,7 +95,7 @@ def demo_inputs() -> AuditInputs:
         repeated=[
             {
                 "query_hash": "9f2c1a7be04d55e1",
-                "warehouse_name": "BI_WH",
+                "warehouse_name": "REPORTING_WH",
                 "warehouse_size": "Medium",
                 "sample_text": "SELECT region, SUM(amount) FROM analytics.marts.fct_orders WHERE order_ts >= DATEADD(day, -7, CURRENT_TIMESTAMP()) GROUP BY 1",
                 "runs": 8640,

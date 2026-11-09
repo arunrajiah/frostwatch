@@ -45,7 +45,7 @@ footer{margin-top:28px;font-size:13px}a{color:var(--accent)}
   <div>
     <h1>Snowflake Savings Audit <span class="demo">DEMO DATA</span></h1>
     <div class="mute">Account <b>DEMO_ACCOUNT</b> &middot; last 30 days
-      &middot; generated 2026-11-09 16:42 UTC
+      &middot; generated 2026-11-09 17:10 UTC
       &middot; $3.00/credit, $23/TB-month</div>
   </div>
   <a class="brand" href="https://github.com/arunrajiah/frostwatch">&#10052; FrostWatch</a>
@@ -66,7 +66,7 @@ footer{margin-top:28px;font-size:13px}a{color:var(--accent)}
   <tr><th>#</th><th>Finding</th><th>Object</th><th class="num">Est. saving / mo</th></tr>
   
   <tr><td>1</td><td><span class="pill high">high</span> Warehouse never suspends</td>
-    <td class="obj">ADHOC_WH</td>
+    <td class="obj">COMPUTE_WH</td>
     <td class="num">$2,070</td></tr>
   
   <tr><td>2</td><td><span class="pill high">high</span> Auto-suspend set too high</td>
@@ -74,11 +74,11 @@ footer{margin-top:28px;font-size:13px}a{color:var(--accent)}
     <td class="num">$900</td></tr>
   
   <tr><td>3</td><td><span class="pill high">high</span> Warehouse looks oversized</td>
-    <td class="obj">BI_WH</td>
+    <td class="obj">REPORTING_WH</td>
     <td class="num">$549</td></tr>
   
   <tr><td>4</td><td><span class="pill medium">medium</span> Auto-suspend set too high</td>
-    <td class="obj">BI_WH</td>
+    <td class="obj">REPORTING_WH</td>
     <td class="num">$480</td></tr>
   
   <tr><td>5</td><td><span class="pill medium">medium</span> Paying for cloud services above the free 10 percent</td>
@@ -86,7 +86,7 @@ footer{margin-top:28px;font-size:13px}a{color:var(--accent)}
     <td class="num">$370</td></tr>
   
   <tr><td>6</td><td><span class="pill medium">medium</span> Identical query re-runs without hitting the result cache</td>
-    <td class="obj">BI_WH / 9f2c1a7be04d</td>
+    <td class="obj">REPORTING_WH / 9f2c1a7be04d</td>
     <td class="num">$202</td></tr>
   
   <tr><td>7</td><td><span class="pill medium">medium</span> Time Travel and Fail-safe bigger than the table</td>
@@ -94,7 +94,7 @@ footer{margin-top:28px;font-size:13px}a{color:var(--accent)}
     <td class="num">$144</td></tr>
   
   <tr><td>8</td><td><span class="pill medium">medium</span> Auto-suspend set too high</td>
-    <td class="obj">DATA_SCIENCE_WH</td>
+    <td class="obj">ML_WH</td>
     <td class="num">$120</td></tr>
   
   <tr><td>9</td><td><span class="pill low">low</span> Identical query re-runs without hitting the result cache</td>
@@ -118,11 +118,11 @@ footer{margin-top:28px;font-size:13px}a{color:var(--accent)}
     <td class="num"><span class="mute">risk / perf</span></td></tr>
   
   <tr><td>14</td><td><span class="pill medium">medium</span> Warehouses with no spending cap</td>
-    <td class="obj">TRANSFORM_WH, ADHOC_WH, DATA_SCIENCE_WH, LOADING_WH</td>
+    <td class="obj">TRANSFORM_WH, COMPUTE_WH, ML_WH, LOADING_WH</td>
     <td class="num"><span class="mute">risk / perf</span></td></tr>
   
   <tr><td>15</td><td><span class="pill low">low</span> Queries waiting in queue</td>
-    <td class="obj">DATA_SCIENCE_WH</td>
+    <td class="obj">ML_WH</td>
     <td class="num"><span class="mute">risk / perf</span></td></tr>
   
   <tr><td>16</td><td><span class="pill info">info</span> Expensive automatic clustering</td>
@@ -138,10 +138,10 @@ footer{margin-top:28px;font-size:13px}a{color:var(--accent)}
     <span class="mute">Compute</span>
     <span class="save">save ~$2,070/mo</span></div>
   <h3>1. Warehouse never suspends</h3>
-  <div class="obj">ADHOC_WH <span class="mute">&middot; costs $4,140/mo</span></div>
+  <div class="obj">COMPUTE_WH <span class="mute">&middot; costs $4,140/mo</span></div>
   <p><b>Why:</b> AUTO_SUSPEND is off and the warehouse was billed in 690 hourly slots, nearly around the clock.</p>
   <p><b>Fix:</b> Enable auto-suspend so the warehouse stops billing when idle. Savings assume roughly half of its running hours are idle. <a href="https://docs.snowflake.com/en/user-guide/warehouses-considerations">Snowflake docs</a></p>
-  <pre><button class="copy" onclick="cp(this)">Copy</button><code>ALTER WAREHOUSE &#34;ADHOC_WH&#34; SET AUTO_SUSPEND = 60;</code></pre>
+  <pre><button class="copy" onclick="cp(this)">Copy</button><code>ALTER WAREHOUSE &#34;COMPUTE_WH&#34; SET AUTO_SUSPEND = 60;</code></pre>
 </div>
 
 <div class="f" id="f2">
@@ -160,10 +160,10 @@ footer{margin-top:28px;font-size:13px}a{color:var(--accent)}
     <span class="mute">Compute</span>
     <span class="save">save ~$549/mo</span></div>
   <h3>3. Warehouse looks oversized</h3>
-  <div class="obj">BI_WH <span class="mute">&middot; costs $1,830/mo</span></div>
+  <div class="obj">REPORTING_WH <span class="mute">&middot; costs $1,830/mo</span></div>
   <p><b>Why:</b> 48,000 queries on a Medium warehouse: p95 runtime 3.2s, p95 scan 180 MB, no spilling.</p>
   <p><b>Fix:</b> Try one size down (SMALL) for a week and compare runtimes. Small queries rarely get slower, so cost drops close to half; the estimate assumes 30 percent to stay conservative. <a href="https://docs.snowflake.com/en/user-guide/warehouses-considerations">Snowflake docs</a></p>
-  <pre><button class="copy" onclick="cp(this)">Copy</button><code>ALTER WAREHOUSE &#34;BI_WH&#34; SET WAREHOUSE_SIZE = &#39;SMALL&#39;;</code></pre>
+  <pre><button class="copy" onclick="cp(this)">Copy</button><code>ALTER WAREHOUSE &#34;REPORTING_WH&#34; SET WAREHOUSE_SIZE = &#39;SMALL&#39;;</code></pre>
 </div>
 
 <div class="f" id="f4">
@@ -171,10 +171,10 @@ footer{margin-top:28px;font-size:13px}a{color:var(--accent)}
     <span class="mute">Compute</span>
     <span class="save">save ~$480/mo</span></div>
   <h3>4. Auto-suspend set too high</h3>
-  <div class="obj">BI_WH <span class="mute">&middot; costs $1,830/mo</span></div>
+  <div class="obj">REPORTING_WH <span class="mute">&middot; costs $1,830/mo</span></div>
   <p><b>Why:</b> AUTO_SUSPEND = 300s on a Medium warehouse that resumed ~600 times. Each resume burns up to 240s of idle time before suspending.</p>
   <p><b>Fix:</b> Lower AUTO_SUSPEND to 60s. Keep it higher only for BI warehouses that depend on a warm local cache. <a href="https://docs.snowflake.com/en/user-guide/warehouses-considerations">Snowflake docs</a></p>
-  <pre><button class="copy" onclick="cp(this)">Copy</button><code>ALTER WAREHOUSE &#34;BI_WH&#34; SET AUTO_SUSPEND = 60;</code></pre>
+  <pre><button class="copy" onclick="cp(this)">Copy</button><code>ALTER WAREHOUSE &#34;REPORTING_WH&#34; SET AUTO_SUSPEND = 60;</code></pre>
 </div>
 
 <div class="f" id="f5">
@@ -197,7 +197,7 @@ GROUP BY 1, 2 ORDER BY cs_credits DESC LIMIT 20;</code></pre>
     <span class="mute">Compute</span>
     <span class="save">save ~$202/mo</span></div>
   <h3>6. Identical query re-runs without hitting the result cache</h3>
-  <div class="obj">BI_WH / 9f2c1a7be04d <span class="mute">&middot; costs $403/mo</span></div>
+  <div class="obj">REPORTING_WH / 9f2c1a7be04d <span class="mute">&middot; costs $403/mo</span></div>
   <p><b>Why:</b> Ran 8,640 times with identical text and still scanned data each time. Sample: SELECT region, SUM(amount) FROM analytics.marts.fct_orders WHERE order_ts &gt;= DATEADD(day, -7, CURRENT_TIMESTAMP()) GROUP BY 1</p>
   <p><b>Fix:</b> Common causes: CURRENT_TIMESTAMP() or RANDOM() in the SQL, USE_CACHED_RESULT = FALSE on the session, or the source table changes between runs. Remove non-deterministic functions, or materialize the result (dynamic table or scheduled table) for dashboards. <a href="https://docs.snowflake.com/en/user-guide/querying-persisted-results">Snowflake docs</a></p>
   <pre><button class="copy" onclick="cp(this)">Copy</button><code>SHOW PARAMETERS LIKE &#39;USE_CACHED_RESULT&#39; IN ACCOUNT;</code></pre>
@@ -219,10 +219,10 @@ GROUP BY 1, 2 ORDER BY cs_credits DESC LIMIT 20;</code></pre>
     <span class="mute">Compute</span>
     <span class="save">save ~$120/mo</span></div>
   <h3>8. Auto-suspend set too high</h3>
-  <div class="obj">DATA_SCIENCE_WH <span class="mute">&middot; costs $2,700/mo</span></div>
+  <div class="obj">ML_WH <span class="mute">&middot; costs $2,700/mo</span></div>
   <p><b>Why:</b> AUTO_SUSPEND = 120s on a X-Large warehouse that resumed ~150 times. Each resume burns up to 60s of idle time before suspending.</p>
   <p><b>Fix:</b> Lower AUTO_SUSPEND to 60s. Keep it higher only for BI warehouses that depend on a warm local cache. <a href="https://docs.snowflake.com/en/user-guide/warehouses-considerations">Snowflake docs</a></p>
-  <pre><button class="copy" onclick="cp(this)">Copy</button><code>ALTER WAREHOUSE &#34;DATA_SCIENCE_WH&#34; SET AUTO_SUSPEND = 60;</code></pre>
+  <pre><button class="copy" onclick="cp(this)">Copy</button><code>ALTER WAREHOUSE &#34;ML_WH&#34; SET AUTO_SUSPEND = 60;</code></pre>
 </div>
 
 <div class="f" id="f9">
@@ -288,18 +288,18 @@ ORDER BY bytes_spilled_to_remote_storage DESC LIMIT 20;</code></pre>
     <span class="mute">Guardrails</span>
     </div>
   <h3>14. Warehouses with no spending cap</h3>
-  <div class="obj">TRANSFORM_WH, ADHOC_WH, DATA_SCIENCE_WH, LOADING_WH <span class="mute">&middot; costs $11,460/mo</span></div>
+  <div class="obj">TRANSFORM_WH, COMPUTE_WH, ML_WH, LOADING_WH <span class="mute">&middot; costs $11,460/mo</span></div>
   <p><b>Why:</b> 4 warehouse(s) spending $11,460/month have no resource monitor. A runaway query or a forgotten loop has no ceiling.</p>
   <p><b>Fix:</b> Add a monthly monitor per warehouse at about 1.5x normal usage: notify at 80 percent, suspend at 100 percent. Requires ACCOUNTADMIN. <a href="https://docs.snowflake.com/en/user-guide/resource-monitors">Snowflake docs</a></p>
   <pre><button class="copy" onclick="cp(this)">Copy</button><code>CREATE RESOURCE MONITOR &#34;FW_TRANSFORM_WH_MONTHLY&#34; WITH CREDIT_QUOTA = 2180 FREQUENCY = MONTHLY START_TIMESTAMP = IMMEDIATELY
   TRIGGERS ON 80 PERCENT DO NOTIFY ON 100 PERCENT DO SUSPEND ON 120 PERCENT DO SUSPEND_IMMEDIATE;
 ALTER WAREHOUSE &#34;TRANSFORM_WH&#34; SET RESOURCE_MONITOR = &#34;FW_TRANSFORM_WH_MONTHLY&#34;;
-CREATE RESOURCE MONITOR &#34;FW_ADHOC_WH_MONTHLY&#34; WITH CREDIT_QUOTA = 2070 FREQUENCY = MONTHLY START_TIMESTAMP = IMMEDIATELY
+CREATE RESOURCE MONITOR &#34;FW_COMPUTE_WH_MONTHLY&#34; WITH CREDIT_QUOTA = 2070 FREQUENCY = MONTHLY START_TIMESTAMP = IMMEDIATELY
   TRIGGERS ON 80 PERCENT DO NOTIFY ON 100 PERCENT DO SUSPEND ON 120 PERCENT DO SUSPEND_IMMEDIATE;
-ALTER WAREHOUSE &#34;ADHOC_WH&#34; SET RESOURCE_MONITOR = &#34;FW_ADHOC_WH_MONTHLY&#34;;
-CREATE RESOURCE MONITOR &#34;FW_DATA_SCIENCE_WH_MONTHLY&#34; WITH CREDIT_QUOTA = 1350 FREQUENCY = MONTHLY START_TIMESTAMP = IMMEDIATELY
+ALTER WAREHOUSE &#34;COMPUTE_WH&#34; SET RESOURCE_MONITOR = &#34;FW_COMPUTE_WH_MONTHLY&#34;;
+CREATE RESOURCE MONITOR &#34;FW_ML_WH_MONTHLY&#34; WITH CREDIT_QUOTA = 1350 FREQUENCY = MONTHLY START_TIMESTAMP = IMMEDIATELY
   TRIGGERS ON 80 PERCENT DO NOTIFY ON 100 PERCENT DO SUSPEND ON 120 PERCENT DO SUSPEND_IMMEDIATE;
-ALTER WAREHOUSE &#34;DATA_SCIENCE_WH&#34; SET RESOURCE_MONITOR = &#34;FW_DATA_SCIENCE_WH_MONTHLY&#34;;
+ALTER WAREHOUSE &#34;ML_WH&#34; SET RESOURCE_MONITOR = &#34;FW_ML_WH_MONTHLY&#34;;
 CREATE RESOURCE MONITOR &#34;FW_LOADING_WH_MONTHLY&#34; WITH CREDIT_QUOTA = 140 FREQUENCY = MONTHLY START_TIMESTAMP = IMMEDIATELY
   TRIGGERS ON 80 PERCENT DO NOTIFY ON 100 PERCENT DO SUSPEND ON 120 PERCENT DO SUSPEND_IMMEDIATE;
 ALTER WAREHOUSE &#34;LOADING_WH&#34; SET RESOURCE_MONITOR = &#34;FW_LOADING_WH_MONTHLY&#34;;</code></pre>
@@ -310,10 +310,10 @@ ALTER WAREHOUSE &#34;LOADING_WH&#34; SET RESOURCE_MONITOR = &#34;FW_LOADING_WH_M
     <span class="mute">Performance</span>
     </div>
   <h3>15. Queries waiting in queue</h3>
-  <div class="obj">DATA_SCIENCE_WH <span class="mute">&middot; costs $2,700/mo</span></div>
+  <div class="obj">ML_WH <span class="mute">&middot; costs $2,700/mo</span></div>
   <p><b>Why:</b> Queries spent 40.0h queued vs 200.0h executing (20%).</p>
   <p><b>Fix:</b> Concurrency, not size, is the bottleneck. Use a multi-cluster warehouse (Enterprise) with a low MAX_CLUSTER_COUNT, or split workloads onto separate warehouses. Upsizing would overpay. <a href="https://docs.snowflake.com/en/user-guide/warehouses-multicluster">Snowflake docs</a></p>
-  <pre><button class="copy" onclick="cp(this)">Copy</button><code>ALTER WAREHOUSE &#34;DATA_SCIENCE_WH&#34; SET MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 3 SCALING_POLICY = &#39;ECONOMY&#39;;</code></pre>
+  <pre><button class="copy" onclick="cp(this)">Copy</button><code>ALTER WAREHOUSE &#34;ML_WH&#34; SET MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 3 SCALING_POLICY = &#39;ECONOMY&#39;;</code></pre>
 </div>
 
 <div class="f" id="f16">
@@ -340,7 +340,7 @@ ALTER WAREHOUSE &#34;LOADING_WH&#34; SET RESOURCE_MONITOR = &#34;FW_LOADING_WH_M
 </div>
 <footer class="mute">Estimates are directional, based on ACCOUNT_USAGE history and list prices you can override
 (<code>--price</code>, <code>--storage-price</code>). FrostWatch never changes your account: every fix above is SQL for you to review and run.
-Generated by FrostWatch v0.5.0.</footer>
+Generated by FrostWatch v0.5.1.</footer>
 </div>
 <script>function cp(b){navigator.clipboard.writeText(b.nextElementSibling.innerText).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1500)})}</script>
 </body></html>
