@@ -2,42 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://arunrajiah.github.io/frostwatch/</loc>
-         <lastmod>2026-10-27</lastmod>
+         <lastmod>2026-11-09</lastmod>
     </url>
     <url>
          <loc>https://arunrajiah.github.io/frostwatch/api/</loc>
-         <lastmod>2026-10-27</lastmod>
+         <lastmod>2026-11-09</lastmod>
     </url>
     <url>
          <loc>https://arunrajiah.github.io/frostwatch/chaos-genius-alternative/</loc>
-         <lastmod>2026-10-27</lastmod>
+         <lastmod>2026-11-09</lastmod>
     </url>
     <url>
          <loc>https://arunrajiah.github.io/frostwatch/configuration/</loc>
-         <lastmod>2026-10-27</lastmod>
+         <lastmod>2026-11-09</lastmod>
     </url>
     <url>
          <loc>https://arunrajiah.github.io/frostwatch/dbt-cloud/</loc>
-         <lastmod>2026-10-27</lastmod>
+         <lastmod>2026-11-09</lastmod>
     </url>
     <url>
          <loc>https://arunrajiah.github.io/frostwatch/dbt/</loc>
-         <lastmod>2026-10-27</lastmod>
+         <lastmod>2026-11-09</lastmod>
     </url>
     <url>
          <loc>https://arunrajiah.github.io/frostwatch/insights/</loc>
-         <lastmod>2026-10-27</lastmod>
+         <lastmod>2026-11-09</lastmod>
     </url>
     <url>
          <loc>https://arunrajiah.github.io/frostwatch/installation/</loc>
-         <lastmod>2026-10-27</lastmod>
+         <lastmod>2026-11-09</lastmod>
     </url>
     <url>
          <loc>https://arunrajiah.github.io/frostwatch/marketing-submissions/</loc>
-         <lastmod>2026-10-27</lastmod>
+         <lastmod>2026-11-09</lastmod>
+    </url>
+    <url>
+         <loc>https://arunrajiah.github.io/frostwatch/quick-audit-sql/</loc>
+         <lastmod>2026-11-09</lastmod>
     </url>
     <url>
          <loc>https://arunrajiah.github.io/frostwatch/resource-monitors/</loc>
-         <lastmod>2026-10-27</lastmod>
+         <lastmod>2026-11-09</lastmod>
+    </url>
+    <url>
+         <loc>https://arunrajiah.github.io/frostwatch/savings-advisor/</loc>
+         <lastmod>2026-11-09</lastmod>
+    </url>
+    <url>
+         <loc>https://arunrajiah.github.io/frostwatch/snowflake-cost-optimization/</loc>
+         <lastmod>2026-11-09</lastmod>
     </url>
 </urlset>
