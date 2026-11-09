@@ -98,7 +98,7 @@ def recommend_monitors(
         # Round up to a clean number
         monthly_quota = _round_up_quota(monthly_quota)
 
-        cost_usd = monthly_quota / credits_per_dollar if credits_per_dollar else 0.0
+        cost_usd = monthly_quota * credits_per_dollar
 
         existing_monitor = monitored_whs.get(wh_name)
         current_quota: float | None = None

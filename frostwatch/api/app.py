@@ -11,6 +11,7 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from frostwatch.api.limiter import limiter
+from frostwatch.api.routes.advisor import router as advisor_router
 from frostwatch.api.routes.anomalies import router as anomalies_router
 from frostwatch.api.routes.dashboard import router as dashboard_router
 from frostwatch.api.routes.dbt import router as dbt_router
@@ -100,6 +101,7 @@ def create_app() -> FastAPI:
     app.include_router(dbt_router, prefix=api_prefix, tags=["dbt"])
     app.include_router(insights_router, prefix=api_prefix, tags=["insights"])
     app.include_router(resource_monitors_router, prefix=api_prefix, tags=["resource-monitors"])
+    app.include_router(advisor_router, prefix=api_prefix, tags=["advisor"])
 
     # Installed wheel bundles the built frontend at frostwatch/frontend_dist;
     # a source checkout serves frontend/dist instead.

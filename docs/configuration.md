@@ -39,7 +39,7 @@ snowflake_query_limit: 500    # Max queries fetched per sync
 alert_threshold_multiplier: 3.0  # Flag spend > 3× rolling baseline
 
 # ── Cost ──────────────────────────────────────────────────────────────────────
-credits_per_dollar: 3.0           # Adjust for your contract rate
+credits_per_dollar: 3.0           # USD per credit (legacy name). Adjust for your contract rate
 
 # ── Server ────────────────────────────────────────────────────────────────────
 cors_origins:
@@ -88,4 +88,29 @@ Or via env var (comma-separated):
 
 ```bash
 FROSTWATCH_CORS_ORIGINS=https://frostwatch.yourcompany.com
+```
+
+## Snowflake authentication
+
+Password-only logins are being phased out by Snowflake (MFA enforcement). Use one of:
+
+```yaml
+# Reuse a named connection from ~/.snowflake/connections.toml (same file the Snowflake CLI uses)
+snowflake_connection_name: my_conn
+
+# SSO through your identity provider (opens a browser once; token is cached)
+snowflake_authenticator: externalbrowser
+
+# Key-pair auth, recommended for servers and service users
+snowflake_private_key_path: /secrets/rsa_key.p8
+snowflake_private_key_passphrase: ""   # or FROSTWATCH_SNOWFLAKE_PRIVATE_KEY_PASSPHRASE
+```
+
+Precedence: connection name, then private key, then authenticator, then password.
+
+## Pricing
+
+```yaml
+credits_per_dollar: 3.0       # USD per credit (legacy name)
+storage_price_per_tb: 23.0    # USD per TB-month, used by the Savings Advisor
 ```

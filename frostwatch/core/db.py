@@ -89,6 +89,17 @@ class ReportRecord(Base):
     details_json: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
+class AdvisorRun(Base):
+    """One Savings Advisor audit, stored as JSON (see analysis.advisor.AuditResult)."""
+
+    __tablename__ = "advisor_runs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    generated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, index=True)
+    monthly_savings_usd: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    result_json: Mapped[str] = mapped_column(Text, nullable=False)
+
+
 class SettingsStore(Base):
     __tablename__ = "settings_store"
 

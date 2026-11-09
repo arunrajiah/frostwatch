@@ -79,9 +79,7 @@ async def get_dbt_breakdown(
             DbtModelAgg(
                 dbt_model=model,
                 total_credits=round(model_credits[model], 6),
-                total_cost_usd=round(
-                    model_credits[model] / credits_per_dollar if credits_per_dollar else 0, 4
-                ),
+                total_cost_usd=round(model_credits[model] * credits_per_dollar, 4),
                 query_count=model_count[model],
                 avg_execution_ms=round(
                     model_exec_ms[model] / model_count[model] if model_count[model] else 0, 2
@@ -192,9 +190,7 @@ async def get_dbt_jobs(
             project_name=g["project_name"],
             run_count=g["run_count"],
             total_credits=round(g["total_credits"], 6),
-            total_cost_usd=round(
-                g["total_credits"] / credits_per_dollar if credits_per_dollar else 0, 4
-            ),
+            total_cost_usd=round(g["total_credits"] * credits_per_dollar, 4),
             avg_duration_seconds=(
                 round(g["total_duration"] / g["duration_count"], 1) if g["duration_count"] else None
             ),
@@ -250,9 +246,7 @@ async def get_dbt_environments(
             project_name=g["project_name"],
             run_count=g["run_count"],
             total_credits=round(g["total_credits"], 6),
-            total_cost_usd=round(
-                g["total_credits"] / credits_per_dollar if credits_per_dollar else 0, 4
-            ),
+            total_cost_usd=round(g["total_credits"] * credits_per_dollar, 4),
             distinct_jobs=len(g["job_ids"]),
         )
         for g in envs.values()
@@ -347,7 +341,6 @@ async def sync_dbt_cloud(request: Request) -> DbtCloudSyncResponse:
     from frostwatch.dbt_cloud.client import DbtCloudClient
 
     client = DbtCloudClient(account_id=account_id, api_token=api_token)
-    credits_per_dollar: float = config.credits_per_dollar
 
     try:
         import asyncio
@@ -393,7 +386,7 @@ async def sync_dbt_cloud(request: Request) -> DbtCloudSyncResponse:
                 finished_at=r.get("finished_at"),
                 duration_seconds=r.get("duration_seconds"),
                 models_executed=r.get("models_executed"),
-                credits_used=round(credits / credits_per_dollar, 6) if credits_per_dollar else 0,
+                credits_used=round(credits, 6),
                 synced_at=now,
             )
             stmt = stmt.on_conflict_do_update(

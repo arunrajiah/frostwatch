@@ -59,10 +59,10 @@ async def get_dashboard(request: Request) -> DashboardSummary:
             last_sync = sync_result.scalar_one_or_none()
 
         total_credits_7d = sum(float(m.credits_used or 0) for m in metrics_7d)
-        total_cost_7d = total_credits_7d / credits_per_dollar if credits_per_dollar else 0.0
+        total_cost_7d = total_credits_7d * credits_per_dollar
 
         total_credits_30d = sum(float(m.credits_used or 0) for m in all_metrics)
-        total_cost_30d = total_credits_30d / credits_per_dollar if credits_per_dollar else 0.0
+        total_cost_30d = total_credits_30d * credits_per_dollar
 
         wh_credits: dict[str, float] = defaultdict(float)
         for m in all_metrics:
@@ -72,7 +72,7 @@ async def get_dashboard(request: Request) -> DashboardSummary:
             CostBreakdownItem(
                 name=name,
                 credits=round(credits, 4),
-                cost_usd=round(credits / credits_per_dollar if credits_per_dollar else 0, 4),
+                cost_usd=round(credits * credits_per_dollar, 4),
                 pct_of_total=round(credits / total_credits_30d * 100, 2)
                 if total_credits_30d
                 else 0.0,
@@ -90,7 +90,7 @@ async def get_dashboard(request: Request) -> DashboardSummary:
             CostBreakdownItem(
                 name=name,
                 credits=round(credits, 4),
-                cost_usd=round(credits / credits_per_dollar if credits_per_dollar else 0, 4),
+                cost_usd=round(credits * credits_per_dollar, 4),
                 pct_of_total=round(credits / user_total * 100, 2),
             )
             for name, credits in sorted(user_credits.items(), key=lambda x: -x[1])[:5]

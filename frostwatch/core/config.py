@@ -24,6 +24,15 @@ class FrostWatchConfig(BaseSettings):
     snowflake_database: str = "SNOWFLAKE"
     snowflake_schema: str = "ACCOUNT_USAGE"
     snowflake_role: str = ""
+    # Auth beyond passwords. Snowflake is phasing out single-factor password
+    # logins, so prefer one of these:
+    #   snowflake_connection_name: a named entry in ~/.snowflake/connections.toml
+    #   snowflake_authenticator: "externalbrowser" (SSO), "SNOWFLAKE_JWT", "oauth", ...
+    #   snowflake_private_key_path (+ passphrase): key-pair auth for service users
+    snowflake_connection_name: str = ""
+    snowflake_authenticator: str = ""
+    snowflake_private_key_path: str = ""
+    snowflake_private_key_passphrase: SecretStr = SecretStr("")
 
     llm_provider: Literal["anthropic", "openai", "gemini", "ollama"] = "anthropic"
     llm_model: str = ""
@@ -39,7 +48,10 @@ class FrostWatchConfig(BaseSettings):
 
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
+    # USD price per credit (legacy name kept for config compatibility).
     credits_per_dollar: float = 3.0
+    # USD per TB-month of storage (on-demand is roughly 23 to 40 depending on region).
+    storage_price_per_tb: float = 23.0
     schedule_cron: str = "0 8 * * 1"
     sync_cron: str = "0 */6 * * *"
     snowflake_query_limit: int = 500
@@ -112,6 +124,7 @@ def save_config(config: FrostWatchConfig, path: Path | None = None) -> None:
         "llm_api_key",
         "email_smtp_password",
         "dbt_cloud_api_token",
+        "snowflake_private_key_passphrase",
     ):
         if secret_field in data and isinstance(data[secret_field], dict):
             data[secret_field] = data[secret_field].get("secret_value", "")

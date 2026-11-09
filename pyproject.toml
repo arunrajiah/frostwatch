@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "frostwatch"
-version = "0.4.3"
-description = "AI-powered cost and query observability for Snowflake"
+version = "0.5.0"
+description = "Find Snowflake savings in 60 seconds, then monitor them: open source cost optimization and query observability for Snowflake"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [
@@ -22,6 +22,13 @@ keywords = [
     "llm",
     "ai",
     "data-engineering",
+    "snowflake-cost",
+    "cost-optimization",
+    "finops",
+    "dbt",
+    "data-warehouse",
+    "query-optimization",
+    "cloud-cost",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -33,6 +40,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Database",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: System :: Monitoring",
@@ -74,6 +82,8 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/arunrajiah/frostwatch"
+Documentation = "https://arunrajiah.github.io/frostwatch/"
+"Sample Report" = "https://arunrajiah.github.io/frostwatch/sample-audit.html"
 Repository = "https://github.com/arunrajiah/frostwatch"
 Issues = "https://github.com/arunrajiah/frostwatch/issues"
 Changelog = "https://github.com/arunrajiah/frostwatch/blob/main/CHANGELOG.md"

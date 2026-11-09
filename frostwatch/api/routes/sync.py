@@ -106,7 +106,7 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
                 wh_name = str(row.get("WAREHOUSE_NAME") or row.get("warehouse_name") or "")
                 usage_date = row.get("USAGE_DATE") or row.get("usage_date")
                 credits = _to_float(row.get("CREDITS_USED") or row.get("credits_used")) or 0.0
-                cost_usd = credits / config.credits_per_dollar if config.credits_per_dollar else 0.0
+                cost_usd = credits * config.credits_per_dollar
 
                 if not wh_name or usage_date is None:
                     continue
@@ -221,6 +221,15 @@ async def run_sync(config, snowflake_client, llm_provider=None) -> None:
         threshold = getattr(config, "dbt_model_credit_threshold", 0.0)
         if threshold and threshold > 0:
             await _check_dbt_thresholds(threshold, detection_time)
+
+        # ── Savings Advisor (best effort: never fails the sync) ────────────
+        try:
+            from frostwatch.analysis.advisor import run_audit
+            from frostwatch.api.routes.advisor import save_audit
+
+            await save_audit(await run_audit(snowflake_client, config, days=30))
+        except Exception:
+            pass
 
         async with get_db() as session:
             result = await session.execute(select(SyncRun).where(SyncRun.id == sync_run_id))

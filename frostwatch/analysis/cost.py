@@ -40,7 +40,7 @@ def compute_cost_breakdown(
     credits_per_dollar: float,
 ) -> CostBreakdown:
     total_credits = sum(float(r.get("credits_used") or 0) for r in warehouse_metrics)
-    total_cost_usd = total_credits / credits_per_dollar if credits_per_dollar else 0.0
+    total_cost_usd = total_credits * credits_per_dollar
 
     wh_credits: dict[str, float] = defaultdict(float)
     for r in warehouse_metrics:
@@ -51,7 +51,7 @@ def compute_cost_breakdown(
         CostBreakdownItem(
             name=name,
             credits=round(credits, 4),
-            cost_usd=round(credits / credits_per_dollar if credits_per_dollar else 0, 4),
+            cost_usd=round(credits * credits_per_dollar, 4),
             pct_of_total=_pct(credits, total_credits),
         )
         for name, credits in sorted(wh_credits.items(), key=lambda x: -x[1])
@@ -67,7 +67,7 @@ def compute_cost_breakdown(
         CostBreakdownItem(
             name=name,
             credits=round(credits, 4),
-            cost_usd=round(credits / credits_per_dollar if credits_per_dollar else 0, 4),
+            cost_usd=round(credits * credits_per_dollar, 4),
             pct_of_total=_pct(credits, user_total),
         )
         for name, credits in sorted(user_credits.items(), key=lambda x: -x[1])[:10]
@@ -83,7 +83,7 @@ def compute_cost_breakdown(
         CostBreakdownItem(
             name=name,
             credits=round(credits, 4),
-            cost_usd=round(credits / credits_per_dollar if credits_per_dollar else 0, 4),
+            cost_usd=round(credits * credits_per_dollar, 4),
             pct_of_total=_pct(credits, tag_total),
         )
         for name, credits in sorted(tag_credits.items(), key=lambda x: -x[1])[:10]
@@ -108,7 +108,7 @@ def compute_cost_breakdown(
             DailyUsage(
                 date=date_str,
                 credits=round(credits, 4),
-                cost_usd=round(credits / credits_per_dollar if credits_per_dollar else 0, 4),
+                cost_usd=round(credits * credits_per_dollar, 4),
             )
             for date_str, credits in date_credits.items()
         ],

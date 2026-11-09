@@ -1,5 +1,5 @@
 site_name: FrostWatch
-site_description: AI-powered cost and query observability for Snowflake
+site_description: Free, open source Snowflake cost optimization and observability. Find savings in 60 seconds with frostwatch audit, then monitor spend, dbt model costs and query regressions.
 site_url: https://arunrajiah.github.io/frostwatch/
 repo_url: https://github.com/arunrajiah/frostwatch
 repo_name: arunrajiah/frostwatch
@@ -36,6 +36,10 @@ nav:
   - Getting Started:
     - Installation: installation.md
     - Configuration: configuration.md
+  - Find savings:
+    - Savings Advisor (frostwatch audit): savings-advisor.md
+    - Quick Audit SQL (no install): quick-audit-sql.md
+    - Cost optimization checklist: snowflake-cost-optimization.md
   - Features:
     - Query Insights: insights.md
     - dbt Integration: dbt.md

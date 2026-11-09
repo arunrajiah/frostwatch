@@ -1,9 +1,18 @@
 # FrostWatch
 
-**AI-powered cost and query observability for Snowflake — open source and self-hostable.**
+**Free, open source Snowflake cost optimization and observability. Self-hosted.**
 
-FrostWatch connects to your Snowflake account, pulls from `SNOWFLAKE.ACCOUNT_USAGE`, and gives you a dark-themed web dashboard with:
+!!! success "Find your Snowflake savings in 60 seconds"
+    ```bash
+    pip install frostwatch
+    frostwatch audit --connection <your_snowflake_connection>
+    ```
+    Read-only, no server, no LLM key. You get a ranked list of savings with dollar estimates and the SQL to fix each one.
+    [See a sample report](sample-audit.html) · [No-install SQL version](quick-audit-sql.md) · [How it works](savings-advisor.md)
 
+Then keep it fixed. FrostWatch connects to your Snowflake account, pulls from `SNOWFLAKE.ACCOUNT_USAGE`, and gives you a dark-themed web dashboard with:
+
+- 💰 **Savings Advisor**: rule-based checks across warehouses, storage and cloud services with $ estimates and fix SQL
 - 📊 **Cost breakdown** by warehouse, user, and query tag
 - 🚨 **Anomaly detection** — spend spikes vs. a 21-day rolling baseline per warehouse
 - 🤖 **AI explanations** — plain-English summaries for each anomaly (BYO LLM: Claude, GPT-4o, Gemini, or local Ollama)

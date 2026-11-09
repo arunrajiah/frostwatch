@@ -56,9 +56,7 @@ async def get_warehouses(
                 WarehouseAgg(
                     warehouse_name=wh,
                     total_credits=round(credits, 4),
-                    total_cost_usd=round(
-                        credits / credits_per_dollar if credits_per_dollar else 0, 4
-                    ),
+                    total_cost_usd=round(credits * credits_per_dollar, 4),
                     query_count=count,
                     avg_execution_ms=round(exec_sum / count if count else 0.0, 2),
                 )
@@ -96,7 +94,7 @@ async def get_warehouse_timeseries(
                 date=row.date.isoformat() if hasattr(row.date, "isoformat") else str(row.date),
                 credits_used=round(float(row.credits_used or 0), 4),
                 cost_usd=round(
-                    float(row.credits_used or 0) / credits_per_dollar if credits_per_dollar else 0,
+                    float(row.credits_used or 0) * credits_per_dollar,
                     4,
                 ),
             )

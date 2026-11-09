@@ -65,7 +65,22 @@ FrostWatch helps set up Snowflake's own cost controls.
 
 ---
 
-## v0.5 — Multi-account and team features
+## v0.5 — Savings Advisor (shipped)
+
+Make the first win take one minute instead of one afternoon.
+
+- [x] `frostwatch audit`: zero-setup CLI with shareable HTML / Markdown / JSON report
+- [x] 11 rule-based savings checks with dollar estimates and fix SQL (no LLM required)
+- [x] Savings page in the UI, refreshed after every sync
+- [x] Quick Audit SQL for Snowsight (zero install)
+- [x] SSO (externalbrowser), key-pair, and connections.toml auth
+- [ ] Savings trend over time ("you saved $X since last month") on the Savings page
+- [ ] Track which findings were fixed between audits
+- [ ] Optional LLM pass that explains the top findings in business language
+
+---
+
+## v0.6 — Multi-account and team features
 
 Useful for platform teams managing multiple Snowflake accounts.
 
@@ -78,10 +93,11 @@ Useful for platform teams managing multiple Snowflake accounts.
 
 ---
 
-## v0.6 — Storage and clustering
+## v0.7 — Storage and clustering
 
 Extend beyond compute credits to storage and automatic clustering.
 
+- [x] Time Travel / Fail-safe bloat and unused tables (via Savings Advisor, v0.5)
 - [ ] Storage trend analysis (database, schema, table level)
 - [ ] Automatic clustering credit breakdown by table
 - [ ] Materialized view refresh cost analysis

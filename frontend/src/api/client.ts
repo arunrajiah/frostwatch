@@ -215,3 +215,37 @@ export const getDbtBreakdown = (params: { days?: number } = {}): Promise<DbtMode
   if (params.days) qs.set('days', String(params.days));
   return request<DbtModelAgg[]>(`/dbt?${qs}`);
 };
+
+// ─── Savings Advisor ─────────────────────────────────────────────────────────
+
+export interface AdvisorFinding {
+  check_id: string;
+  title: string;
+  category: 'compute' | 'storage' | 'cloud_services' | 'governance' | 'performance';
+  severity: 'high' | 'medium' | 'low' | 'info';
+  object_name: string;
+  monthly_savings_usd: number;
+  monthly_cost_usd: number;
+  evidence: string;
+  recommendation: string;
+  fix_sql: string;
+  docs_url: string;
+}
+
+export interface AdvisorResult {
+  generated_at: string | null;
+  account?: string;
+  days?: number;
+  credit_price_usd?: number;
+  monthly_compute_spend_usd?: number;
+  monthly_savings_usd: number;
+  annual_savings_usd?: number;
+  findings: AdvisorFinding[];
+  skipped?: Record<string, string>;
+  demo?: boolean;
+}
+
+export const getAdvisor = (): Promise<AdvisorResult> => request<AdvisorResult>('/advisor');
+
+export const runAdvisor = (days = 30): Promise<AdvisorResult> =>
+  request<AdvisorResult>(`/advisor/run?days=${days}`, { method: 'POST' });

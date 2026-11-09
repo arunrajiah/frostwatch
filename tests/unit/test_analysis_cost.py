@@ -39,7 +39,7 @@ def test_total_credits():
 
 def test_total_cost_usd():
     result = compute_cost_breakdown(SAMPLE_QUERIES, SAMPLE_METRICS, credits_per_dollar=3.0)
-    assert result.total_cost_usd == pytest.approx(2.0)
+    assert result.total_cost_usd == pytest.approx(18.0)  # 6 credits x 3 USD/credit
 
 
 def test_by_warehouse_sorted():

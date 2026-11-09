@@ -38,7 +38,7 @@ snowflake_query_limit: 500
 alert_threshold_multiplier: 3.0
 
 # ── Cost ──────────────────────────────────────────────────────────────────────
-# Snowflake on-demand price per credit (adjust for your contract rate)
+# USD price per Snowflake credit (despite the legacy name). Adjust for your contract rate.
 credits_per_dollar: 3.0
 
 # ── Server ────────────────────────────────────────────────────────────────────

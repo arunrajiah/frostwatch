@@ -146,7 +146,7 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
                 if date(day.year, day.month, day.day).weekday() >= 5:
                     credits *= 0.25
                 credits = round(credits, 4)
-                cost_usd = round(credits / config.credits_per_dollar, 4)
+                cost_usd = round(credits * config.credits_per_dollar, 4)
 
                 await session.execute(
                     text(
@@ -675,6 +675,21 @@ async def seed_demo(config: FrostWatchConfig, days: int = 35) -> None:
                     synced_at=synced_at,
                 )
             )
+
+    # ── Savings Advisor ───────────────────────────────────────────────────
+    from frostwatch.analysis.advisor import analyze
+    from frostwatch.api.routes.advisor import save_audit
+    from frostwatch.demo.audit_demo import demo_inputs
+
+    await save_audit(
+        analyze(
+            demo_inputs(),
+            credit_price=config.credits_per_dollar,
+            storage_price_per_tb=config.storage_price_per_tb,
+            account="DEMO_ACCOUNT",
+            demo=True,
+        )
+    )
 
     # ── Report ────────────────────────────────────────────────────────────
     period_end = now

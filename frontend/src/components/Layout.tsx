@@ -12,6 +12,7 @@ import {
   Clock,
   ChevronRight,
   Package,
+  PiggyBank,
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { triggerSync, getSyncStatus } from '../api/client';
@@ -20,6 +21,7 @@ import clsx from 'clsx';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/savings', icon: PiggyBank, label: 'Savings' },
   { to: '/queries', icon: Database, label: 'Queries' },
   { to: '/warehouses', icon: BarChart2, label: 'Warehouses' },
   { to: '/dbt', icon: Package, label: 'dbt Models' },

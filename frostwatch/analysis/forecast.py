@@ -89,7 +89,7 @@ def forecast_warehouse_costs(
             trend = "down"
 
         proj30 = sum(max(0.0, slope * (last_x + i + 1) + intercept) for i in range(30))
-        proj30_cost = proj30 / credits_per_dollar if credits_per_dollar else 0.0
+        proj30_cost = proj30 * credits_per_dollar
 
         for i in range(1, days_ahead + 1):
             pred = max(0.0, slope * (last_x + i) + intercept)
@@ -99,9 +99,7 @@ def forecast_warehouse_costs(
                     "warehouse_name": wh,
                     "forecast_date": fdate.isoformat(),
                     "predicted_credits": round(pred, 4),
-                    "predicted_cost_usd": round(pred / credits_per_dollar, 4)
-                    if credits_per_dollar
-                    else 0.0,
+                    "predicted_cost_usd": round(pred * credits_per_dollar, 4),
                     "trend": trend,
                     "confidence": confidence,
                     "projected_30d_credits": round(proj30, 2),

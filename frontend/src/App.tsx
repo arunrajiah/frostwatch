@@ -7,12 +7,14 @@ import Anomalies from './pages/Anomalies';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import Dbt from './pages/Dbt';
+import Savings from './pages/Savings';
 
 export default function App() {
   return (
     <Layout>
       <Routes>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/savings" element={<Savings />} />
         <Route path="/queries" element={<Queries />} />
         <Route path="/warehouses" element={<Warehouses />} />
         <Route path="/dbt" element={<Dbt />} />

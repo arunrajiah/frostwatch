@@ -7,9 +7,21 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [Unreleased]
+## [0.5.0] - 2026-11-09
+
+### Added
+
+- **`frostwatch audit`**: find Snowflake savings in about a minute with no server, config file, or LLM key. Prints a ranked summary and writes a shareable HTML report (or `.md` / `.json`) with a dollar estimate and fix SQL per finding. `--demo` for synthetic data, `--fail-over` for CI.
+- **Savings Advisor**: 11 rule-based checks (auto-suspend, never-suspending and oversized warehouses, remote spilling, queuing, result cache misses, cloud services overage, Time Travel / Fail-safe bloat, unused tables, missing resource monitors, automatic clustering). Runs after every sync and powers the new **Savings** page, with `/api/advisor` endpoints and a downloadable report.
+- **Quick Audit SQL** (`sql/frostwatch_quick_audit.sql`): the core checks as one Snowsight script, zero install.
+- **Snowflake auth beyond passwords**: `snowflake_connection_name` (`~/.snowflake/connections.toml`), `snowflake_authenticator` (e.g. `externalbrowser` SSO), and key-pair (`snowflake_private_key_path`). The Snowflake connection is now reused across queries.
+- `storage_price_per_tb` setting.
+- Docs: Savings Advisor guide, Snowflake cost optimization checklist, hosted sample report.
 
 ### Fixed
+
+- **Dollar amounts were too low by a factor of price squared.** Costs were computed as credits divided by `credits_per_dollar` instead of multiplied, so at the default $3/credit every USD figure (dashboard, warehouses, dbt, forecasts, resource monitor recommendations) showed one ninth of the real cost. `credits_per_dollar` is now applied as USD per credit, as documented.
+- dbt Cloud run credits were divided by the credit price before being stored.
 
 - Running `frostwatch demo` a second time crashed with `UNIQUE constraint failed: dbt_cloud_runs.run_id`. Demo data now lives in its own database (`~/.frostwatch/demo/frostwatch.db`), rebuilt on every run, so it also no longer mixes with real synced data.
 

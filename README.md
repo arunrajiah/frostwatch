@@ -18,25 +18,38 @@
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/arunrajiah?label=Sponsors&logo=github)](https://github.com/sponsors/arunrajiah)
 [![GitHub Stars](https://img.shields.io/github/stars/arunrajiah/frostwatch?style=social)](https://github.com/arunrajiah/frostwatch/stargazers)
 
-FrostWatch is an open source, self-hosted cost and query observability tool for Snowflake. Snowflake's built-in Cost Management can now tell you *that* spend spiked. FrostWatch tells you **which dbt model, query pattern, and user** caused it, rewrites the expensive SQL, and generates the resource monitors to cap it. It runs in your own infrastructure, works with your own LLM (including a fully local one), and costs nothing: no SaaS contract, no percentage-of-spend pricing, no phone-home.
-
-![FrostWatch Dashboard](docs/screenshots/dashboard.png)
-
-> *Cost breakdown by warehouse, anomaly detection, and AI-powered explanations, all in one dashboard.*
-
-| Anomalies | Query Explorer |
-|---|---|
-| ![Anomalies](docs/screenshots/anomalies.png) | ![Query Explorer](docs/screenshots/queries.png) |
-
-## Try it in 30 seconds (no Snowflake needed)
+### Find your Snowflake savings in 60 seconds
 
 ```bash
 pip install frostwatch
-frostwatch demo
-# → open http://localhost:8000
+frostwatch audit --connection <your_snowflake_connection>   # or: -a <account> -u <user> for SSO
 ```
 
-`frostwatch demo` seeds the local database with 35 days of realistic synthetic data - warehouse cost trends, dbt model breakdowns, injected anomaly spikes, AI explanations, pre-baked query rewrites, and a weekly digest - so you can explore the full UI before connecting a real Snowflake account.
+Read-only. No server, no config file, no LLM key. You get a ranked list of what is wasting money, a dollar estimate for each item, and the exact SQL to fix it, in your terminal and as a **shareable HTML report** you can forward to your team or your CFO.
+
+![Savings Audit report](docs/screenshots/audit-report.png)
+
+**[See a sample report](https://arunrajiah.github.io/frostwatch/sample-audit.html)** · No Python? Paste the **[Quick Audit SQL](sql/frostwatch_quick_audit.sql)** into a Snowsight worksheet · Just looking? `frostwatch audit --demo`
+
+It checks: auto-suspend settings, warehouses that never suspend, oversized warehouses, remote spilling, queuing, identical queries missing the result cache, cloud services above the free 10 percent, Time Travel and Fail-safe bloat, large tables nobody reads, warehouses without resource monitors, and automatic clustering spend. Works with SSO, key-pair auth, and `~/.snowflake/connections.toml`.
+
+> Found savings? A ⭐ helps other Snowflake teams find this tool.
+
+### Then keep it fixed
+
+FrostWatch is an open source, self-hosted cost and query observability tool for Snowflake. Snowflake's built-in Cost Management can tell you *that* spend spiked. FrostWatch tells you **which dbt model, query pattern, and user** caused it, rewrites the expensive SQL, and generates the resource monitors to cap it. It runs in your own infrastructure, works with your own LLM (including a fully local one), and costs nothing: no SaaS contract, no percentage-of-spend pricing, no phone-home.
+
+![FrostWatch Savings Advisor](docs/screenshots/savings.png)
+
+| Dashboard | Anomalies | Query Explorer |
+|---|---|---|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Anomalies](docs/screenshots/anomalies.png) | ![Query Explorer](docs/screenshots/queries.png) |
+
+```bash
+pip install frostwatch
+frostwatch demo        # full UI with 35 days of synthetic data, no Snowflake needed
+# → open http://localhost:8000
+```
 
 ## Why FrostWatch
 
@@ -55,11 +68,16 @@ frostwatch demo
 - **Read-only.** FrostWatch recommends and generates SQL; it never changes your warehouses on its own.
 - **Auditable.** Every query it runs against `ACCOUNT_USAGE` is in this repo.
 
-**When to pick something else:** if you need multi-account rollups today (FrostWatch is single-account until v0.5) or automatic warehouse tuning, a paid tool fits better. If you only want spike alerts on one account, Snowflake's built-in tools are enough.
+**When to pick something else:** if you need multi-account rollups today (FrostWatch is single-account until v0.6) or automatic warehouse tuning, a paid tool fits better. If you only want spike alerts on one account, Snowflake's built-in tools are enough.
 
 *Comparison based on public docs as of October 2026. Spot something out of date? Open an issue.*
 
 ## What it does
+
+**Find savings now**
+
+- **Savings Advisor / `frostwatch audit`**: 11 rule-based checks with dollar estimates and fix SQL, as a CLI report or a page in the UI, refreshed after every sync. No LLM needed. [Docs](https://arunrajiah.github.io/frostwatch/savings-advisor/)
+- **Quick Audit SQL**: the core checks as one script for a Snowsight worksheet, zero install
 
 **Find what's driving spend**
 
@@ -172,7 +190,20 @@ GRANT IMPORTED PRIVILEGES ON DATABASE SNOWFLAKE TO ROLE frostwatch_role;
 GRANT ROLE frostwatch_role TO USER your_user;
 ```
 
-The `ACCOUNTADMIN` role already has this access. No data is ever written to Snowflake.
+The `ACCOUNTADMIN` role already has this access. No data is ever written to Snowflake. The role also needs `USAGE` on the warehouse FrostWatch runs on (an X-Small is plenty).
+
+### Authentication
+
+Snowflake is phasing out password-only logins, so FrostWatch supports every common method:
+
+```yaml
+snowflake_connection_name: my_conn            # reuse ~/.snowflake/connections.toml (Snowflake CLI)
+# or
+snowflake_authenticator: externalbrowser      # SSO in your browser, token cached
+# or
+snowflake_private_key_path: ~/.ssh/rsa_key.p8 # key-pair, best for service users and servers
+snowflake_private_key_passphrase: ...
+```
 
 ## LLM providers
 
@@ -188,6 +219,9 @@ FrostWatch is BYO-LLM. Your data never passes through a hosted proxy - it goes d
 ## CLI reference
 
 ```
+frostwatch audit             Find savings now: terminal summary + shareable HTML report
+frostwatch audit --demo      Same, on synthetic data
+frostwatch audit -o a.md     Markdown report (Slack, GitHub issues); .json also works
 frostwatch demo              Seed synthetic data and start server - no Snowflake needed
 frostwatch serve             Start the web server (default: http://localhost:8000)
 frostwatch serve --reload    Start with auto-reload for development
